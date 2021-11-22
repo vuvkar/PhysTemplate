@@ -4,9 +4,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.kotcrab.vis.ui.util.FloatDigitsOnlyFilter;
 import com.kotcrab.vis.ui.widget.*;
+import com.phys.template.PhysTemplate;
 import com.phys.template.models.*;
-import com.phys.template.views.exerciseWidgets.ExercisePreviewWidget;
 
 import java.util.ArrayList;
 
@@ -19,6 +21,8 @@ public class AddPeoplePopup extends VisWindow {
     private VisSelectBox<Category> categorySelectBox;
     private VisSelectBox<AgeGroup> ageGroupSelectBox;
     private Table exercisesTable;
+
+    private ObjectMap<Exercise, VisTextField> exerciseMap = new ObjectMap<>();
 
     public AddPeoplePopup() {
         super("Ավելացնել զինծառայող");
@@ -96,7 +100,7 @@ public class AddPeoplePopup extends VisWindow {
         mainTable.row();
 
         exercisesTable = new Table();
-        mainTable.add(exercisesTable);
+        mainTable.add(exercisesTable).grow();
 
         pane.setScrollingDisabled(true, false);
         add(pane).grow();
@@ -104,17 +108,50 @@ public class AddPeoplePopup extends VisWindow {
         VisTextButton saveButton = new VisTextButton("Ավելացնել", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                Person person = createPerson();
+                PhysTemplate.Instance().ProjectController().addPersonToCurrentProject(person);
+                PhysTemplate.Instance().UIStage().updatePeopleContent();
+                PhysTemplate.Instance().UIStage().hidePersonAddPopup();
             }
         });
         add(saveButton);
     }
 
-    public void refreshContent(ArrayList<Person> peopleList) {
+    private Person createPerson() {
+        // TODO: 11/22/2021 validate all data from fields
 
+        Person person = new Person();
+        person.name = nameField.getText();
+        person.rank = rankSelectBox.getSelected();
+        person.ageGroup = ageGroupSelectBox.getSelected();
+        person.surname = surnameField.getText();
+        person.fatherName = fatherField.getText();
+        person.category = categorySelectBox.getSelected();
+        person.sex = sexSelectBox.getSelected();
+
+        for (ObjectMap.Entry<Exercise, VisTextField> entry : exerciseMap) {
+            Exercise exercise = entry.key;
+            VisTextField field = entry.value;
+            person.addExercise(exercise.number);
+            person.putExerciseRawValue(exercise.number, Float.parseFloat(field.getText()));
+        }
+
+        return person;
     }
 
-    public void refreshExerciseContent(ArrayList<Exercise> exerciseList) {
 
+    public void refreshExerciseContent(ArrayList<Exercise> exerciseList) {
+        exercisesTable.clearChildren();
+        exerciseMap.clear();
+
+        for (Exercise exercise : exerciseList) {
+            VisLabel exerciseName = new VisLabel(exercise.name);
+            exercisesTable.add(exerciseName);
+            VisTextField exerciseField = new VisTextField();
+            exerciseField.setTextFieldFilter(new FloatDigitsOnlyFilter(false));
+            exercisesTable.add(exerciseField);
+            exercisesTable.row();
+            exerciseMap.put(exercise, exerciseField);
+        }
     }
 }

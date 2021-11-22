@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.phys.template.models.Exercise;
+import com.phys.template.models.Person;
 
 import java.util.ArrayList;
 
@@ -25,5 +26,9 @@ public class DataController {
         }
 
         return exercises;
+    }
+
+    public void calculatePersonPoints(Person person) {
+        // TODO: 11/22/2021 calculatePoints
     }
 }

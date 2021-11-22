@@ -145,6 +145,7 @@ public class UIStage {
     }
 
     public void showPersonAddPopup() {
+        addPersonPopup.refreshExerciseContent(PhysTemplate.Instance().ProjectController().getCurrentProjectExercises());
         stage.addActor(addPersonPopup.fadeIn());
     }
 
@@ -158,6 +159,10 @@ public class UIStage {
 
     public void updateExerciseContent() {
         exercisesGroupWidget.updateContent();
+        peopleListWidget.updateContent();
+    }
+
+    public void updatePeopleContent() {
         peopleListWidget.updateContent();
     }
 }

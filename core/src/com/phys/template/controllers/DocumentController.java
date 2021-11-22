@@ -5,18 +5,20 @@ import org.apache.poi.POIDocument;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Path;
+
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 public class DocumentController {
 
-    public void createDocumentFor (Project project) throws Exception {
+    public void createDocumentFor (Project project, Path path) throws Exception {
         //Blank Document
         XWPFDocument document = new XWPFDocument();
 
         //Write the Document in file system
-        FileOutputStream out = new FileOutputStream(new File("create_table.docx"));
+        FileOutputStream out = new FileOutputStream(path.toString());
 
         //create table
         XWPFTable table = document.createTable();

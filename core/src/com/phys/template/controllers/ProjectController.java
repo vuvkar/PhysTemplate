@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Logger;
+import com.phys.template.PhysTemplate;
 import com.phys.template.models.Exercise;
 import com.phys.template.models.Person;
 import com.phys.template.models.Project;
@@ -75,5 +76,14 @@ public class ProjectController {
         }
 
         return currentProject.getPeople();
+    }
+
+    public void addPersonToCurrentProject(Person person) {
+        if (currentProject == null) {
+            logger.error("Current project is null", new GdxRuntimeException(""));
+        }
+
+        PhysTemplate.Instance().DataController().calculatePersonPoints(person);
+        currentProject.addPerson(person);
     }
 }

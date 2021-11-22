@@ -39,7 +39,6 @@ public class PeopleListWidget extends Table {
         addPerson = new VisTextButton("Նոր զինծառայող", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // TODO: 11/19/2021 handle people creation
                 PhysTemplate.Instance().UIStage().showPersonAddPopup();
             }
         });
@@ -52,6 +51,7 @@ public class PeopleListWidget extends Table {
         ArrayList<Person> currentProjectPeople = PhysTemplate.Instance().ProjectController().getCurrentProjectPeople();
         for (Person currentProjectPerson : currentProjectPeople) {
             PeopleListRowWidget peopleListRowWidget = new PeopleListRowWidget();
+            peopleListRowWidget.updateForPerson(currentProjectPerson);
             mainGroup.addActor(peopleListRowWidget);
         }
     }

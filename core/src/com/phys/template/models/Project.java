@@ -55,4 +55,8 @@ public class Project {
         }
         return peopleList;
     }
+
+    public void addPerson(Person person) {
+        people.add(person);
+    }
 }
