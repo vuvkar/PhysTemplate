@@ -83,7 +83,34 @@ public class ProjectController {
             logger.error("Current project is null", new GdxRuntimeException(""));
         }
 
+        person.index = currentProject.getPeopleCount();
         PhysTemplate.Instance().DataController().calculatePersonPoints(person);
         currentProject.addPerson(person);
+    }
+
+    public void removeExercise(int exerciseNumber) {
+        if (currentProject == null) {
+            logger.error("Current project is null", new GdxRuntimeException(""));
+        }
+        currentProject.removeExercise(exerciseNumber);
+        // TODO: 11/22/2021 refresh points
+    }
+
+    public void movePersonUp(Person person) {
+        if (currentProject == null) {
+            logger.error("Current project is null", new GdxRuntimeException(""));
+        }
+        currentProject.movePersonUp(person);
+    }
+
+    public void movePersonDown (Person person) {
+        if (currentProject == null) {
+            logger.error("Current project is null", new GdxRuntimeException(""));
+        }
+        currentProject.movePersonDown(person);
+    }
+
+    public int getPeopleCount() {
+        return currentProject.getPeopleCount();
     }
 }

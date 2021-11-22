@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class ExercisesGroupWidget extends Table {
     ScrollPane scrollPane;
-    HorizontalGroup mainContainer;
+    Table mainContainer;
     VisLabel headerLabel;
 
     public ExercisesGroupWidget() {
@@ -26,14 +26,14 @@ public class ExercisesGroupWidget extends Table {
         add(headerLabel);
         row();
 
-        mainContainer = new HorizontalGroup();
-        mainContainer.space(10);
+        mainContainer = new Table();
+        mainContainer.defaults().pad(10);
+        mainContainer.top().left();
         updateContent();
 
         // TODO: 11/19/2021 add new exercise button creation
         scrollPane = new ScrollPane(mainContainer);
         scrollPane.setScrollingDisabled(false, true);
-        scrollPane.setScrollBarPositions(true, false);
         add(scrollPane).grow();
     }
 
@@ -41,9 +41,9 @@ public class ExercisesGroupWidget extends Table {
         mainContainer.clearChildren();
         ArrayList<Exercise> currentProjectExercises = PhysTemplate.Instance().ProjectController().getCurrentProjectExercises();
         for (Exercise currentProjectExercise : currentProjectExercises) {
-            ExerciseWidget exerciseWidget = new ExerciseWidget();
+            ExerciseWidget exerciseWidget = new ExerciseWidget(currentProjectExercise.number);
             exerciseWidget.setName(currentProjectExercise.name);
-            mainContainer.addActor(exerciseWidget);
+            mainContainer.add(exerciseWidget);
         }
 
         VisTextButton addExercise = new VisTextButton("Ավելացնել \nվարժություն");
@@ -55,6 +55,6 @@ public class ExercisesGroupWidget extends Table {
 
             }
         });
-        mainContainer.addActor(addExercise);
+        mainContainer.add(addExercise);
     }
 }

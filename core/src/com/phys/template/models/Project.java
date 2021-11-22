@@ -59,4 +59,37 @@ public class Project {
     public void addPerson(Person person) {
         people.add(person);
     }
+
+    public void removeExercise(int exerciseNumber) {
+        boolean didRemove = false;
+        for (int i = 0; i < exercises.size(); i++) {
+            Exercise exercise = exercises.get(i);
+            if (exercise.number == exerciseNumber) {
+                exercises.remove(exercise);
+                didRemove = true;
+            }
+        }
+
+        if(!didRemove) {
+            logger.error("Exercise not found to be removed " + exerciseNumber, new GdxRuntimeException(""));
+        }
+
+        for (Person person : people) {
+            person.removeExercise(exerciseNumber);
+        }
+    }
+
+    public void movePersonUp(Person person) {
+        Person remove = people.remove(person.index);
+        people.add(person.index - 1, remove);
+    }
+
+    public void movePersonDown(Person person) {
+        Person remove = people.remove(person.index);
+        people.add(person.index + 1, remove);
+    }
+
+    public int getPeopleCount() {
+        return people.size();
+    }
 }

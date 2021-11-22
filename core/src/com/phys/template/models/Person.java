@@ -17,6 +17,7 @@ public class Person {
     public Sex sex;
     public AgeGroup ageGroup;
     public Category category;
+    public int index;
 
     private int overallPoints;
     private int finalGrade;
@@ -66,6 +67,7 @@ public class Person {
         copy.category = this.category;
         copy.overallPoints = this.overallPoints;
         copy.finalGrade = this.finalGrade;
+        copy.index = this.index;
 
         copy.attachedExercises.addAll(attachedExercises);
         for (ObjectMap.Entry<Integer, Float> integerFloatEntry : this.exercisesRaw) {
@@ -76,5 +78,15 @@ public class Person {
         }
 
         return copy;
+    }
+
+    public void removeExercise(int exerciseNumber) {
+        for (Integer attachedExercise : attachedExercises) {
+            if (attachedExercise == exerciseNumber) {
+                attachedExercises.remove(attachedExercise);
+            }
+        }
+        exercisesPoints.remove(exerciseNumber);
+        exercisesRaw.remove(exerciseNumber);
     }
 }

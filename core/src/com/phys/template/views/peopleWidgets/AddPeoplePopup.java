@@ -13,6 +13,7 @@ import com.phys.template.models.*;
 import java.util.ArrayList;
 
 public class AddPeoplePopup extends VisWindow {
+
     private VisTextField nameField;
     private VisTextField surnameField;
     private VisTextField fatherField;
@@ -133,7 +134,10 @@ public class AddPeoplePopup extends VisWindow {
             Exercise exercise = entry.key;
             VisTextField field = entry.value;
             person.addExercise(exercise.number);
-            person.putExerciseRawValue(exercise.number, Float.parseFloat(field.getText()));
+            String text = field.getText();
+            if (!text.isEmpty()) {
+                person.putExerciseRawValue(exercise.number, Float.parseFloat(text));
+            }
         }
 
         return person;

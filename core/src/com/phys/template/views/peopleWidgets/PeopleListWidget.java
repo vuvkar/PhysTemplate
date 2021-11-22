@@ -16,7 +16,7 @@ public class PeopleListWidget extends Table {
     private VisLabel nameLabel;
     private ScrollPane scrollPane;
     private VisTextButton addPerson;
-    private VerticalGroup mainGroup;
+    private Table mainGroup;
 
     public PeopleListWidget() {
         super();
@@ -26,9 +26,9 @@ public class PeopleListWidget extends Table {
 
         add(nameLabel).left();
         row();
-        mainGroup = new VerticalGroup();
-        mainGroup.pad(10);
-        mainGroup.space(10);
+        mainGroup = new Table();
+        mainGroup.top().left();
+        mainGroup.defaults().pad(10);
 
         updateContent();
         scrollPane = new ScrollPane(mainGroup);
@@ -52,7 +52,8 @@ public class PeopleListWidget extends Table {
         for (Person currentProjectPerson : currentProjectPeople) {
             PeopleListRowWidget peopleListRowWidget = new PeopleListRowWidget();
             peopleListRowWidget.updateForPerson(currentProjectPerson);
-            mainGroup.addActor(peopleListRowWidget);
+            mainGroup.add(peopleListRowWidget).growX();
+            mainGroup.row();
         }
     }
 }

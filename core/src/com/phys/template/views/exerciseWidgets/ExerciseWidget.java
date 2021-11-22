@@ -7,26 +7,31 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.phys.template.PhysTemplate;
 
 public class ExerciseWidget extends Table {
 
     private VisLabel nameLabel;
     private VisTextButton deleteButton;
+    private int exerciseNumber;
 
     @Override
     public float getPrefHeight() {
         return 100;
     }
 
-    public ExerciseWidget() {
+    public ExerciseWidget(int exerciseNumber) {
         super();
         nameLabel = new VisLabel();
+        this.exerciseNumber = exerciseNumber;
         add(nameLabel);
         row();
         deleteButton = new VisTextButton("Ջնջել", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // TODO: 11/19/2021 handle deletion
+                PhysTemplate.Instance().ProjectController().removeExercise(ExerciseWidget.this.exerciseNumber);
+                PhysTemplate.Instance().UIStage().updateExerciseContent();
             }
         });
         add(deleteButton);

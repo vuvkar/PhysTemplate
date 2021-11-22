@@ -101,7 +101,7 @@ public class UIStage {
 
     private void constructExerciseWidget() {
         exercisesGroupWidget = new ExercisesGroupWidget();
-        fullScreenTable.add(exercisesGroupWidget);
+        fullScreenTable.add(exercisesGroupWidget).growX();
     }
 
     private void constructMenu () {
