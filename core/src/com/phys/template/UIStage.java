@@ -145,7 +145,6 @@ public class UIStage {
     }
 
     public void showPersonAddPopup() {
-        addPersonPopup.refreshContent();
         stage.addActor(addPersonPopup.fadeIn());
     }
 
