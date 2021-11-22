@@ -13,6 +13,7 @@ import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.phys.template.views.exerciseWidgets.AddExercisePopup;
 import com.phys.template.views.exerciseWidgets.ExercisesGroupWidget;
 import com.phys.template.views.MainMenu;
+import com.phys.template.views.peopleWidgets.AddPeoplePopup;
 import com.phys.template.views.peopleWidgets.PeopleListWidget;
 import com.phys.template.views.dialogs.SettingsDialog;
 
@@ -24,11 +25,12 @@ public class UIStage {
     // TODO: 11/19/2021 Handle project drag and drop
     private final DragAndDrop dragAndDrop;
 
-    Table fullScreenTable;
-    ExercisesGroupWidget exercisesGroupWidget;
-    PeopleListWidget peopleListWidget;
-    AddExercisePopup addExercisePopup;
-    Table bottomButtonTable;
+    private Table fullScreenTable;
+    private ExercisesGroupWidget exercisesGroupWidget;
+    private PeopleListWidget peopleListWidget;
+    private AddExercisePopup addExercisePopup;
+    private AddPeoplePopup addPersonPopup;
+    private Table bottomButtonTable;
 
     // TODO: 11/19/2021 Handle file chooser
     FileChooser fileChooser;
@@ -62,6 +64,7 @@ public class UIStage {
 
         settingsDialog = new SettingsDialog();
         addExercisePopup = new AddExercisePopup();
+        addPersonPopup = new AddPeoplePopup();
 
         // TODO: 11/19/2021 Handle exercise loading from file
 //        FileHandle list = Gdx.files.internal("modules.xml");
@@ -138,8 +141,16 @@ public class UIStage {
 
     public void showExerciseAddPopup() {
         addExercisePopup.refreshContent();
-        addExercisePopup.invalidate();
         stage.addActor(addExercisePopup.fadeIn());
+    }
+
+    public void showPersonAddPopup() {
+        addPersonPopup.refreshContent();
+        stage.addActor(addPersonPopup.fadeIn());
+    }
+
+    public void hidePersonAddPopup() {
+        addPersonPopup.fadeOut();
     }
 
     public void hideExerciseAddPopup() {

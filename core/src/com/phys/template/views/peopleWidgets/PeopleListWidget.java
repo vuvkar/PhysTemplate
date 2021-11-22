@@ -40,6 +40,7 @@ public class PeopleListWidget extends Table {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // TODO: 11/19/2021 handle people creation
+                PhysTemplate.Instance().UIStage().showPersonAddPopup();
             }
         });
         add(addPerson).growX();
