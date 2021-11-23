@@ -113,4 +113,11 @@ public class ProjectController {
     public int getPeopleCount() {
         return currentProject.getPeopleCount();
     }
+
+    public void updatePersonData(Person person) {
+        if (currentProject == null) {
+            logger.error("Current project is null", new GdxRuntimeException(""));
+        }
+        currentProject.updatePersonData(person);
+    }
 }

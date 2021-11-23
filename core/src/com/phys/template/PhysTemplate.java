@@ -85,7 +85,7 @@ public class PhysTemplate extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(0, 0, 0, 1);
+		ScreenUtils.clear(0.1f, 0.1f, 0.1f, 1);
 
 		uiStage.getStage().act();
 		uiStage.getStage().draw();

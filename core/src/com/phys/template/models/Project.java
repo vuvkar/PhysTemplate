@@ -92,4 +92,12 @@ public class Project {
     public int getPeopleCount() {
         return people.size();
     }
+
+    public void updatePersonData(Person copyPerson) {
+        for (Person original : people) {
+            if (original.index == copyPerson.index) {
+                original.copyFrom(copyPerson);
+            }
+        }
+    }
 }

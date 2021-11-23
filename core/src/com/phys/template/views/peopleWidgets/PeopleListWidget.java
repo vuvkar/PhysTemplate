@@ -2,6 +2,7 @@ package com.phys.template.views.peopleWidgets;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -20,15 +21,18 @@ public class PeopleListWidget extends Table {
 
     public PeopleListWidget() {
         super();
-        nameLabel = new VisLabel("Անվանացուցակ");
+        Skin skin = PhysTemplate.Instance().UIStage().getSkin();
+        setSkin(skin);
+        setBackground("border");
+        nameLabel = new VisLabel("Անձնակազմի անվանացուցակ", "big");
         top().left();
-        pad(20);
+        pad(10);
 
         add(nameLabel).left();
         row();
         mainGroup = new Table();
         mainGroup.top().left();
-        mainGroup.defaults().pad(10);
+        mainGroup.defaults().padBottom(10);
 
         updateContent();
         scrollPane = new ScrollPane(mainGroup);

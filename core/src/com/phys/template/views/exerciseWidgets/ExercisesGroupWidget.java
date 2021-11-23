@@ -20,14 +20,16 @@ public class ExercisesGroupWidget extends Table {
 
     public ExercisesGroupWidget() {
         super();
+        setSkin(PhysTemplate.Instance().UIStage().getSkin());
+        setBackground("border");
 
-        headerLabel = new VisLabel("Վարժություններ");
+        headerLabel = new VisLabel("Անցկացվելիք վարժություններ", "big");
         defaults().pad(10).top().left();
         add(headerLabel);
         row();
 
         mainContainer = new Table();
-        mainContainer.defaults().pad(10);
+        mainContainer.defaults().padRight(10);
         mainContainer.top().left();
         updateContent();
 

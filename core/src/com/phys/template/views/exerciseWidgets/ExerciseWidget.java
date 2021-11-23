@@ -15,14 +15,12 @@ public class ExerciseWidget extends Table {
     private VisTextButton deleteButton;
     private int exerciseNumber;
 
-    @Override
-    public float getPrefHeight() {
-        return 100;
-    }
-
     public ExerciseWidget(int exerciseNumber) {
         super();
+        setSkin(PhysTemplate.Instance().UIStage().getSkin());
+        setBackground("border");
         nameLabel = new VisLabel();
+        defaults().pad(5);
         this.exerciseNumber = exerciseNumber;
         add(nameLabel);
         row();

@@ -12,7 +12,7 @@ import com.phys.template.models.*;
 
 import java.util.ArrayList;
 
-public class AddPeoplePopup extends VisWindow {
+public class EditPersonPopup extends VisWindow {
 
     private VisTextField nameField;
     private VisTextField surnameField;
@@ -21,11 +21,14 @@ public class AddPeoplePopup extends VisWindow {
     private VisSelectBox<Sex> sexSelectBox;
     private VisSelectBox<Category> categorySelectBox;
     private VisSelectBox<AgeGroup> ageGroupSelectBox;
+    private VisTextButton saveButton;
     private Table exercisesTable;
+    private boolean isCreation;
+    private int updatePersonIndex;
 
-    private ObjectMap<Exercise, VisTextField> exerciseMap = new ObjectMap<>();
+    private final ObjectMap<Exercise, VisTextField> exerciseMap = new ObjectMap<>();
 
-    public AddPeoplePopup() {
+    public EditPersonPopup() {
         super("Ավելացնել զինծառայող");
         setCenterOnAdd(true);
         setResizable(false);
@@ -106,16 +109,41 @@ public class AddPeoplePopup extends VisWindow {
         pane.setScrollingDisabled(true, false);
         add(pane).grow();
         row();
-        VisTextButton saveButton = new VisTextButton("Ավելացնել", new ChangeListener() {
+        saveButton = new VisTextButton("Ավելացնել", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Person person = createPerson();
-                PhysTemplate.Instance().ProjectController().addPersonToCurrentProject(person);
+                person.index = updatePersonIndex;
+                if (isCreation) {
+                    PhysTemplate.Instance().ProjectController().addPersonToCurrentProject(person);
+                } else {
+                    PhysTemplate.Instance().ProjectController().updatePersonData(person);
+                }
                 PhysTemplate.Instance().UIStage().updatePeopleContent();
                 PhysTemplate.Instance().UIStage().hidePersonAddPopup();
             }
         });
         add(saveButton);
+    }
+
+    public void updateForMode(boolean isCreation) {
+        this.isCreation = isCreation;
+        if (isCreation) {
+            getTitleLabel().setText("Ավելացնել զինծառայող");
+            nameField.clearText();
+            surnameField.clearText();
+            fatherField.clearText();
+            categorySelectBox.setSelected(Category.FIRST);
+            rankSelectBox.setSelected(Rank.SHN);
+            sexSelectBox.setSelected(Sex.MALE);
+            for (VisTextField value : exerciseMap.values()) {
+                value.clearText();
+            }
+            saveButton.setText("Ավելացնել");
+        } else {
+            getTitleLabel().setText("Փոփոխել զինծառայողի տվյալները");
+            saveButton.setText("Պահպանել");
+        }
     }
 
     private Person createPerson() {
@@ -157,5 +185,22 @@ public class AddPeoplePopup extends VisWindow {
             exercisesTable.row();
             exerciseMap.put(exercise, exerciseField);
         }
+    }
+
+    public void updateFor(Person person) {
+        nameField.setText(person.name);
+        surnameField.setText(person.surname);
+        fatherField.setText(person.fatherName);
+        rankSelectBox.setSelected(person.rank);
+        sexSelectBox.setSelected(person.sex);
+        categorySelectBox.setSelected(person.category);
+        ageGroupSelectBox.setSelected(person.ageGroup);
+
+        for (ObjectMap.Entry<Exercise, VisTextField> exerciseVisTextFieldEntry : exerciseMap) {
+            VisTextField fi = exerciseVisTextFieldEntry.value;
+//            float exerciseRawValue = person.getExerciseRawValue(exerciseVisTextFieldEntry.key.number);
+//            fi.setText(String.valueOf(exerciseRawValue));
+        }
+        updatePersonIndex = person.index;
     }
 }

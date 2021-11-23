@@ -1,0 +1,126 @@
+[
+  {
+    "ageGroup": 1,
+    "description": "",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 105
+              },
+              {
+                "grade": 4,
+                "point": 90
+              },
+              {
+                "grade": 3,
+                "point": 70
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 150
+              },
+              {
+                "grade": 4,
+                "point": 130
+              },
+              {
+                "grade": 3,
+                "point": 100
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 210
+              },
+              {
+                "grade": 4,
+                "point": 180
+              },
+              {
+                "grade": 3,
+                "point": 140
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 2,
+    "description": "",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 115
+              },
+              {
+                "grade": 4,
+                "point": 100
+              },
+              {
+                "grade": 3,
+                "point": 80
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 170
+              },
+              {
+                "grade": 4,
+                "point": 150
+              },
+              {
+                "grade": 3,
+                "point": 110
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 230
+              },
+              {
+                "grade": 4,
+                "point": 200
+              },
+              {
+                "grade": 3,
+                "point": 150
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

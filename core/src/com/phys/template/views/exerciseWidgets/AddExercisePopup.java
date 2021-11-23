@@ -29,7 +29,7 @@ public class AddExercisePopup extends VisWindow {
         invalidate();
 
         centerWindow();
-        setSize(800, 500);
+        setSize(1000, 500);
     }
 
     private void initContent() {

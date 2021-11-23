@@ -43,12 +43,20 @@ public class Person {
         attachedExercises.add(number);
     }
 
-    public float getExercisePoint (int number) {
+    public float getExercisePoint(int number) {
         if (exercisesPoints.containsKey(number)) {
             logger.error(name + " person doesn't contain exercise " + number, new RuntimeException());
         }
 
-        return  exercisesPoints.get(number);
+        return exercisesPoints.get(number);
+    }
+
+    public float getExerciseRawValue(int number) {
+        if (!exercisesRaw.containsKey(number)) {
+            logger.error(name + " person doesn't contain exercise " + number, new RuntimeException());
+        }
+
+        return exercisesRaw.get(number);
     }
 
     public void putExerciseRawValue(int number, float value) {
@@ -81,6 +89,7 @@ public class Person {
     }
 
     public void removeExercise(int exerciseNumber) {
+        // TODO: 11/23/2021 np exception here
         for (Integer attachedExercise : attachedExercises) {
             if (attachedExercise == exerciseNumber) {
                 attachedExercises.remove(attachedExercise);
@@ -88,5 +97,33 @@ public class Person {
         }
         exercisesPoints.remove(exerciseNumber);
         exercisesRaw.remove(exerciseNumber);
+    }
+
+    public void copyFrom(Person copyPerson) {
+        this.name = copyPerson.name;
+        this.rank = copyPerson.rank;
+        this.ageGroup = copyPerson.ageGroup;
+        this.surname = copyPerson.surname;
+        this.fatherName = copyPerson.fatherName;
+        this.sex = copyPerson.sex;
+        notes.clear();
+        notes.addAll(copyPerson.notes);
+        this.category = copyPerson.category;
+        this.overallPoints = copyPerson.overallPoints;
+        this.finalGrade = copyPerson.finalGrade;
+        this.index = copyPerson.index;
+
+        attachedExercises.clear();
+        attachedExercises.addAll(copyPerson.attachedExercises);
+        exercisesRaw.clear();
+        for (ObjectMap.Entry<Integer, Float> integerFloatEntry : copyPerson.exercisesRaw) {
+            exercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);
+        }
+
+        exercisesPoints.clear();
+        for (ObjectMap.Entry<Integer, Integer> exercisesPoint : copyPerson.exercisesPoints) {
+            exercisesPoints.put(exercisesPoint.key, exercisesPoint.value);
+        }
+
     }
 }

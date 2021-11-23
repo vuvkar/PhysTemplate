@@ -1,6 +1,7 @@
 {
 com.badlogic.gdx.graphics.g2d.BitmapFont: {
 	grapalat_20: {file: grapalat_20.fnt },
+	grapalat_25: {file: grapalat_25.fnt },
 	grapalat_15: {file: grapalat_15.fnt }
 },
 com.badlogic.gdx.graphics.Color: {
@@ -65,6 +66,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {font: grapalat_20, fontColor: white },
+	big: {font: grapalat_25, fontColor: white },
 	link-label: {fontColor: link-label, font: grapalat_20 },
 	small: {font: grapalat_15, fontColor: white },
 	menuitem-shortcut: {font: grapalat_20, fontColor: menuitem }

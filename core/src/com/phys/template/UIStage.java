@@ -10,10 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.phys.template.models.Person;
 import com.phys.template.views.exerciseWidgets.AddExercisePopup;
 import com.phys.template.views.exerciseWidgets.ExercisesGroupWidget;
 import com.phys.template.views.MainMenu;
-import com.phys.template.views.peopleWidgets.AddPeoplePopup;
+import com.phys.template.views.peopleWidgets.EditPersonPopup;
 import com.phys.template.views.peopleWidgets.PeopleListWidget;
 import com.phys.template.views.dialogs.SettingsDialog;
 
@@ -29,7 +30,7 @@ public class UIStage {
     private ExercisesGroupWidget exercisesGroupWidget;
     private PeopleListWidget peopleListWidget;
     private AddExercisePopup addExercisePopup;
-    private AddPeoplePopup addPersonPopup;
+    private EditPersonPopup addPersonPopup;
     private Table bottomButtonTable;
 
     // TODO: 11/19/2021 Handle file chooser
@@ -49,11 +50,12 @@ public class UIStage {
         fullScreenTable = new Table();
         fullScreenTable.setFillParent(true);
         fullScreenTable.top().left();
+        fullScreenTable.defaults().pad(5);
 
         stage.addActor(fullScreenTable);
 
-        constructMenu();
-        fullScreenTable.row();
+//        constructMenu();
+//        fullScreenTable.row();
         constructExerciseWidget();
         fullScreenTable.row();
         constructPeopleListWidget();
@@ -64,7 +66,7 @@ public class UIStage {
 
         settingsDialog = new SettingsDialog();
         addExercisePopup = new AddExercisePopup();
-        addPersonPopup = new AddPeoplePopup();
+        addPersonPopup = new EditPersonPopup();
 
         // TODO: 11/19/2021 Handle exercise loading from file
 //        FileHandle list = Gdx.files.internal("modules.xml");
@@ -146,6 +148,7 @@ public class UIStage {
 
     public void showPersonAddPopup() {
         addPersonPopup.refreshExerciseContent(PhysTemplate.Instance().ProjectController().getCurrentProjectExercises());
+        addPersonPopup.updateForMode(true);
         stage.addActor(addPersonPopup.fadeIn());
     }
 
@@ -164,5 +167,12 @@ public class UIStage {
 
     public void updatePeopleContent() {
         peopleListWidget.updateContent();
+    }
+
+    public void showEditPersonPopup(Person person) {
+        addPersonPopup.refreshExerciseContent(PhysTemplate.Instance().ProjectController().getCurrentProjectExercises());
+        addPersonPopup.updateForMode(false);
+        addPersonPopup.updateFor(person);
+        stage.addActor(addPersonPopup.fadeIn());
     }
 }

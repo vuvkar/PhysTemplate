@@ -9,6 +9,7 @@ import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.phys.template.PhysTemplate;
 import com.phys.template.models.Person;
+import com.phys.template.views.BackgroundColor;
 
 public class PeopleListRowWidget extends Table {
 
@@ -32,6 +33,7 @@ public class PeopleListRowWidget extends Table {
         // TODO: 11/22/2021 handle validation UI, if some exercises are missing info
         Skin skin = PhysTemplate.Instance().UIStage().getSkin();
         moveTop = new VisImageButton(skin.getDrawable("select-up"));
+        setBackground(skin.getDrawable("border"));
         moveTop.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -75,6 +77,17 @@ public class PeopleListRowWidget extends Table {
         add(finalPoints);
         finalGrade = new VisLabel();
         add(finalGrade);
+        addListeners();
+    }
+
+    private void addListeners() {
+        addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                PhysTemplate.Instance().UIStage().showEditPersonPopup(person);
+            }
+        });
     }
 
     public void updateForPerson (Person person) {

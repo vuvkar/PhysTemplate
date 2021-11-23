@@ -19,9 +19,13 @@ public class ExercisePreviewWidget extends Table {
 
     public ExercisePreviewWidget(Exercise exercise) {
         super();
+        defaults().pad(5);
+        setSkin(PhysTemplate.Instance().UIStage().getSkin());
+        setBackground("border");
         exerciseNumber = exercise.number;
-        nameLabel = new VisLabel(exercise.name);
+        nameLabel = new VisLabel(exercise.name, "big");
         descriptionLabel = new VisLabel(exercise.longName);
+        descriptionLabel.setWrap(true);
 
         add(nameLabel).growX();
         row();
