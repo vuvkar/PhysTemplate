@@ -6,7 +6,7 @@ public enum AgeGroup {
     FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH, SEVENTH, EIGHTH, NINTH, TENTH, ELEVENTH, THIRTEENTH, FOURTEENTH, SIXTEENTH, SEVENTEENTH, EIGHTEENTH;
     
     public String getShortName () {
-        return getDescription().substring(0, 15);
+        return getDescription().substring(0, 25) + "...";
     }
     
     public String getDescription() {

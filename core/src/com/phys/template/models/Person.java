@@ -90,11 +90,7 @@ public class Person {
 
     public void removeExercise(int exerciseNumber) {
         // TODO: 11/23/2021 np exception here
-        for (Integer attachedExercise : attachedExercises) {
-            if (attachedExercise == exerciseNumber) {
-                attachedExercises.remove(attachedExercise);
-            }
-        }
+        attachedExercises.remove(Integer.valueOf(exerciseNumber));
         exercisesPoints.remove(exerciseNumber);
         exercisesRaw.remove(exerciseNumber);
     }

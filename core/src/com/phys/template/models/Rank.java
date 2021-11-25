@@ -1,5 +1,8 @@
 package com.phys.template.models;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+
 public enum Rank {
     SHN, KRTST, ST, AVST, AV, ENT, AVENT, LT, AVLT, KN, MR, PGT, GT, GNMR, GNLT, GNGP;
 
@@ -40,6 +43,44 @@ public enum Rank {
                 return "Գեներալ գնդապետ";
         }
         return super.toString();
+    }
+    
+    public String shortName () {
+        switch (this) {
+            case SHN:
+                return "շ-ն";
+            case KRTST:
+                return "կրտ. ս-տ";
+            case ST:
+                return "ս-տ";
+            case AVST:
+                return "ավ. ս-տ";
+            case AV:
+                return "ավ.";
+            case ENT:
+                return "ենթ.";
+            case AVENT:
+                return "ավ. ենթ.";
+            case LT:
+                return "լ-տ";
+            case AVLT:
+                return "ավ. լ-տ";
+            case KN:
+                return "կ-ն";
+            case MR:
+                return "մ-ր";
+            case PGT:
+                return "փ/գ-տ";
+            case GT:
+                return "գ-տ";
+            case GNMR:
+                return "գեն. մ-ր";
+            case GNLT:
+                return "գեն. լ-տ";
+            case GNGP:
+                return "գեն. գ-տ";
+        }
+        throw new GdxRuntimeException("Can't keep my hand to myself");
     }
 }
 

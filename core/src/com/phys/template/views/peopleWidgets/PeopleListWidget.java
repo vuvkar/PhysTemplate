@@ -30,8 +30,11 @@ public class PeopleListWidget extends Table {
 
         add(nameLabel).left();
         row();
+        createFirstRow();
+        row();
         mainGroup = new Table();
         mainGroup.top().left();
+        mainGroup.padTop(30);
         mainGroup.defaults().padBottom(10);
 
         updateContent();
@@ -47,6 +50,11 @@ public class PeopleListWidget extends Table {
             }
         });
         add(addPerson).growX();
+    }
+
+    private void createFirstRow() {
+        PeopleListRowWidget peopleListRowWidget = new PeopleListRowWidget(true);
+        add(peopleListRowWidget).growX().padTop(5).height(90);
     }
 
     public void updateContent() {
