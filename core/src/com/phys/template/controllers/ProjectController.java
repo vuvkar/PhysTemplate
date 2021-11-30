@@ -96,20 +96,6 @@ public class ProjectController {
         // TODO: 11/22/2021 refresh points
     }
 
-    public void movePersonUp(Person person) {
-        if (currentProject == null) {
-            logger.error("Current project is null", new GdxRuntimeException(""));
-        }
-        currentProject.movePersonUp(person);
-    }
-
-    public void movePersonDown (Person person) {
-        if (currentProject == null) {
-            logger.error("Current project is null", new GdxRuntimeException(""));
-        }
-        currentProject.movePersonDown(person);
-    }
-
     public int getPeopleCount() {
         return currentProject.getPeopleCount();
     }

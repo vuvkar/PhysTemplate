@@ -79,16 +79,6 @@ public class Project {
         }
     }
 
-    public void movePersonUp(Person person) {
-        Person remove = people.remove(person.index);
-        people.add(person.index - 1, remove);
-    }
-
-    public void movePersonDown(Person person) {
-        Person remove = people.remove(person.index);
-        people.add(person.index + 1, remove);
-    }
-
     public int getPeopleCount() {
         return people.size();
     }

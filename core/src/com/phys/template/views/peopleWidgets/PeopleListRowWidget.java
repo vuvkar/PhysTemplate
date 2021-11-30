@@ -28,6 +28,7 @@ public class PeopleListRowWidget extends Table {
     private VisImageButton moveDown;
     private VisImage invalidRowImage;
 
+    private RowCell index;
     private RowCell rank;
     private RowCell name;
     private RowCell sex;
@@ -48,9 +49,12 @@ public class PeopleListRowWidget extends Table {
         left().top();
         defaults().padRight(2);
         if (isFirstRow) {
+            index = new RowCell(NUMBER_LENGTH, true);
+            index.setText("Հ/Հ");
+            add(index).growY();
             rank = new RowCell(RANK_LENGTH, true);
-            add(rank).growY().padLeft(32);
             rank.setText("Կոչում");
+            add(rank).growY();
             name = new RowCell(NAME_LENGTH, true);
             add(name).grow();
             name.setText("Ա.Ա.Հ.");
@@ -75,37 +79,8 @@ public class PeopleListRowWidget extends Table {
 
         } else {
             // TODO: 11/22/2021 handle validation UI, if some exercises are missing info
-            Skin skin = PhysTemplate.Instance().UIStage().getSkin();
-            moveTop = new VisImageButton(skin.getDrawable("select-up"));
-            setBackground(skin.getDrawable("border"));
-            moveTop.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    super.clicked(event, x, y);
-                    if (person.index != 0) {
-                        PhysTemplate.Instance().ProjectController().movePersonUp(person);
-                        PhysTemplate.Instance().UIStage().updatePeopleContent();
-                    }
-
-                }
-            });
-            moveDown = new VisImageButton(skin.getDrawable("select-down"));
-            moveDown.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    super.clicked(event, x, y);
-                    if (person.index != PhysTemplate.Instance().ProjectController().getPeopleCount() - 1) {
-                        PhysTemplate.Instance().ProjectController().movePersonDown(person);
-                        PhysTemplate.Instance().UIStage().updatePeopleContent();
-                    }
-                }
-            });
-            Table buttonsTable = new Table();
-            buttonsTable.add(moveTop);
-            buttonsTable.row();
-            buttonsTable.add(moveDown);
-
-            add(buttonsTable);
+            index = new RowCell(NUMBER_LENGTH);
+            add(index).growY();
             rank = new RowCell(RANK_LENGTH);
             add(rank).growY();
             name = new RowCell(NAME_LENGTH);
@@ -137,6 +112,7 @@ public class PeopleListRowWidget extends Table {
     }
 
     public void updateForPerson(Person person) {
+        index.setText(person.index + 1);
         rank.setText(person.rank.shortName());
         name.setText(person.getFullName());
         sex.setText(person.sex.toString());

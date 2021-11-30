@@ -81,6 +81,11 @@ public class UIStage {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // TODO: 11/19/2021 handle export same as print
+                try {
+                    PhysTemplate.Instance().DocumentController().createDocumentForCurrentProject();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         VisTextButton saveButton = new VisTextButton("Պահպանել", new ChangeListener() {
