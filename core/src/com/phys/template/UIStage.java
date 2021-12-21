@@ -1,7 +1,11 @@
 package com.phys.template;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -17,6 +21,11 @@ import com.phys.template.views.MainMenu;
 import com.phys.template.views.peopleWidgets.EditPersonPopup;
 import com.phys.template.views.peopleWidgets.PeopleListWidget;
 import com.phys.template.views.dialogs.SettingsDialog;
+
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 
 public class UIStage {
 
@@ -44,6 +53,16 @@ public class UIStage {
         this.stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
         this.skin = skin;
         this.dragAndDrop = new DragAndDrop();
+
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if(keycode == Input.Keys.V && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+                   onPaste();
+                }
+                return super.keyDown(event, keycode);
+            }
+        });
     }
 
     public void init() {
@@ -179,5 +198,18 @@ public class UIStage {
         addPersonPopup.updateForMode(false);
         addPersonPopup.updateFor(person);
         stage.addActor(addPersonPopup.fadeIn());
+    }
+
+    public void onPaste () {
+        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable t = c.getContents(this);
+        if (t == null)
+            return;
+        try {
+            // TODO: 12/21/2021 handle copy pasting
+            String transferData = (String) t.getTransferData(DataFlavor.stringFlavor);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

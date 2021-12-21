@@ -51,6 +51,10 @@ public class Person {
         return exercisesPoints.get(number);
     }
 
+    public int getOverallPoints() {
+        return overallPoints;
+    }
+
     public float getExerciseRawValue(int number) {
         if (!exercisesRaw.containsKey(number)) {
             logger.error(name + " person doesn't contain exercise " + number, new RuntimeException());
@@ -121,5 +125,21 @@ public class Person {
             exercisesPoints.put(exercisesPoint.key, exercisesPoint.value);
         }
 
+    }
+
+    public void setGrade(Integer grade) {
+        this.finalGrade = grade;
+    }
+
+    public void setOverallPoints(int overallPoints) {
+        this.overallPoints = overallPoints;
+    }
+
+    public void putExercisePoint(Integer attachedExercise, int gradePoint) {
+        exercisesPoints.put(attachedExercise, gradePoint);
+    }
+
+    public int getGrade() {
+        return finalGrade;
     }
 }

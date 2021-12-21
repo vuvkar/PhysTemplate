@@ -91,7 +91,7 @@ public class EditPersonPopup extends VisWindow {
         VisLabel ageLabel = new VisLabel("Տարիքային խումբ");
         mainTable.add(ageLabel);
         ageGroupSelectBox = new VisSelectBox<>();
-        ageGroupSelectBox.setItems(AgeGroup.values());
+        ageGroupSelectBox.setItems(PhysTemplate.Instance().DataController().getAllAgeGroups());
         mainTable.add(ageGroupSelectBox);
         mainTable.row();
 
@@ -175,6 +175,9 @@ public class EditPersonPopup extends VisWindow {
     public void refreshExerciseContent(ArrayList<Exercise> exerciseList) {
         exercisesTable.clearChildren();
         exerciseMap.clear();
+        exercisesTable.defaults().pad(5);
+        exercisesTable.add(new VisLabel("Վարժություններ"));
+        exercisesTable.row();
 
         for (Exercise exercise : exerciseList) {
             VisLabel exerciseName = new VisLabel(exercise.name);

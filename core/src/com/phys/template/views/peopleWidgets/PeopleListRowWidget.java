@@ -118,8 +118,8 @@ public class PeopleListRowWidget extends Table {
         sex.setText(person.sex.toString());
         ageGroup.setText(person.ageGroup.toString());
         category.setText(person.category.toString());
-        finalPoints.setText(50);
-        finalGrade.setText(5);
+        finalPoints.setText(person.getOverallPoints());
+        finalGrade.setText(person.getGrade());
         this.person = person;
     }
 

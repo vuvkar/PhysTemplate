@@ -1,6 +1,7 @@
 package com.phys.template.views.exerciseWidgets;
 
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.layout.GridGroup;
 import com.kotcrab.vis.ui.widget.VisWindow;
@@ -43,7 +44,7 @@ public class AddExercisePopup extends VisWindow {
 
     public void refreshContent() {
         widgetGrid.clear();
-        ArrayList<Exercise> availableExercises = PhysTemplate.Instance().ProjectController().getAvailableExercises();
+        Array<Exercise> availableExercises = PhysTemplate.Instance().ProjectController().getAvailableExercises();
 
         for (Exercise availableExercise : availableExercises) {
             ExercisePreviewWidget exercisePreviewWidget = new ExercisePreviewWidget(availableExercise);

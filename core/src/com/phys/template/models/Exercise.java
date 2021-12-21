@@ -1,6 +1,7 @@
 package com.phys.template.models;
 
 public class Exercise {
+
     public int number;
     public String name;
     public  String longName;

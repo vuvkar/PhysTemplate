@@ -1,6 +1,7 @@
 package com.phys.template.controllers;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Logger;
@@ -10,19 +11,15 @@ import com.phys.template.models.Person;
 import com.phys.template.models.Project;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ProjectController {
 
     private static Logger logger = new Logger("ProjectController");
 
-    private IntMap<Exercise> loadedExercises;
     private Project currentProject;
 
-    public void init(ArrayList<Exercise> exercises) {
-        loadedExercises = new IntMap<>();
-        for (Exercise exercise : exercises) {
-            loadedExercises.put(exercise.number, exercise);
-        }
+    public void init() {
     }
 
     public void newProject() {
@@ -40,17 +37,23 @@ public class ProjectController {
     }
 
     public Exercise getExerciseModelFor(int exerciseNumber) {
-        Exercise exercise = loadedExercises.get(exerciseNumber);
+        Exercise exercise = PhysTemplate.Instance().DataController().getExerciseModelFor(exerciseNumber);
         return  exercise.copy();
     }
 
-    public ArrayList<Exercise> getAvailableExercises() {
-        ArrayList<Exercise> exercises = new ArrayList<>();
-        for (Exercise value : loadedExercises.values()) {
+    public Array<Exercise> getAvailableExercises() {
+        Array<Exercise> exercises = new Array<>();
+        for (Exercise value : PhysTemplate.Instance().DataController().getAllExercises()) {
             if (!currentProject.containsExercise(value.number)) {
                 exercises.add(value.copy());
             }
         }
+        exercises.sort(new Comparator<Exercise>() {
+            @Override
+            public int compare(Exercise o1, Exercise o2) {
+                return o1.number - o2.number;
+            }
+        });
 
         return exercises;
     }

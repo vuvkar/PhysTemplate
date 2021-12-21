@@ -51,7 +51,7 @@ public class PhysTemplate extends ApplicationAdapter {
 
 		projectController = new ProjectController();
 		projectController.newProject();
-		projectController.init(dataController.loadExercisesData());
+		projectController.init();
 
 		documentController = new DocumentController();
 

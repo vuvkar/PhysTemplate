@@ -1,7 +1,7 @@
 [
   {
     "ageGroup": 1,
-    "description": "",
+    "description": "Մինչև 6 ամիս ծառայած պարտադիր ժամկետային զինծառայողներ",
     "category": [
       {
         "ord": [1, 2, 3],
@@ -63,7 +63,7 @@
   },
   {
     "ageGroup": 2,
-    "description": "",
+    "description": "Պարտադիր ժամկետային զինծառայողներ",
     "category": [
       {
         "ord": [1, 2, 3],
