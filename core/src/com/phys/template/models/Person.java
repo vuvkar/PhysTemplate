@@ -57,7 +57,7 @@ public class Person {
 
     public float getExerciseRawValue(int number) {
         if (!exercisesRaw.containsKey(number)) {
-            logger.error(name + " person doesn't contain exercise " + number, new RuntimeException());
+            return 0;
         }
 
         return exercisesRaw.get(number);

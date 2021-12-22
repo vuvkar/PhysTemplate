@@ -8,6 +8,7 @@ public class Exercise {
     public String description;
     public boolean isCustom;
     public boolean isFloat;
+    public String unit;
 
     public Exercise copy() {
         Exercise exercise = new Exercise();
@@ -17,7 +18,12 @@ public class Exercise {
         exercise.description = this.description;
         exercise.isCustom = this.isCustom;
         exercise.isFloat = this.isFloat;
+        exercise.unit = this.unit;
         return exercise;
+    }
+
+    public String getUnit() {
+        return unit;
     }
 }
 

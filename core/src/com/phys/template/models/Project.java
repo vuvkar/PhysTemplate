@@ -56,6 +56,16 @@ public class Project {
         return peopleList;
     }
 
+    public Person getPersonWithIndex(int index) {
+        for (Person person : people) {
+            if (person.index == index) {
+                return person;
+            }
+        }
+
+        return null;
+    }
+
     public void addPerson(Person person) {
         people.add(person);
     }

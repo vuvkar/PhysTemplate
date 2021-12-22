@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.FloatDigitsOnlyFilter;
 import com.kotcrab.vis.ui.widget.*;
 import com.phys.template.PhysTemplate;
@@ -22,9 +23,11 @@ public class EditPersonPopup extends VisWindow {
     private VisSelectBox<Category> categorySelectBox;
     private VisSelectBox<AgeGroup> ageGroupSelectBox;
     private VisTextButton saveButton;
+    private VisTextButton deleteSoldierButton;
     private Table exercisesTable;
     private boolean isCreation;
     private int updatePersonIndex;
+    private static final int FIELD_HEIGHT = 50;
 
     private final ObjectMap<Exercise, VisTextField> exerciseMap = new ObjectMap<>();
 
@@ -42,41 +45,42 @@ public class EditPersonPopup extends VisWindow {
         invalidate();
 
         centerWindow();
-        setSize(600, 600);
+        setSize(1170, 850);
+//        debugAll();
     }
 
     private void initContent() {
         Table mainTable = new Table();
         ScrollPane pane = new ScrollPane(mainTable);
-        mainTable.defaults().pad(15);
+        mainTable.defaults().pad(8);
 
         //rank config
         VisLabel rankLabel = new VisLabel("Կոչումը");
         mainTable.add(rankLabel);
         rankSelectBox = new VisSelectBox<>();
         rankSelectBox.setItems(Rank.values());
-        mainTable.add(rankSelectBox);
+        mainTable.add(rankSelectBox).growX();
         mainTable.row();
 
         //name config
         VisLabel nameLabel = new VisLabel("Անուն");
         mainTable.add(nameLabel);
         nameField = new VisTextField();
-        mainTable.add(nameField);
+        mainTable.add(nameField).height(FIELD_HEIGHT).growX();
         mainTable.row();
 
         //surname config
         VisLabel surnameConfig = new VisLabel("Ազգանուն");
         mainTable.add(surnameConfig);
         surnameField = new VisTextField();
-        mainTable.add(surnameField);
+        mainTable.add(surnameField).height(FIELD_HEIGHT).growX();
         mainTable.row();
 
         //fathername config
         VisLabel fathernameConfig = new VisLabel("Հայրանուն");
         mainTable.add(fathernameConfig);
         fatherField = new VisTextField();
-        mainTable.add(fatherField);
+        mainTable.add(fatherField).height(FIELD_HEIGHT).growX();
         mainTable.row();
 
         //sex config
@@ -84,7 +88,7 @@ public class EditPersonPopup extends VisWindow {
         mainTable.add(sexLabel);
         sexSelectBox = new VisSelectBox<>();
         sexSelectBox.setItems(Sex.values());
-        mainTable.add(sexSelectBox);
+        mainTable.add(sexSelectBox).growX();
         mainTable.row();
 
         //age group
@@ -92,7 +96,7 @@ public class EditPersonPopup extends VisWindow {
         mainTable.add(ageLabel);
         ageGroupSelectBox = new VisSelectBox<>();
         ageGroupSelectBox.setItems(PhysTemplate.Instance().DataController().getAllAgeGroups());
-        mainTable.add(ageGroupSelectBox);
+        mainTable.add(ageGroupSelectBox).growX();
         mainTable.row();
 
         //category config
@@ -100,14 +104,16 @@ public class EditPersonPopup extends VisWindow {
         mainTable.add(categoryLabel);
         categorySelectBox = new VisSelectBox<>();
         categorySelectBox.setItems(Category.values());
-        mainTable.add(categorySelectBox);
+        mainTable.add(categorySelectBox).growX();
         mainTable.row();
 
         exercisesTable = new Table();
-        mainTable.add(exercisesTable).grow();
+        exercisesTable.setSkin(VisUI.getSkin());
+        exercisesTable.setBackground("border");
+        mainTable.add(exercisesTable).colspan(2).grow();
 
         pane.setScrollingDisabled(true, false);
-        add(pane).grow();
+        add(pane).colspan(3).grow();
         row();
         saveButton = new VisTextButton("Ավելացնել", new ChangeListener() {
             @Override
@@ -123,7 +129,16 @@ public class EditPersonPopup extends VisWindow {
                 PhysTemplate.Instance().UIStage().hidePersonAddPopup();
             }
         });
-        add(saveButton);
+        deleteSoldierButton = new VisTextButton("Ջնջել Զինծառայողին", new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                PhysTemplate.Instance().ProjectController().deletePerson(updatePersonIndex);
+                PhysTemplate.Instance().UIStage().updatePeopleContent();
+                PhysTemplate.Instance().UIStage().hidePersonAddPopup();
+            }
+        });
+        add(saveButton).pad(8).left();
+//        debugAll();
     }
 
     public void updateForMode(boolean isCreation) {
@@ -140,9 +155,15 @@ public class EditPersonPopup extends VisWindow {
                 value.clearText();
             }
             saveButton.setText("Ավելացնել");
+            if (deleteSoldierButton.hasParent()) {
+                deleteSoldierButton.remove();
+            }
         } else {
             getTitleLabel().setText("Փոփոխել զինծառայողի տվյալները");
             saveButton.setText("Պահպանել");
+            if (!deleteSoldierButton.hasParent()) {
+                add(deleteSoldierButton).pad(8).right();
+            }
         }
     }
 
@@ -175,16 +196,19 @@ public class EditPersonPopup extends VisWindow {
     public void refreshExerciseContent(ArrayList<Exercise> exerciseList) {
         exercisesTable.clearChildren();
         exerciseMap.clear();
-        exercisesTable.defaults().pad(5);
-        exercisesTable.add(new VisLabel("Վարժություններ"));
+        exercisesTable.defaults().pad(8);
+        exercisesTable.top().left();
+        exercisesTable.add(new VisLabel("Վարժություններ", "big")).growX().colspan(2);
         exercisesTable.row();
+//        exercisesTable.debugAll();
 
         for (Exercise exercise : exerciseList) {
             VisLabel exerciseName = new VisLabel(exercise.name);
             exercisesTable.add(exerciseName);
             VisTextField exerciseField = new VisTextField();
             exerciseField.setTextFieldFilter(new FloatDigitsOnlyFilter(false));
-            exercisesTable.add(exerciseField);
+            exercisesTable.add(exerciseField).height(FIELD_HEIGHT).growX();
+            exercisesTable.add(new VisLabel(exercise.getUnit()));
             exercisesTable.row();
             exerciseMap.put(exercise, exerciseField);
         }
@@ -201,8 +225,8 @@ public class EditPersonPopup extends VisWindow {
 
         for (ObjectMap.Entry<Exercise, VisTextField> exerciseVisTextFieldEntry : exerciseMap) {
             VisTextField fi = exerciseVisTextFieldEntry.value;
-//            float exerciseRawValue = person.getExerciseRawValue(exerciseVisTextFieldEntry.key.number);
-//            fi.setText(String.valueOf(exerciseRawValue));
+            float exerciseRawValue = person.getExerciseRawValue(exerciseVisTextFieldEntry.key.number);
+            fi.setText(String.valueOf(exerciseRawValue));
         }
         updatePersonIndex = person.index;
     }

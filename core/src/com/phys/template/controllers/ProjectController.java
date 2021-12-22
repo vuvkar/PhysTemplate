@@ -108,5 +108,14 @@ public class ProjectController {
             logger.error("Current project is null", new GdxRuntimeException(""));
         }
         currentProject.updatePersonData(person);
+        PhysTemplate.Instance().DataController().calculatePersonPoints(getPersonWithIndex(person.index));
+    }
+
+    private Person getPersonWithIndex(int index) {
+        return currentProject.getPersonWithIndex(index);
+    }
+
+    public void deletePerson(int updatePersonIndex) {
+        // TODO: 12/22/2021 handle deleteion
     }
 }

@@ -122,5 +122,179 @@
         ]
       }
     ]
+  },
+  {
+    "ageGroup": 6,
+    "description": "1-ին տարիքային խմբի սպաներ, ենթասպաներ, պայմանագրային զինծառայողներ (մինչև 25)",
+    "category": [
+      {
+        "ord": [1],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 145
+              },
+              {
+                "grade": 4,
+                "point": 130
+              },
+              {
+                "grade": 3,
+                "point": 100
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 220
+              },
+              {
+                "grade": 4,
+                "point": 200
+              },
+              {
+                "grade": 3,
+                "point": 140
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 290
+              },
+              {
+                "grade": 4,
+                "point": 260
+              },
+              {
+                "grade": 3,
+                "point": 180
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "ord": [2],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 140
+              },
+              {
+                "grade": 4,
+                "point": 125
+              },
+              {
+                "grade": 3,
+                "point": 95
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 210
+              },
+              {
+                "grade": 4,
+                "point": 190
+              },
+              {
+                "grade": 3,
+                "point": 130
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 280
+              },
+              {
+                "grade": 4,
+                "point": 250
+              },
+              {
+                "grade": 3,
+                "point": 170
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "ord": [3],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 135
+              },
+              {
+                "grade": 4,
+                "point": 120
+              },
+              {
+                "grade": 3,
+                "point": 90
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 200
+              },
+              {
+                "grade": 4,
+                "point": 180
+              },
+              {
+                "grade": 3,
+                "point": 120
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 270
+              },
+              {
+                "grade": 4,
+                "point": 240
+              },
+              {
+                "grade": 3,
+                "point": 160
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

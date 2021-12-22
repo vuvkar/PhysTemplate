@@ -5,6 +5,9 @@ import com.badlogic.gdx.utils.*;
 import com.phys.template.models.*;
 
 public class DataController {
+
+    private static Logger logger = new Logger("DataController");
+
     private final JsonReader json = new JsonReader();
 
 
@@ -32,6 +35,7 @@ public class DataController {
             exercise.number = jsonValue.getInt("number");
             exercise.longName = jsonValue.getString("longName");
             exercise.name = jsonValue.getString("name");
+            exercise.unit = jsonValue.getString("unit");
 
             loadedExercises.put(exercise.number, exercise);
         }
@@ -52,8 +56,8 @@ public class DataController {
                 JsonValue gradePointsJson = pointAbsJson.get("points");
 
                 IntMap<IntMap<Integer>> categoryObjectMap = new IntMap<>();
-                IntMap<Integer> gradeMap = new IntMap<>();
                 for (JsonValue exerciseCountJson : gradePointsJson) {
+                    IntMap<Integer> gradeMap = new IntMap<>();
                     int exerciseCount = exerciseCountJson.getInt("exerciseCount");
                     JsonValue gradeValuesJson = exerciseCountJson.get("values");
                     for (JsonValue gradeValueJson : gradeValuesJson) {
@@ -97,7 +101,7 @@ public class DataController {
         }
     }
 
-    public void calculatePersonPoints(Person person) throws PersonGradeCalculationError {
+    public void calculatePersonPoints(Person person) {
         int overallPoints = 0;
 
         for (Integer attachedExercise : person.attachedExercises) {
@@ -108,6 +112,11 @@ public class DataController {
         }
 
         person.setOverallPoints(overallPoints);
+        try {
+            calculatePersonGrade(person);
+        } catch (PersonGradeCalculationError error) {
+            logger.debug(error.getMessage());
+        }
     }
 
     private int getGradePointForExercise(int attachedExercise, float exerciseRawValue) {
@@ -127,7 +136,7 @@ public class DataController {
         }
 
         int arraySize = pointSortedArray.size;
-        for (int i = 0; i < arraySize; i++) {
+        for (int i = 1; i < arraySize; i++) {
             Float f = pointSortedArray.get(i);
             if (f > exerciseRawValue) {
                 return exerciseGradePoints.get(pointSortedArray.get(i-1));
@@ -154,54 +163,20 @@ public class DataController {
         IntArray intArray = exerciseCountMap.keys().toArray();
         intArray.sort();
 
-        int ceil = getCeil(intArray, person.getOverallPoints());
-        if (ceil == -1) {
+        if (intArray.first() > person.getOverallPoints()) {
             person.setGrade(2);
-        } else {
-            Integer grade = exerciseCountMap.get(ceil);
-            if (grade == null) {
-                throw  new PersonGradeCalculationError(CalculationErrorType.MISSING_GRADE);
-            }
-            person.setGrade(grade);
+            return;
         }
-    }
 
-    public static int getCeil(IntArray nums, int x)
-    {
-        // search space is nums[left…right]
-        int left = 0, right = nums.size - 1;
-
-        // initialize ceil to -1
-        int ceil = -1;
-
-        // loop till the search space is exhausted
-        while (left <= right)
-        {
-            // find the mid-value in the search space
-            int mid = (left + right) / 2;
-
-            // if `x` is equal to the middle element, it is the ceil
-            if (nums.get(mid) == x) {
-                return nums.get(mid);
-            }
-
-            // if `x` is less than the middle element, the ceil exists in the
-            // subarray nums[left…mid]; update ceil to the middle element
-            // and reduce our search space to the left subarray nums[left…mid-1]
-            else if (x < nums.get(mid))
-            {
-                ceil = nums.get(mid);
-                right = mid - 1;
-            }
-
-            // if `x` is more than the middle element, the ceil exists in the
-            // right subarray nums[mid+1…right]
-            else {
-                left = mid + 1;
+        for (int i = 1; i < intArray.size; i++) {
+            int iter = intArray.get(i);
+            if (iter > person.getOverallPoints()) {
+                person.setGrade(exerciseCountMap.get(intArray.get(i-1)));
+                return;
             }
         }
 
-        return ceil;
+        person.setGrade(5);
     }
 
     public Exercise getExerciseModelFor(int exerciseNumber) {
