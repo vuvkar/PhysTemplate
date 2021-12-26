@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisImageTextButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -41,7 +42,7 @@ public class ExercisesGroupWidget extends Table {
 
     public void updateContent() {
         mainContainer.clearChildren();
-        ArrayList<Exercise> currentProjectExercises = PhysTemplate.Instance().ProjectController().getCurrentProjectExercises();
+        Array<Exercise> currentProjectExercises = PhysTemplate.Instance().ProjectController().getCurrentProjectExercises();
         for (Exercise currentProjectExercise : currentProjectExercises) {
             ExerciseWidget exerciseWidget = new ExerciseWidget(currentProjectExercise.number);
             exerciseWidget.setName(currentProjectExercise.name);

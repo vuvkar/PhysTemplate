@@ -15,7 +15,7 @@ import java.util.Comparator;
 
 public class ProjectController {
 
-    private static Logger logger = new Logger("ProjectController");
+    private static final Logger logger = new Logger("ProjectController");
 
     private Project currentProject;
 
@@ -63,9 +63,12 @@ public class ProjectController {
             logger.error("Current project is null", new GdxRuntimeException(""));
         }
         currentProject.addExercise(exerciseNumber);
+        PhysTemplate.Instance().UIStage().updateExerciseContent();
+        PhysTemplate.Instance().UIStage().updateTopRow();
+        PhysTemplate.Instance().UIStage().updatePeopleContent();
     }
 
-    public ArrayList<Exercise> getCurrentProjectExercises() {
+    public Array<Exercise> getCurrentProjectExercises() {
         if (currentProject == null) {
             logger.error("Current project is null", new GdxRuntimeException(""));
         }
@@ -88,6 +91,7 @@ public class ProjectController {
 
         person.index = currentProject.getPeopleCount();
         PhysTemplate.Instance().DataController().calculatePersonPoints(person);
+        PhysTemplate.Instance().DataController().calculatePersonGrade(person);
         currentProject.addPerson(person);
     }
 
@@ -96,6 +100,9 @@ public class ProjectController {
             logger.error("Current project is null", new GdxRuntimeException(""));
         }
         currentProject.removeExercise(exerciseNumber);
+        PhysTemplate.Instance().UIStage().updateExerciseContent();
+        PhysTemplate.Instance().UIStage().updateTopRow();
+        PhysTemplate.Instance().UIStage().updatePeopleContent();
         // TODO: 11/22/2021 refresh points
     }
 
@@ -107,8 +114,11 @@ public class ProjectController {
         if (currentProject == null) {
             logger.error("Current project is null", new GdxRuntimeException(""));
         }
+
         currentProject.updatePersonData(person);
-        PhysTemplate.Instance().DataController().calculatePersonPoints(getPersonWithIndex(person.index));
+        Person originalPerson = getPersonWithIndex(person.index);
+        PhysTemplate.Instance().DataController().calculatePersonPoints(originalPerson);
+        PhysTemplate.Instance().DataController().calculatePersonGrade(originalPerson);
     }
 
     private Person getPersonWithIndex(int index) {
@@ -117,5 +127,9 @@ public class ProjectController {
 
     public void deletePerson(int updatePersonIndex) {
         // TODO: 12/22/2021 handle deleteion
+        currentProject.deletePerson(updatePersonIndex);
+        // TODO: 12/25/2021 update overall percentage
+        PhysTemplate.Instance().UIStage().updatePeopleContent();
+
     }
 }

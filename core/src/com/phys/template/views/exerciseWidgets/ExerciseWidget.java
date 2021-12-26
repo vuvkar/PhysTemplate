@@ -29,7 +29,6 @@ public class ExerciseWidget extends Table {
             public void changed(ChangeEvent event, Actor actor) {
                 // TODO: 11/19/2021 handle deletion
                 PhysTemplate.Instance().ProjectController().removeExercise(ExerciseWidget.this.exerciseNumber);
-                PhysTemplate.Instance().UIStage().updateExerciseContent();
             }
         });
         add(deleteButton);

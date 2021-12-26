@@ -38,7 +38,6 @@ public class ExercisePreviewWidget extends Table {
                 super.clicked(event, x, y);
                 if (event.getButton() == Input.Buttons.LEFT) {
                     PhysTemplate.Instance().ProjectController().addExerciseToCurrentProject(exerciseNumber);
-                    PhysTemplate.Instance().UIStage().updateExerciseContent();
                     PhysTemplate.Instance().UIStage().hideExerciseAddPopup();
                 }
             }

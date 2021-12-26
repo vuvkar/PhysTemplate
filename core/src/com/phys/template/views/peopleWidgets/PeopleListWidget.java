@@ -4,7 +4,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -17,7 +16,9 @@ public class PeopleListWidget extends Table {
     private VisLabel nameLabel;
     private ScrollPane scrollPane;
     private VisTextButton addPerson;
-    private Table mainGroup;
+    private Table mainPeopleTable;
+    private Table mainTable;
+    public PeopleListRowWidget topRow;
 
     public PeopleListWidget() {
         super();
@@ -30,17 +31,22 @@ public class PeopleListWidget extends Table {
 
         add(nameLabel).left();
         row();
+        mainTable = new Table();
         createFirstRow();
-        row();
-        mainGroup = new Table();
-        mainGroup.top().left();
-        mainGroup.padTop(30);
-        mainGroup.defaults().padBottom(10);
+        mainTable.row();
+        mainPeopleTable = new Table();
+        mainPeopleTable.top().left();
+        mainPeopleTable.padTop(30);
+        mainPeopleTable.defaults().padBottom(10);
 
         updateContent();
-        scrollPane = new ScrollPane(mainGroup);
-        scrollPane.setScrollingDisabled(true, false);
-        add(scrollPane).grow();
+        scrollPane = new ScrollPane(mainPeopleTable);
+        scrollPane.setScrollingDisabled(false, false);
+        mainTable.add(scrollPane).grow();
+
+        ScrollPane mainScrollPane = new ScrollPane(mainTable);
+        mainScrollPane.setScrollingDisabled(false, true);
+        add(mainScrollPane).growY();
 
         row();
         addPerson = new VisTextButton("Նոր զինծառայող", new ChangeListener() {
@@ -53,19 +59,19 @@ public class PeopleListWidget extends Table {
     }
 
     private void createFirstRow() {
-        PeopleListRowWidget peopleListRowWidget = new PeopleListRowWidget(true);
-        add(peopleListRowWidget).growX().padTop(5).height(90);
+        topRow = new PeopleListRowWidget(true);
+        mainTable.add(topRow).padTop(5).height(90);
     }
 
     public void updateContent() {
-        mainGroup.clearChildren();
+        mainPeopleTable.clearChildren();
         // TODO: 11/19/2021 handle top row
         ArrayList<Person> currentProjectPeople = PhysTemplate.Instance().ProjectController().getCurrentProjectPeople();
         for (Person currentProjectPerson : currentProjectPeople) {
             PeopleListRowWidget peopleListRowWidget = new PeopleListRowWidget();
             peopleListRowWidget.updateForPerson(currentProjectPerson);
-            mainGroup.add(peopleListRowWidget).growX();
-            mainGroup.row();
+            mainPeopleTable.add(peopleListRowWidget).growX();
+            mainPeopleTable.row();
         }
     }
 }

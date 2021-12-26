@@ -4,38 +4,40 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.building.utilities.Alignment;
 import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.phys.template.PhysTemplate;
+import com.phys.template.models.Exercise;
 import com.phys.template.models.Person;
 import com.phys.template.views.BackgroundColor;
 
 public class PeopleListRowWidget extends Table {
 
     public static int NUMBER_LENGTH = 50;
-    public static int RANK_LENGTH = 80;
-    public static int NAME_LENGTH = 80;
+    public static int RANK_LENGTH = 90;
+    public static int NAME_LENGTH = 800;
     public static int SEX_LENGTH = 90;
     public static int AGE_GROUP_LENGTH = 120;
     public static int CATEGORY_LENGTH = 130;
     public static int POINTS_LENGTH = 110;
     public static int FINAL_GRADE_LENGTH = 150;
+    public static int EXERCISE_COLUMN_LENGTH = 150;
 
-
-    private VisImageButton moveTop;
-    private VisImageButton moveDown;
     private VisImage invalidRowImage;
 
-    private RowCell index;
-    private RowCell rank;
-    private RowCell name;
-    private RowCell sex;
-    private RowCell ageGroup;
-    private RowCell category;
-    private RowCell finalPoints;
-    private RowCell finalGrade;
+    private final RowCell index;
+    private final RowCell rank;
+    private final RowCell name;
+    private final RowCell sex;
+    private final RowCell ageGroup;
+    private final RowCell category;
+    private final RowCell finalPoints;
+    private final RowCell finalGrade;
+    private final Array<RowCell> exerciseRowCells;
+    private final Table exerciseTable;
 
     private Person person;
 
@@ -48,6 +50,8 @@ public class PeopleListRowWidget extends Table {
         super();
         left().top();
         defaults().padRight(2);
+        exerciseRowCells = new Array<>();
+        exerciseTable = new Table();
         if (isFirstRow) {
             index = new RowCell(NUMBER_LENGTH, true);
             index.setText("Հ/Հ");
@@ -67,6 +71,7 @@ public class PeopleListRowWidget extends Table {
             category = new RowCell(CATEGORY_LENGTH, true);
             add(category).growY();
             category.setText("Կատեգորիա");
+            add(exerciseTable).growY();
             finalPoints = new RowCell(POINTS_LENGTH, true);
             add(finalPoints).growY();
             finalPoints.setText("Ընդհ. միավորներ");
@@ -91,13 +96,13 @@ public class PeopleListRowWidget extends Table {
             add(ageGroup).growY();
             category = new RowCell(CATEGORY_LENGTH);
             add(category).growY();
+            add(exerciseTable).growY();
             finalPoints = new RowCell(POINTS_LENGTH);
             add(finalPoints).growY();
             finalGrade = new RowCell(FINAL_GRADE_LENGTH);
             add(finalGrade).growY();
             addListeners();
             setBackground(PhysTemplate.Instance().UIStage().getSkin().getDrawable("slider-knob"));
-
         }
     }
 
@@ -111,6 +116,15 @@ public class PeopleListRowWidget extends Table {
         });
     }
 
+    public void updateTopRowForExercises(Array<Exercise> exercises) {
+        exerciseTable.clearChildren();
+        for (Exercise exercise : exercises) {
+            RowCell rawValue = new RowCell(EXERCISE_COLUMN_LENGTH);
+            exerciseTable.add(rawValue).padRight(2).growY();
+            rawValue.setText("Վարժ. " + exercise.number + "\n արդյունք/բալ");
+        }
+    }
+
     public void updateForPerson(Person person) {
         index.setText(person.index + 1);
         rank.setText(person.rank.shortName());
@@ -118,8 +132,34 @@ public class PeopleListRowWidget extends Table {
         sex.setText(person.sex.toString());
         ageGroup.setText(person.ageGroup.toString());
         category.setText(person.category.toString());
+        exerciseTable.clearChildren();
+        for (Integer attachedExercise : person.attachedExercises) {
+            String valueText = "";
+            RowCell value = new RowCell(EXERCISE_COLUMN_LENGTH);
+            exerciseTable.add(value).spaceRight(2).growY();
+            if (person.hasFilledRawValue(attachedExercise)) {
+                String rawValue = String.valueOf(person.getExerciseRawValue(attachedExercise));
+                valueText += rawValue;
+            } else {
+                valueText += "-";
+            }
+            valueText += "/";
+
+            if (person.hasFilledRawValue(attachedExercise)) {
+                String pointValueText = String.valueOf(person.getExercisePoint(attachedExercise));
+                valueText += pointValueText;
+            } else {
+                valueText += "-";
+            }
+            value.setText(valueText);
+        }
+
         finalPoints.setText(person.getOverallPoints());
-        finalGrade.setText(person.getGrade());
+        if (person.canCalculateFinalGrade) {
+            finalGrade.setText(person.getGrade());
+        } else {
+            finalGrade.setText("-");
+        }
         this.person = person;
     }
 

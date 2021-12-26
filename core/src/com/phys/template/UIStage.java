@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.phys.template.controllers.ProjectController;
 import com.phys.template.models.Person;
 import com.phys.template.views.exerciseWidgets.AddExercisePopup;
 import com.phys.template.views.exerciseWidgets.ExercisesGroupWidget;
@@ -211,5 +212,9 @@ public class UIStage {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void updateTopRow() {
+        peopleListWidget.topRow.updateTopRowForExercises(PhysTemplate.Instance().ProjectController().getCurrentProjectExercises());
     }
 }

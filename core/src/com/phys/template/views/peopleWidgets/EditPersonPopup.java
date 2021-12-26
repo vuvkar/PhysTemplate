@@ -4,7 +4,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.OrderedMap;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.FloatDigitsOnlyFilter;
 import com.kotcrab.vis.ui.widget.*;
@@ -29,7 +31,7 @@ public class EditPersonPopup extends VisWindow {
     private int updatePersonIndex;
     private static final int FIELD_HEIGHT = 50;
 
-    private final ObjectMap<Exercise, VisTextField> exerciseMap = new ObjectMap<>();
+    private final OrderedMap<Exercise, VisTextField> exerciseMap = new OrderedMap<>();
 
     public EditPersonPopup() {
         super("Ավելացնել զինծառայող");
@@ -133,7 +135,6 @@ public class EditPersonPopup extends VisWindow {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 PhysTemplate.Instance().ProjectController().deletePerson(updatePersonIndex);
-                PhysTemplate.Instance().UIStage().updatePeopleContent();
                 PhysTemplate.Instance().UIStage().hidePersonAddPopup();
             }
         });
@@ -193,7 +194,7 @@ public class EditPersonPopup extends VisWindow {
     }
 
 
-    public void refreshExerciseContent(ArrayList<Exercise> exerciseList) {
+    public void refreshExerciseContent(Array<Exercise> exerciseList) {
         exercisesTable.clearChildren();
         exerciseMap.clear();
         exercisesTable.defaults().pad(8);
@@ -203,8 +204,9 @@ public class EditPersonPopup extends VisWindow {
 //        exercisesTable.debugAll();
 
         for (Exercise exercise : exerciseList) {
-            VisLabel exerciseName = new VisLabel(exercise.name);
-            exercisesTable.add(exerciseName);
+            VisLabel exerciseName = new VisLabel(exercise.name + ", " + exercise.longName);
+            exercisesTable.add(exerciseName).left();
+            exercisesTable.row();
             VisTextField exerciseField = new VisTextField();
             exerciseField.setTextFieldFilter(new FloatDigitsOnlyFilter(false));
             exercisesTable.add(exerciseField).height(FIELD_HEIGHT).growX();
@@ -225,8 +227,13 @@ public class EditPersonPopup extends VisWindow {
 
         for (ObjectMap.Entry<Exercise, VisTextField> exerciseVisTextFieldEntry : exerciseMap) {
             VisTextField fi = exerciseVisTextFieldEntry.value;
-            float exerciseRawValue = person.getExerciseRawValue(exerciseVisTextFieldEntry.key.number);
-            fi.setText(String.valueOf(exerciseRawValue));
+            int exerciseNumber = exerciseVisTextFieldEntry.key.number;
+            if (person.hasFilledRawValue(exerciseNumber)) {
+                float exerciseRawValue = person.getExerciseRawValue(exerciseNumber);
+                fi.setText(String.valueOf(exerciseRawValue));
+            } else {
+                fi.clearText();
+            }
         }
         updatePersonIndex = person.index;
     }

@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.OrderedMap;
 import java.util.ArrayList;
 
 public class Person {
-    private static Logger logger = new Logger("PersonClass");
+    private static final Logger logger = new Logger("PersonClass");
 
     public Rank rank;
     public String name;
@@ -21,9 +21,11 @@ public class Person {
 
     private int overallPoints;
     private int finalGrade;
+    public boolean canCalculateFinalGrade = false;
+    public PersonGradeCalculationError gradeCalculationError;
 
-    private OrderedMap<Integer, Integer> exercisesPoints;
-    private OrderedMap<Integer, Float> exercisesRaw;
+    private final OrderedMap<Integer, Integer> exercisesPoints;
+    private final OrderedMap<Integer, Float> exercisesRaw;
     public ArrayList<Integer> attachedExercises;
 
     public ArrayList<String> notes;
@@ -43,12 +45,17 @@ public class Person {
         attachedExercises.add(number);
     }
 
-    public float getExercisePoint(int number) {
-        if (exercisesPoints.containsKey(number)) {
-            logger.error(name + " person doesn't contain exercise " + number, new RuntimeException());
+    public int getExercisePoint(int number) {
+        if (!exercisesPoints.containsKey(number)) {
+            logger.debug(name + " person doesn't contain exercise " + number, new RuntimeException());
+            return 0;
         }
 
         return exercisesPoints.get(number);
+    }
+
+    public boolean hasFilledRawValue(int number) {
+        return exercisesRaw.containsKey(number);
     }
 
     public int getOverallPoints() {
@@ -56,10 +63,6 @@ public class Person {
     }
 
     public float getExerciseRawValue(int number) {
-        if (!exercisesRaw.containsKey(number)) {
-            return 0;
-        }
-
         return exercisesRaw.get(number);
     }
 
@@ -80,6 +83,8 @@ public class Person {
         copy.overallPoints = this.overallPoints;
         copy.finalGrade = this.finalGrade;
         copy.index = this.index;
+        copy.canCalculateFinalGrade = this.canCalculateFinalGrade;
+        copy.gradeCalculationError = this.gradeCalculationError;
 
         copy.attachedExercises.addAll(attachedExercises);
         for (ObjectMap.Entry<Integer, Float> integerFloatEntry : this.exercisesRaw) {
@@ -112,6 +117,8 @@ public class Person {
         this.overallPoints = copyPerson.overallPoints;
         this.finalGrade = copyPerson.finalGrade;
         this.index = copyPerson.index;
+        this.gradeCalculationError = copyPerson.gradeCalculationError;
+        this.canCalculateFinalGrade = copyPerson.canCalculateFinalGrade;
 
         attachedExercises.clear();
         attachedExercises.addAll(copyPerson.attachedExercises);

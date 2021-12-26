@@ -1,5 +1,6 @@
 package com.phys.template.models;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Logger;
 import com.phys.template.PhysTemplate;
@@ -26,6 +27,8 @@ public class Project {
         exercises.add(exercise);
         for (Person person : people) {
             person.addExercise(exerciseNumber);
+            PhysTemplate.Instance().DataController().calculatePersonPoints(person);
+            PhysTemplate.Instance().DataController().calculatePersonGrade(person);
         }
     }
 
@@ -39,8 +42,8 @@ public class Project {
         return false;
     }
 
-    public ArrayList<Exercise> getExercises() {
-        ArrayList<Exercise> exerciseArrayList = new ArrayList<>();
+    public Array<Exercise> getExercises() {
+        Array<Exercise> exerciseArrayList = new Array<>();
         for (Exercise exercise : exercises) {
             exerciseArrayList.add(exercise.copy());
         }
@@ -86,6 +89,8 @@ public class Project {
 
         for (Person person : people) {
             person.removeExercise(exerciseNumber);
+            PhysTemplate.Instance().DataController().calculatePersonPoints(person);
+            PhysTemplate.Instance().DataController().calculatePersonGrade(person);
         }
     }
 
@@ -98,6 +103,18 @@ public class Project {
             if (original.index == copyPerson.index) {
                 original.copyFrom(copyPerson);
             }
+        }
+    }
+
+    public void deletePerson(int updatePersonIndex) {
+        people.remove(updatePersonIndex);
+        updatePeopleIndexes();
+    }
+
+    private void updatePeopleIndexes() {
+        for (int i = 0; i < people.size(); i++) {
+            Person person = people.get(i);
+            person.index = i;
         }
     }
 }

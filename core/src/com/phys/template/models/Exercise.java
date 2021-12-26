@@ -9,6 +9,8 @@ public class Exercise {
     public boolean isCustom;
     public boolean isFloat;
     public String unit;
+    // Վարժության արդյունքի մեծացման հետ միավորները փոքրանում են թե ոչ
+    public boolean arePointsDescending;
 
     public Exercise copy() {
         Exercise exercise = new Exercise();
@@ -19,6 +21,8 @@ public class Exercise {
         exercise.isCustom = this.isCustom;
         exercise.isFloat = this.isFloat;
         exercise.unit = this.unit;
+        exercise.arePointsDescending = this.arePointsDescending;
+
         return exercise;
     }
 

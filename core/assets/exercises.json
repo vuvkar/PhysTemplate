@@ -4,62 +4,73 @@
     "name": "Վարժություն 1",
     "longName": "Ձգումներ պտտաձողից",
     "description": "",
-    "unit": "հատ"
+    "unit": "հատ",
+    "isFloat": false
   },
   {
     "number": 2,
     "name": "Վարժություն 2",
     "longName": "Վերելք շրջումով պտտաձողի վրա",
     "description": "",
-    "unit": "հատ"
+    "unit": "հատ",
+    "isFloat": false
   },
   {
     "number": 3,
     "name": "Վարժություն 3",
     "longName": "Վերելք ուժով պտտաձողի վրա",
     "description": "",
-    "unit": "հատ"
+    "unit": "հատ",
+    "isFloat": false
   },
   {
     "number": 4,
     "name": "Վարժություն 4",
     "longName": "Ձեռքերի ծալում և ուղղում զուգափայտերի վրա",
     "description": "",
-    "unit": "հատ"
+    "unit": "հատ",
+    "isFloat": false
   },
   {
     "number": 5,
     "name": "Վարժություն 5",
     "longName": "Անկյուն զուգափայտերի վրա",
     "description": "",
-    "unit": "հատ"
+    "unit": "հատ",
+    "isFloat": true
   },
   {
     "number": 6,
     "name": "Վարժություն 6",
     "longName": "Իրանի ծալում և տարածում պառկած դրությունից",
     "description": "",
-    "unit": "հատ"
+    "unit": "հատ",
+    "isFloat": false
   },
   {
     "number": 7,
     "name": "Վարժություն 7",
     "longName": "Եռացատկ տեղից",
     "description": "",
-    "unit": "հատ"
+    "unit": "հատ",
+    "isFloat": false
   },
   {
     "number": 26,
     "name": "Վարժություն 26",
     "longName": "Վազք 100 մ",
     "description": "",
-    "unit": "վրկ"
+    "unit": "վրկ",
+    "isFloat": true,
+    "arePointsDescending": true
   },
   {
-  "number": 29,
-  "name": "Վարժություն 29",
-  "longName": "վազք 3 կմ",
-  "description": "",
-  "unit": "րոպե, վրկ"
-}
+    "number": 29,
+    "name": "Վարժություն 29",
+    "longName": "վազք 3 կմ",
+    "description": "",
+    "unit": "րոպե, վրկ",
+    "isFloat": true,
+    "arePointsDescending": true
+  }
 ]

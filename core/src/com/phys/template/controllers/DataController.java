@@ -6,7 +6,7 @@ import com.phys.template.models.*;
 
 public class DataController {
 
-    private static Logger logger = new Logger("DataController");
+    private static final Logger logger = new Logger("DataController");
 
     private final JsonReader json = new JsonReader();
 
@@ -22,6 +22,7 @@ public class DataController {
     private final Array<AgeGroup> loadedAgeGroups = new Array<>();
 
     public DataController() {
+        logger.setLevel(Logger.DEBUG);
         loadExercisesData();
         loadExercisePointData();
         loadGradePointData();
@@ -36,12 +37,13 @@ public class DataController {
             exercise.longName = jsonValue.getString("longName");
             exercise.name = jsonValue.getString("name");
             exercise.unit = jsonValue.getString("unit");
+            exercise.arePointsDescending = jsonValue.getBoolean("arePointsDescending", false);
 
             loadedExercises.put(exercise.number, exercise);
         }
     }
 
-    public void loadExercisePointData () {
+    public void loadExercisePointData() {
         JsonValue base = json.parse(Gdx.files.internal("grades.json"));
 
         for (JsonValue ageGroupJson : base) {
@@ -73,14 +75,14 @@ public class DataController {
                 Category[] categories = Category.values();
                 int[] ords = pointAbsJson.get("ord").asIntArray();
                 for (int ord : ords) {
-                    ageGroupObjectMap.put(categories[ord-1], categoryObjectMap);
+                    ageGroupObjectMap.put(categories[ord - 1], categoryObjectMap);
                 }
             }
 
         }
     }
 
-    public void loadGradePointData () {
+    public void loadGradePointData() {
         JsonValue base = json.parse(Gdx.files.internal("points.json"));
 
         for (JsonValue exercise : base) {
@@ -105,6 +107,9 @@ public class DataController {
         int overallPoints = 0;
 
         for (Integer attachedExercise : person.attachedExercises) {
+            if (!person.hasFilledRawValue(attachedExercise)) {
+                continue;
+            }
             float exerciseRawValue = person.getExerciseRawValue(attachedExercise);
             int gradePoint = getGradePointForExercise(attachedExercise, exerciseRawValue);
             person.putExercisePoint(attachedExercise, gradePoint);
@@ -112,11 +117,6 @@ public class DataController {
         }
 
         person.setOverallPoints(overallPoints);
-        try {
-            calculatePersonGrade(person);
-        } catch (PersonGradeCalculationError error) {
-            logger.debug(error.getMessage());
-        }
     }
 
     private int getGradePointForExercise(int attachedExercise, float exerciseRawValue) {
@@ -131,34 +131,53 @@ public class DataController {
         }
 
         Array<Float> pointSortedArray = sortedExercisePointKey.get(attachedExercise);
-        if (pointSortedArray.first() > exerciseRawValue) {
-            return 0;
-        }
+        boolean arePointsDescending = loadedExercises.get(attachedExercise).arePointsDescending;
 
         int arraySize = pointSortedArray.size;
-        for (int i = 1; i < arraySize; i++) {
-            Float f = pointSortedArray.get(i);
-            if (f > exerciseRawValue) {
-                return exerciseGradePoints.get(pointSortedArray.get(i-1));
+        if (arePointsDescending) {
+            if (pointSortedArray.get(arraySize - 1) < exerciseRawValue) {
+                return 0;
+            }
+
+        } else {
+            if (pointSortedArray.first() > exerciseRawValue) {
+                return 0;
             }
         }
 
-        return exerciseGradePoints.get(pointSortedArray.get(arraySize - 1));
+        for (int i = 0; i < arraySize; i++) {
+            Float f = pointSortedArray.get(i);
+            if (f > exerciseRawValue) {
+                int index = arePointsDescending ? i : i - 1;
+                return exerciseGradePoints.get(pointSortedArray.get(index));
+            }
+        }
+
+        return arePointsDescending ? exerciseGradePoints.get(pointSortedArray.first()) : exerciseGradePoints.get(pointSortedArray.get(arraySize - 1));
     }
 
-    public void calculatePersonGrade(Person person) throws PersonGradeCalculationError {
+    public void calculatePersonGrade(Person person) {
         ObjectMap<Category, IntMap<IntMap<Integer>>> ageGroup = gradeMap.get(person.ageGroup);
         if (ageGroup == null) {
-            throw new PersonGradeCalculationError(CalculationErrorType.MISSING_AGE_GROUP);
+            person.gradeCalculationError = new PersonGradeCalculationError(CalculationErrorType.MISSING_AGE_GROUP);
+            person.canCalculateFinalGrade = false;
+            return;
         }
         IntMap<IntMap<Integer>> categoryMap = ageGroup.get(person.category);
         if (categoryMap == null) {
-            throw new PersonGradeCalculationError(CalculationErrorType.MISSING_CATEGORY);
+            person.gradeCalculationError = new PersonGradeCalculationError(CalculationErrorType.MISSING_CATEGORY);
+            person.canCalculateFinalGrade = false;
+            return;
         }
         IntMap<Integer> exerciseCountMap = categoryMap.get(person.attachedExercises.size());
         if (exerciseCountMap == null) {
-            throw new PersonGradeCalculationError(CalculationErrorType.EXERCISE_COUNT);
+            person.gradeCalculationError = new PersonGradeCalculationError(CalculationErrorType.EXERCISE_COUNT);
+            person.canCalculateFinalGrade = false;
+            return;
         }
+
+        person.gradeCalculationError = null;
+        person.canCalculateFinalGrade = true;
 
         IntArray intArray = exerciseCountMap.keys().toArray();
         intArray.sort();
@@ -171,7 +190,7 @@ public class DataController {
         for (int i = 1; i < intArray.size; i++) {
             int iter = intArray.get(i);
             if (iter > person.getOverallPoints()) {
-                person.setGrade(exerciseCountMap.get(intArray.get(i-1)));
+                person.setGrade(exerciseCountMap.get(intArray.get(i - 1)));
                 return;
             }
         }
@@ -192,7 +211,7 @@ public class DataController {
         return copyArray;
     }
 
-    public Array<AgeGroup> getAllAgeGroups () {
+    public Array<AgeGroup> getAllAgeGroups() {
         Array<AgeGroup> copyArray = new Array<>();
         for (AgeGroup loadedAgeGroup : loadedAgeGroups) {
             copyArray.add(loadedAgeGroup.copy());
