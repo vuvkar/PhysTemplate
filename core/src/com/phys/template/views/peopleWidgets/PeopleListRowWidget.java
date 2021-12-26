@@ -138,8 +138,13 @@ public class PeopleListRowWidget extends Table {
             RowCell value = new RowCell(EXERCISE_COLUMN_LENGTH);
             exerciseTable.add(value).spaceRight(2).growY();
             if (person.hasFilledRawValue(attachedExercise)) {
-                String rawValue = String.valueOf(person.getExerciseRawValue(attachedExercise));
-                valueText += rawValue;
+                if (PhysTemplate.Instance().DataController().isFloatExercise(attachedExercise)) {
+                    String rawValue = String.valueOf(person.getFloatExerciseRawValue(attachedExercise));
+                    valueText += rawValue;
+                } else {
+                    String rawValue = String.valueOf(person.getIntExerciseRawValue(attachedExercise));
+                    valueText += rawValue;
+                }
             } else {
                 valueText += "-";
             }

@@ -2,6 +2,7 @@ package com.phys.template.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.*;
+import com.phys.template.PhysTemplate;
 import com.phys.template.models.*;
 
 public class DataController {
@@ -38,6 +39,7 @@ public class DataController {
             exercise.name = jsonValue.getString("name");
             exercise.unit = jsonValue.getString("unit");
             exercise.arePointsDescending = jsonValue.getBoolean("arePointsDescending", false);
+            exercise.isFloat = jsonValue.getBoolean("isFloat");
 
             loadedExercises.put(exercise.number, exercise);
         }
@@ -110,8 +112,14 @@ public class DataController {
             if (!person.hasFilledRawValue(attachedExercise)) {
                 continue;
             }
-            float exerciseRawValue = person.getExerciseRawValue(attachedExercise);
-            int gradePoint = getGradePointForExercise(attachedExercise, exerciseRawValue);
+            int gradePoint;
+            if (PhysTemplate.Instance().DataController().isFloatExercise(attachedExercise)) {
+                float exerciseRawValue = person.getFloatExerciseRawValue(attachedExercise);
+                gradePoint = getGradePointForExercise(attachedExercise, exerciseRawValue);
+            } else {
+                int intExerciseRawValue = person.getIntExerciseRawValue(attachedExercise);
+                gradePoint = getGradePointForExercise(attachedExercise, intExerciseRawValue);
+            }
             person.putExercisePoint(attachedExercise, gradePoint);
             overallPoints += gradePoint;
         }
@@ -218,6 +226,10 @@ public class DataController {
         }
 
         return copyArray;
+    }
+
+    public boolean isFloatExercise(int number) {
+        return getExerciseModelFor(number).isFloat;
     }
 }
 

@@ -1,9 +1,9 @@
 package com.phys.template.models;
 
-import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.phys.template.PhysTemplate;
 
 import java.util.ArrayList;
 
@@ -25,7 +25,8 @@ public class Person {
     public PersonGradeCalculationError gradeCalculationError;
 
     private final OrderedMap<Integer, Integer> exercisesPoints;
-    private final OrderedMap<Integer, Float> exercisesRaw;
+    private final OrderedMap<Integer, Float> floatExercisesRaw;
+    private final OrderedMap<Integer, Integer> intExercisesRaw;
     public ArrayList<Integer> attachedExercises;
 
     public ArrayList<String> notes;
@@ -33,7 +34,8 @@ public class Person {
     public Person() {
         attachedExercises = new ArrayList<>();
         exercisesPoints = new OrderedMap<>();
-        exercisesRaw = new OrderedMap<>();
+        floatExercisesRaw = new OrderedMap<>();
+        intExercisesRaw = new OrderedMap<>();
         notes = new ArrayList<>();
     }
 
@@ -55,19 +57,31 @@ public class Person {
     }
 
     public boolean hasFilledRawValue(int number) {
-        return exercisesRaw.containsKey(number);
+        if (PhysTemplate.Instance().DataController().isFloatExercise(number)) {
+            return floatExercisesRaw.containsKey(number);
+        } else {
+            return intExercisesRaw.containsKey(number);
+        }
     }
 
     public int getOverallPoints() {
         return overallPoints;
     }
 
-    public float getExerciseRawValue(int number) {
-        return exercisesRaw.get(number);
+    public int getIntExerciseRawValue (int number) {
+        return intExercisesRaw.get(number);
     }
 
-    public void putExerciseRawValue(int number, float value) {
-        exercisesRaw.put(number, value);
+    public float getFloatExerciseRawValue(int number) {
+        return floatExercisesRaw.get(number);
+    }
+
+    public void putFloatExerciseRawValue(int number, float value) {
+        floatExercisesRaw.put(number, value);
+    }
+
+    public void putIntExerciseRawValue(int number, int value) {
+        intExercisesRaw.put(number, value);
     }
 
     public Person copy() {
@@ -87,8 +101,11 @@ public class Person {
         copy.gradeCalculationError = this.gradeCalculationError;
 
         copy.attachedExercises.addAll(attachedExercises);
-        for (ObjectMap.Entry<Integer, Float> integerFloatEntry : this.exercisesRaw) {
-            copy.exercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);
+        for (ObjectMap.Entry<Integer, Float> integerFloatEntry : this.floatExercisesRaw) {
+            copy.floatExercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);
+        }
+        for (ObjectMap.Entry<Integer, Integer> integerFloatEntry : this.intExercisesRaw) {
+            copy.intExercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);
         }
         for (ObjectMap.Entry<Integer, Integer> exercisesPoint : exercisesPoints) {
             copy.exercisesPoints.put(exercisesPoint.key, exercisesPoint.value);
@@ -101,7 +118,11 @@ public class Person {
         // TODO: 11/23/2021 np exception here
         attachedExercises.remove(Integer.valueOf(exerciseNumber));
         exercisesPoints.remove(exerciseNumber);
-        exercisesRaw.remove(exerciseNumber);
+        if (PhysTemplate.Instance().DataController().isFloatExercise(exerciseNumber)) {
+            floatExercisesRaw.remove(exerciseNumber);
+        } else {
+            intExercisesRaw.remove(exerciseNumber);
+        }
     }
 
     public void copyFrom(Person copyPerson) {
@@ -122,9 +143,13 @@ public class Person {
 
         attachedExercises.clear();
         attachedExercises.addAll(copyPerson.attachedExercises);
-        exercisesRaw.clear();
-        for (ObjectMap.Entry<Integer, Float> integerFloatEntry : copyPerson.exercisesRaw) {
-            exercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);
+        floatExercisesRaw.clear();
+        for (ObjectMap.Entry<Integer, Float> integerFloatEntry : copyPerson.floatExercisesRaw) {
+            floatExercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);
+        }
+        intExercisesRaw.clear();
+        for (ObjectMap.Entry<Integer, Integer> integerFloatEntry : copyPerson.intExercisesRaw) {
+            intExercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);
         }
 
         exercisesPoints.clear();

@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.FloatDigitsOnlyFilter;
+import com.kotcrab.vis.ui.util.IntDigitsOnlyFilter;
+import com.kotcrab.vis.ui.util.NumberDigitsTextFieldFilter;
 import com.kotcrab.vis.ui.widget.*;
 import com.phys.template.PhysTemplate;
 import com.phys.template.models.*;
@@ -186,7 +188,11 @@ public class EditPersonPopup extends VisWindow {
             person.addExercise(exercise.number);
             String text = field.getText();
             if (!text.isEmpty()) {
-                person.putExerciseRawValue(exercise.number, Float.parseFloat(text));
+                if (PhysTemplate.Instance().DataController().isFloatExercise(exercise.number)) {
+                    person.putFloatExerciseRawValue(exercise.number, Float.parseFloat(text));
+                } else {
+                    person.putIntExerciseRawValue(exercise.number, Integer.parseInt(text));
+                }
             }
         }
 
@@ -208,7 +214,8 @@ public class EditPersonPopup extends VisWindow {
             exercisesTable.add(exerciseName).left();
             exercisesTable.row();
             VisTextField exerciseField = new VisTextField();
-            exerciseField.setTextFieldFilter(new FloatDigitsOnlyFilter(false));
+            NumberDigitsTextFieldFilter filter = PhysTemplate.Instance().DataController().isFloatExercise(exercise.number) ? new FloatDigitsOnlyFilter(false) : new IntDigitsOnlyFilter(false);
+            exerciseField.setTextFieldFilter(filter);
             exercisesTable.add(exerciseField).height(FIELD_HEIGHT).growX();
             exercisesTable.add(new VisLabel(exercise.getUnit()));
             exercisesTable.row();
@@ -229,8 +236,15 @@ public class EditPersonPopup extends VisWindow {
             VisTextField fi = exerciseVisTextFieldEntry.value;
             int exerciseNumber = exerciseVisTextFieldEntry.key.number;
             if (person.hasFilledRawValue(exerciseNumber)) {
-                float exerciseRawValue = person.getExerciseRawValue(exerciseNumber);
-                fi.setText(String.valueOf(exerciseRawValue));
+                boolean isFloatExercise = PhysTemplate.Instance().DataController().isFloatExercise(exerciseNumber);
+                if (isFloatExercise) {
+                    float exerciseRawValue = person.getFloatExerciseRawValue(exerciseNumber);
+                    fi.setText(String.valueOf(exerciseRawValue));
+                } else {
+                    int exerciseRawValue = person.getIntExerciseRawValue(exerciseNumber);
+                    fi.setText(String.valueOf(exerciseRawValue));
+                }
+
             } else {
                 fi.clearText();
             }
