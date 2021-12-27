@@ -102,7 +102,7 @@ public class UIStage {
             public void changed(ChangeEvent event, Actor actor) {
                 // TODO: 11/19/2021 handle export same as print
                 try {
-                    PhysTemplate.Instance().DocumentController().createDocumentForCurrentProject();
+                    PhysTemplate.Instance().DocumentController().createDocumentForProject(PhysTemplate.Instance().ProjectController().getCurrentProject());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

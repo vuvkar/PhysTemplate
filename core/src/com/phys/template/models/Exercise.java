@@ -29,6 +29,10 @@ public class Exercise {
     public String getUnit() {
         return unit;
     }
+
+    public String getVeryShortDescription() {
+        return "Վարժ. " + number;
+    }
 }
 
 

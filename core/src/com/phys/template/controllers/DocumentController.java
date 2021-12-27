@@ -3,25 +3,44 @@ package com.phys.template.controllers;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
+import com.phys.template.PhysTemplate;
+import com.phys.template.models.Exercise;
+import com.phys.template.models.Person;
 import com.phys.template.models.Project;
-import org.apache.poi.POIDocument;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTBody;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageSz;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STPageOrientation;
+import org.apache.poi.xwpf.usermodel.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
 public class DocumentController {
 
-    public void createDocumentFor (Project project, Path path) throws Exception {
+    private final static int INITIAL_COLUMNS = 6;
+
+    private final static int ORDER_COL_INDEX = 0;
+    private final static int RANK_INDEX = 1;
+    private final static int FULL_NAME_INDEX = 2;
+    private final static int AGE_GROUP_INDEX = 3;
+    private final static int CATEGORY_INDEX = 4;
+    private final static int RESTRICTIONS_INDEX = 5;
+
+    private final static int HEADER_HEIGHT = 1600;
+    private final static int ORDER_WIDTH = 500;
+    private final static int RANK_WIDTH = 800;
+    private final static int NAME_WIDTH = 5000;
+    private final static int AGE_GROUP_WIDTH = 500;
+    private final static int CATEGORY_WIDTH = 500;
+    private final static int RESTRICTION_WIDTH = 500;
+    private final static int RAW_VALUE_WIDTH = 500;
+    private final static int POINT_WIDTH = 500;
+    private final static int OVERALL_POINTS_WIDTH = 1300;
+    private final static int GRADE_WIDTH = 1300;
+
+    public void createDocumentFor(Project project, Path path) throws Exception {
 
     }
 
@@ -33,7 +52,7 @@ public class DocumentController {
         }
         CTSectPr section = body.getSectPr();
 
-        if(!section.isSetPgSz()) {
+        if (!section.isSetPgSz()) {
             section.addNewPgSz();
         }
         CTPageSz pageSize = section.getPgSz();
@@ -43,35 +62,55 @@ public class DocumentController {
         pageSize.setOrient(STPageOrientation.LANDSCAPE);
     }
 
-    public void createFirstRow(XWPFTable table, Project project) {
+    public void createTableStructure(XWPFTable table, Project project) {
+        int exerciseSize = project.getExercises().size;
 
+        XWPFTableRow firstRow = table.getRow(0);
+        XWPFTableRow secondRow = table.createRow();
+
+        int overallColumnSize = INITIAL_COLUMNS + 2 + exerciseSize * 2;
+
+        // initial cell is already created
+        for (int i = 1; i < overallColumnSize; i++) {
+            firstRow.addNewTableCell();
+            secondRow.addNewTableCell();
+        }
+
+        int peopleCount = project.getPeopleCount();
+        for (int i = 0; i < peopleCount; i++) {
+            table.createRow();
+        }
+
+        for (int i = 0; i < INITIAL_COLUMNS; i++) {
+            mergeCellVertically(table, i, 0, 1);
+        }
+
+        for (int i = 6; i < INITIAL_COLUMNS + exerciseSize * 2; i += 2) {
+            mergeCellHorizontally(table, 0, i, i + 1);
+        }
+
+        for (int i = INITIAL_COLUMNS + exerciseSize * 2; i < overallColumnSize; i++) {
+            mergeCellVertically(table, i, 0, 1);
+        }
     }
 
-    public void createDocumentForCurrentProject() throws Exception {
+    public void createDocumentForProject(Project project) throws Exception {
         //Blank Document
         XWPFDocument document = new XWPFDocument();
         configurePageSizeAndOrientation(document);
 
         //create table
         XWPFTable table = document.createTable();
+        createTableStructure(table, project);
 
-        //create first row
-        XWPFTableRow tableRowOne = table.getRow(0);
-        tableRowOne.getCell(0).setText("col one, row one");
-        tableRowOne.addNewTableCell().setText("col two, row one");
-        tableRowOne.addNewTableCell().setText("col three, row one");
+        // configure table cells size
+        configureTableCellsSize(table, project);
 
-        //create second row
-        XWPFTableRow tableRowTwo = table.createRow();
-        tableRowTwo.getCell(0).setText("col one, row two");
-        tableRowTwo.getCell(1).setText("col two, row two");
-        tableRowTwo.getCell(2).setText("col three, row two");
+        //fill table data
+        fillTableInfo(table, project);
 
-        //create third row
-        XWPFTableRow tableRowThree = table.createRow();
-        tableRowThree.getCell(0).setText("col one, row three");
-        tableRowThree.getCell(1).setText("col two, row three");
-        tableRowThree.getCell(2).setText("col three, row three");
+        //align table data
+        formatTableCells(table, project);
 
         //Write the Document in file system
         FileHandle fileHandle = Gdx.files.getFileHandle("C:\\Users\\vuvka\\Desktop\\a.docx", Files.FileType.Absolute);
@@ -80,5 +119,214 @@ public class DocumentController {
         document.write(out);
         out.close();
         System.out.println("create_table.docx written successully");
+    }
+
+    private void configureTableCellsSize(XWPFTable table, Project project) {
+        XWPFTableRow firstRow = table.getRow(0);
+        XWPFTableRow secondRow = table.getRow(1);
+
+        firstRow.setHeight(HEADER_HEIGHT);
+        secondRow.setHeight(HEADER_HEIGHT);
+
+        XWPFTableCell orderCell = firstRow.getCell(0);
+        orderCell.setWidthType(TableWidthType.DXA);
+        orderCell.setWidth(String.valueOf(ORDER_WIDTH));
+
+        XWPFTableCell rankCell = firstRow.getCell(1);
+        rankCell.setWidthType(TableWidthType.DXA);
+        rankCell.setWidth(String.valueOf(RANK_WIDTH));
+
+        XWPFTableCell nameCell = firstRow.getCell(2);
+        nameCell.setWidthType(TableWidthType.DXA);
+        nameCell.setWidth(String.valueOf(NAME_WIDTH));
+
+        XWPFTableCell ageGroupCell = firstRow.getCell(3);
+        ageGroupCell.setWidthType(TableWidthType.DXA);
+        ageGroupCell.setWidth(String.valueOf(AGE_GROUP_WIDTH));
+
+        XWPFTableCell categoryCell = firstRow.getCell(4);
+        categoryCell.setWidthType(TableWidthType.DXA);
+        categoryCell.setWidth(String.valueOf(CATEGORY_WIDTH));
+
+        XWPFTableCell restrictionCell = firstRow.getCell(5);
+        restrictionCell.setWidthType(TableWidthType.DXA);
+        restrictionCell.setWidth(String.valueOf(RESTRICTION_WIDTH));
+
+        int exerciseSize = project.getExercises().size;
+
+        for (int i = 0; i < exerciseSize; i++) {
+            XWPFTableCell cellRawValue = secondRow.getCell(INITIAL_COLUMNS + i * 2);
+            cellRawValue.setWidthType(TableWidthType.DXA);
+            cellRawValue.setWidth(String.valueOf(RAW_VALUE_WIDTH));
+
+            XWPFTableCell cellPointValue = secondRow.getCell(INITIAL_COLUMNS + i * 2 + 1);
+            cellPointValue.setWidthType(TableWidthType.DXA);
+            cellPointValue.setWidth(String.valueOf(POINT_WIDTH));
+
+            XWPFTableCell exerciseCell = firstRow.getCell(INITIAL_COLUMNS + i * 2);
+            exerciseCell.setWidthType(TableWidthType.DXA);
+            exerciseCell.setWidth(String.valueOf(POINT_WIDTH + RAW_VALUE_WIDTH));
+        }
+
+        int offset = INITIAL_COLUMNS + exerciseSize * 2;
+        XWPFTableCell overallPointCell = firstRow.getCell(offset);
+        overallPointCell.setWidthType(TableWidthType.DXA);
+        overallPointCell.setWidth(String.valueOf(OVERALL_POINTS_WIDTH));
+
+        XWPFTableCell gradeCell = firstRow.getCell(offset + 1);
+        gradeCell.setWidthType(TableWidthType.DXA);
+        gradeCell.setWidth(String.valueOf(GRADE_WIDTH));
+
+
+    }
+
+    private void formatTableCells(XWPFTable table, Project project) {
+        for (int i = 0; i < project.getPeopleCount() + 2; i++) {
+            XWPFTableRow row = table.getRow(i);
+            int lastIndexStart = INITIAL_COLUMNS + project.getExercises().size * 2;
+            for (int j = 0; j < lastIndexStart + 2; j++) {
+                row.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                row.getCell(j).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+
+                if (i == 0 && (j == AGE_GROUP_INDEX || j == CATEGORY_INDEX || j == RESTRICTIONS_INDEX
+                        || j == lastIndexStart || j == lastIndexStart + 1)) {
+                    row.getCell(j).getCTTc().getTcPr().addNewTextDirection().setVal(STTextDirection.BT_LR);
+                }
+
+                if (i == 1 && (j >= INITIAL_COLUMNS && j < lastIndexStart)) {
+                    row.getCell(j).getCTTc().getTcPr().addNewTextDirection().setVal(STTextDirection.BT_LR);
+                }
+            }
+        }
+    }
+
+    private void fillTableInfo(XWPFTable table, Project project) {
+        XWPFTableRow firstRow = table.getRow(0);
+        XWPFTableRow secondRow = table.getRow(1);
+
+        firstRow.getCell(ORDER_COL_INDEX).setText("Հ/Հ");
+        firstRow.getCell(RANK_INDEX).setText("Զին- \nկոչումը");
+        firstRow.getCell(FULL_NAME_INDEX).setText("Ա․Ա․Հ․");
+        firstRow.getCell(AGE_GROUP_INDEX).setText("Տարիքային խումբը");
+        firstRow.getCell(CATEGORY_INDEX).setText("Կատեգորիան");
+        firstRow.getCell(RESTRICTIONS_INDEX).setText("Առողջական սահմանափակում.");
+
+        Array<Exercise> exercises = project.getExercises();
+        int exerciseSize = exercises.size;
+        for (int i = 0; i < exerciseSize; i++) {
+            Exercise exercise = exercises.get(i);
+            firstRow.getCell(INITIAL_COLUMNS + i * 2).setText(exercise.getVeryShortDescription());
+
+            secondRow.getCell(INITIAL_COLUMNS + i * 2).setText("արդյունքը");
+            secondRow.getCell(INITIAL_COLUMNS + i * 2 + 1).setText("բալը");
+        }
+
+        firstRow.getCell(INITIAL_COLUMNS + 2 * exerciseSize).setText("Վարժությունների կատարման ընդհանուր բալը");
+        firstRow.getCell(INITIAL_COLUMNS + 2 * exerciseSize + 1).setText("Ֆիզիկական պատրաստվածության ընդհանուր գնահատականը");
+
+        fillPeopleData(table, project);
+    }
+
+    private void fillPeopleData(XWPFTable table, Project project) {
+        ArrayList<Person> people = project.getPeople();
+        for (int i = 0; i < people.size(); i++) {
+            Person person = people.get(i);
+
+            XWPFTableRow row = table.getRow(i + 2);
+            row.getCell(ORDER_COL_INDEX).setText(String.valueOf(person.index + 1));
+            row.getCell(RANK_INDEX).setText(person.rank.shortName());
+            row.getCell(FULL_NAME_INDEX).setText(person.getFullName());
+            row.getCell(AGE_GROUP_INDEX).setText(String.valueOf(person.ageGroup.number));
+            row.getCell(CATEGORY_INDEX).setText(String.valueOf(person.category.ordinal() + 1));
+
+            int exerciseSize = person.attachedExercises.size();
+            for (int j = 0; j < exerciseSize; j++) {
+                Integer exerciseNumber = person.attachedExercises.get(j);
+                String rawValue = "-";
+
+                boolean hasFilled = person.hasFilledRawValue(exerciseNumber);
+                if (hasFilled) {
+                    if (PhysTemplate.Instance().DataController().isFloatExercise(exerciseNumber)) {
+                        rawValue = String.valueOf(person.getFloatExerciseRawValue(exerciseNumber));
+                    } else {
+                        rawValue = String.valueOf(person.getIntExerciseRawValue(exerciseNumber));
+                    }
+                }
+                row.getCell(INITIAL_COLUMNS + j * 2).setText(rawValue);
+
+                String pointValue = "-";
+                if (hasFilled) {
+                    pointValue = String.valueOf(person.getExercisePoint(exerciseNumber));
+                }
+                row.getCell(INITIAL_COLUMNS + j * 2 + 1).setText(pointValue);
+            }
+
+            int offset = INITIAL_COLUMNS + exerciseSize * 2;
+            row.getCell(offset).setText(String.valueOf(person.getOverallPoints()));
+
+            String finalGrade = "-";
+            if (person.canCalculateFinalGrade) {
+                finalGrade = String.valueOf(person.getGrade());
+            }
+            row.getCell(offset + 1).setText(finalGrade);
+        }
+    }
+
+    private void mergeCellVertically(XWPFTable table, int col, int fromRow, int toRow) {
+        for (int rowIndex = fromRow; rowIndex <= toRow; rowIndex++) {
+            XWPFTableCell cell = table.getRow(rowIndex).getCell(col);
+            CTVMerge vmerge = CTVMerge.Factory.newInstance();
+            if (rowIndex == fromRow) {
+                // The first merged cell is set with RESTART merge value
+                vmerge.setVal(STMerge.RESTART);
+            } else {
+                // Cells which join (merge) the first one, are set with CONTINUE
+                vmerge.setVal(STMerge.CONTINUE);
+                // and the content should be removed
+                for (int i = cell.getParagraphs().size(); i > 0; i--) {
+                    cell.removeParagraph(0);
+                }
+                cell.addParagraph();
+            }
+            // Try getting the TcPr. Not simply setting an new one every time.
+            CTTcPr tcPr = cell.getCTTc().getTcPr();
+            if (tcPr != null) {
+                tcPr.setVMerge(vmerge);
+            } else {
+                // only set an new TcPr if there is not one already
+                tcPr = CTTcPr.Factory.newInstance();
+                tcPr.setVMerge(vmerge);
+                cell.getCTTc().setTcPr(tcPr);
+            }
+        }
+    }
+
+    private void mergeCellHorizontally(XWPFTable table, int row, int fromCol, int toCol) {
+        for (int colIndex = fromCol; colIndex <= toCol; colIndex++) {
+            XWPFTableCell cell = table.getRow(row).getCell(colIndex);
+            CTHMerge hmerge = CTHMerge.Factory.newInstance();
+            if (colIndex == fromCol) {
+                // The first merged cell is set with RESTART merge value
+                hmerge.setVal(STMerge.RESTART);
+            } else {
+                // Cells which join (merge) the first one, are set with CONTINUE
+                hmerge.setVal(STMerge.CONTINUE);
+                // and the content should be removed
+                for (int i = cell.getParagraphs().size(); i > 0; i--) {
+                    cell.removeParagraph(0);
+                }
+                cell.addParagraph();
+            }
+            // Try getting the TcPr. Not simply setting an new one every time.
+            CTTcPr tcPr = cell.getCTTc().getTcPr();
+            if (tcPr != null) {
+                tcPr.setHMerge(hmerge);
+            } else {
+                // only set an new TcPr if there is not one already
+                tcPr = CTTcPr.Factory.newInstance();
+                tcPr.setHMerge(hmerge);
+                cell.getCTTc().setTcPr(tcPr);
+            }
+        }
     }
 }

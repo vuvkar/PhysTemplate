@@ -132,4 +132,8 @@ public class ProjectController {
         PhysTemplate.Instance().UIStage().updatePeopleContent();
 
     }
+
+    public Project getCurrentProject() {
+        return currentProject;
+    }
 }
