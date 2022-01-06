@@ -176,7 +176,9 @@ public class EditPersonPopup extends VisWindow {
         Person person = new Person();
         person.name = nameField.getText();
         person.rank = rankSelectBox.getSelected();
-        person.ageGroup = ageGroupSelectBox.getSelected();
+        AgeGroup selected = ageGroupSelectBox.getSelected();
+        person.ageGroup = selected;
+        person.ageGroupNumber = selected.number;
         person.surname = surnameField.getText();
         person.fatherName = fatherField.getText();
         person.category = categorySelectBox.getSelected();

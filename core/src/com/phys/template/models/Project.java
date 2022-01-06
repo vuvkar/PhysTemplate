@@ -1,21 +1,27 @@
 package com.phys.template.models;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.*;
 import com.phys.template.PhysTemplate;
 
 import java.util.ArrayList;
 
 public class Project {
-    private ArrayList<Exercise> exercises;
-    private ArrayList<Person> people;
 
-    private static Logger logger = new Logger("Project logger");
+    private transient final ArrayList<Exercise> exercises;
+
+    private final  IntArray exerciseNumbers;
+    private final ArrayList<Person> people;
+    private final Metadata metadata;
+
+    private transient String fileName;
+
+    private static  final Logger logger = new Logger("Project logger");
 
     public Project() {
         exercises = new ArrayList<>();
+        exerciseNumbers = new IntArray();
         people = new ArrayList<>();
+        metadata = new Metadata();
     }
 
     public void addExercise(int exerciseNumber) {
@@ -25,6 +31,7 @@ public class Project {
 
         Exercise exercise = PhysTemplate.Instance().ProjectController().getExerciseModelFor(exerciseNumber);
         exercises.add(exercise);
+        exerciseNumbers.add(exerciseNumber);
         for (Person person : people) {
             person.addExercise(exerciseNumber);
             PhysTemplate.Instance().DataController().calculatePersonPoints(person);
@@ -82,6 +89,7 @@ public class Project {
                 didRemove = true;
             }
         }
+        exerciseNumbers.removeValue(exerciseNumber);
 
         if(!didRemove) {
             logger.error("Exercise not found to be removed " + exerciseNumber, new GdxRuntimeException(""));
@@ -116,5 +124,29 @@ public class Project {
             Person person = people.get(i);
             person.index = i;
         }
+    }
+
+    public String getProjectString() {
+        Json json = new Json();
+        json.setOutputType(JsonWriter.OutputType.json);
+        String data = json.prettyPrint(this);
+
+        return data;
+    }
+
+    public void buildAfterLoad() {
+        for (int i = 0; i < exerciseNumbers.size; i++) {
+            int exerciseNumber = exerciseNumbers.get(i);
+            Exercise exercise = PhysTemplate.Instance().ProjectController().getExerciseModelFor(exerciseNumber);
+            exercises.add(exercise);
+            for (Person person : people) {
+                person.addExercise(exerciseNumber);
+                person.ageGroup = PhysTemplate.Instance().DataController().getAgeGroupFor(person.ageGroupNumber);
+                PhysTemplate.Instance().DataController().calculatePersonPoints(person);
+                PhysTemplate.Instance().DataController().calculatePersonGrade(person);
+            }
+        }
+
+
     }
 }

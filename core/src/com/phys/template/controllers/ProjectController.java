@@ -1,10 +1,7 @@
 package com.phys.template.controllers;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.*;
 import com.phys.template.PhysTemplate;
 import com.phys.template.models.Exercise;
 import com.phys.template.models.Person;
@@ -28,17 +25,37 @@ public class ProjectController {
         currentProject = project;
     }
 
-    public void loadProject(FileHandle handle) {
-        // TODO: 11/19/2021 handle project file loading
+    public void saveProject(FileHandle destination) {
+        try {
+            String data = currentProject.getProjectString();
+            destination.writeString(data, false);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 
-    public void updateRecentsList() {
-        // TODO: 11/19/2021 handle recent file menu updating
+    public void loadProject(FileHandle projectFileHandle) {
+        try {
+            if (projectFileHandle.exists()) {
+
+                String string = projectFileHandle.readString();
+                Json json = new Json();
+                currentProject = json.fromJson(Project.class, string);
+                currentProject.buildAfterLoad();
+                PhysTemplate.Instance().UIStage().updateTopRow();
+                PhysTemplate.Instance().UIStage().updatePeopleContent();
+                PhysTemplate.Instance().UIStage().updateExerciseContent();
+            } else {
+                //error handle
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 
     public Exercise getExerciseModelFor(int exerciseNumber) {
         Exercise exercise = PhysTemplate.Instance().DataController().getExerciseModelFor(exerciseNumber);
-        return  exercise.copy();
+        return exercise.copy();
     }
 
     public Array<Exercise> getAvailableExercises() {
@@ -126,7 +143,6 @@ public class ProjectController {
     }
 
     public void deletePerson(int updatePersonIndex) {
-        // TODO: 12/22/2021 handle deleteion
         currentProject.deletePerson(updatePersonIndex);
         // TODO: 12/25/2021 update overall percentage
         PhysTemplate.Instance().UIStage().updatePeopleContent();

@@ -2,6 +2,7 @@ package com.phys.template;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,9 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.phys.template.controllers.ProjectController;
 import com.phys.template.models.Person;
 import com.phys.template.views.exerciseWidgets.AddExercisePopup;
@@ -27,6 +30,8 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.io.FileFilter;
 
 public class UIStage {
 
@@ -58,8 +63,8 @@ public class UIStage {
         stage.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if(keycode == Input.Keys.V && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-                   onPaste();
+                if (keycode == Input.Keys.V && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+                    onPaste();
                 }
                 return super.keyDown(event, keycode);
             }
@@ -108,16 +113,25 @@ public class UIStage {
                 }
             }
         });
-        VisTextButton saveButton = new VisTextButton("Պահպանել", new ChangeListener() {
+
+        VisTextButton saveButton = new VisTextButton("Պահպանել պրոյեկտը", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // TODO: 11/19/2021 handle project save
+                PhysTemplate.Instance().UIStage().saveProjectAction();
             }
         });
+        VisTextButton openButton = new VisTextButton("Բացել պրոյեկտ", new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                PhysTemplate.Instance().UIStage().openProjectAction();
+            }
+        });
+
         bottomButtonTable.left();
         bottomButtonTable.defaults().pad(10);
         bottomButtonTable.add(printButton);
         bottomButtonTable.add(saveButton);
+        bottomButtonTable.add(openButton);
         fullScreenTable.add(bottomButtonTable);
     }
 
@@ -131,7 +145,7 @@ public class UIStage {
         fullScreenTable.add(exercisesGroupWidget).growX();
     }
 
-    private void constructMenu () {
+    private void constructMenu() {
         mainMenu = new MainMenu(this);
         mainMenu.build();
         fullScreenTable.add(mainMenu).growX();
@@ -146,15 +160,64 @@ public class UIStage {
     }
 
     private void initFileChoosers() {
-//        fileChooser = new FileChooser(FileChooser.Mode.SAVE);
-//        fileChooser.setBackground(skin.getDrawable("window-noborder"));
+        fileChooser = new FileChooser(FileChooser.Mode.SAVE);
     }
 
     public void openProjectAction() {
-        // TODO: 11/19/2021 handle open project action
+        fileChooser.setMode(FileChooser.Mode.OPEN);
+        fileChooser.setMultiSelectionEnabled(false);
+
+        fileChooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory() || pathname.getAbsolutePath().endsWith("fpe");
+            }
+        });
+        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+
+        fileChooser.setListener(new FileChooserAdapter() {
+            @Override
+            public void selected(Array<FileHandle> file) {
+                String path = file.first().file().getAbsolutePath();
+                PhysTemplate.Instance().ProjectController().loadProject(Gdx.files.absolute(path));
+            }
+        });
+
+        stage.addActor(fileChooser.fadeIn());
     }
 
     public void saveProjectAction() {
+        final String ext = ".fpe";
+        fileChooser.setMode(FileChooser.Mode.SAVE);
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory() || pathname.getAbsolutePath().endsWith(ext);
+            }
+        });
+        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+
+        fileChooser.setListener(new FileChooserAdapter() {
+            @Override
+            public void selected(Array<FileHandle> file) {
+                String path = file.first().file().getAbsolutePath();
+                if (!path.endsWith(ext)) {
+                    if (path.indexOf(".") > 0) {
+                        path = path.substring(0, path.indexOf("."));
+                    }
+                    path += ext;
+                }
+                FileHandle handle = Gdx.files.absolute(path);
+                // TODO: 1/6/2022 save on a file
+                PhysTemplate.Instance().ProjectController().saveProject(handle);
+//                TalosMain.Instance().ProjectController().saveProject(handle);
+            }
+        });
+
+        fileChooser.setName("a");
+
+        stage.addActor(fileChooser.fadeIn());
         // TODO: 11/19/2021 handle save project action
     }
 
@@ -201,7 +264,7 @@ public class UIStage {
         stage.addActor(addPersonPopup.fadeIn());
     }
 
-    public void onPaste () {
+    public void onPaste() {
         Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
         Transferable t = c.getContents(this);
         if (t == null)
@@ -209,7 +272,7 @@ public class UIStage {
         try {
             // TODO: 12/21/2021 handle copy pasting
             String transferData = (String) t.getTransferData(DataFlavor.stringFlavor);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

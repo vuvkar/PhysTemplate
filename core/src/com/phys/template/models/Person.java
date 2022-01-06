@@ -15,19 +15,20 @@ public class Person {
     public String surname;
     public String fatherName;
     public Sex sex;
-    public AgeGroup ageGroup;
+    public int ageGroupNumber;
     public Category category;
     public int index;
 
-    private int overallPoints;
-    private int finalGrade;
-    public boolean canCalculateFinalGrade = false;
-    public PersonGradeCalculationError gradeCalculationError;
+    public transient AgeGroup ageGroup;
+    private transient int overallPoints;
+    private transient int finalGrade;
+    public transient boolean canCalculateFinalGrade = false;
+    public transient PersonGradeCalculationError gradeCalculationError;
 
-    private final OrderedMap<Integer, Integer> exercisesPoints;
+    private transient final OrderedMap<Integer, Integer> exercisesPoints;
     private final OrderedMap<Integer, Float> floatExercisesRaw;
     private final OrderedMap<Integer, Integer> intExercisesRaw;
-    public ArrayList<Integer> attachedExercises;
+    public transient ArrayList<Integer> attachedExercises;
 
     public ArrayList<String> notes;
 
@@ -89,6 +90,7 @@ public class Person {
         copy.name = this.name;
         copy.rank = this.rank;
         copy.ageGroup = this.ageGroup;
+        copy.ageGroupNumber = this.ageGroupNumber;
         copy.surname = this.surname;
         copy.fatherName = this.fatherName;
         copy.sex = this.sex;
@@ -129,6 +131,7 @@ public class Person {
         this.name = copyPerson.name;
         this.rank = copyPerson.rank;
         this.ageGroup = copyPerson.ageGroup;
+        this.ageGroupNumber = copyPerson.ageGroupNumber;
         this.surname = copyPerson.surname;
         this.fatherName = copyPerson.fatherName;
         this.sex = copyPerson.sex;

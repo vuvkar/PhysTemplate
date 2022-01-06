@@ -141,7 +141,6 @@ public class MainMenu extends Table {
             }
         });
 
-        PhysTemplate.Instance().ProjectController().updateRecentsList();
     }
 
 

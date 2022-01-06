@@ -231,6 +231,17 @@ public class DataController {
     public boolean isFloatExercise(int number) {
         return getExerciseModelFor(number).isFloat;
     }
+
+    public AgeGroup getAgeGroupFor(int ageGroupNumber) {
+        for (AgeGroup loadedAgeGroup : loadedAgeGroups) {
+            if (loadedAgeGroup.number == ageGroupNumber) {
+                return loadedAgeGroup.copy();
+            }
+        }
+
+        logger.error("No age group found for " + ageGroupNumber);
+        return null;
+    }
 }
 
 
