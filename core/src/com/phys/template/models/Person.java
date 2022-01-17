@@ -1,11 +1,13 @@
 package com.phys.template.models;
 
-import com.badlogic.gdx.utils.Logger;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.OrderedMap;
+import com.badlogic.gdx.utils.*;
 import com.phys.template.PhysTemplate;
+import org.apache.commons.collections4.map.LazySortedMap;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class Person {
     private static final Logger logger = new Logger("PersonClass");
@@ -26,8 +28,8 @@ public class Person {
     public transient PersonGradeCalculationError gradeCalculationError;
 
     private transient final OrderedMap<Integer, Integer> exercisesPoints;
-    private final OrderedMap<Integer, Float> floatExercisesRaw;
-    private final OrderedMap<Integer, Integer> intExercisesRaw;
+    private final TreeMap<Integer, Float> floatExercisesRaw;
+    private final TreeMap<Integer, Integer> intExercisesRaw;
     public transient ArrayList<Integer> attachedExercises;
 
     public ArrayList<String> notes;
@@ -35,8 +37,8 @@ public class Person {
     public Person() {
         attachedExercises = new ArrayList<>();
         exercisesPoints = new OrderedMap<>();
-        floatExercisesRaw = new OrderedMap<>();
-        intExercisesRaw = new OrderedMap<>();
+        floatExercisesRaw = new TreeMap<>();
+        intExercisesRaw = new TreeMap<>();
         notes = new ArrayList<>();
     }
 
@@ -177,4 +179,57 @@ public class Person {
     public int getGrade() {
         return finalGrade;
     }
+
+//    @Override
+//    public void write(Json json) {
+//        json.writeValue("rank", rank.ordinal());
+//        json.writeValue("name", name);
+//        json.writeValue("surname", surname);
+//        json.writeValue("fatherName", fatherName);
+//        json.writeValue("sex", sex.ordinal());
+//        json.writeValue("ageGroupNumber", ageGroupNumber);
+//        json.writeValue("category", category.ordinal());
+//        json.writeValue("index", index);
+//
+//        json.writeArrayStart("floatExercises");
+//        for (ObjectMap.Entry<Integer, Float> integerFloatEntry : floatExercisesRaw) {
+//            json.writeObjectEnd();
+//            json.writeValue("exerciseNumber", integerFloatEntry.key);
+//            json.writeValue("exerciseRawValue", integerFloatEntry.value);
+//            json.writeObjectEnd();
+//        }
+//        json.writeArrayEnd();
+//
+//        json.writeArrayStart("intExercises");
+//        for (ObjectMap.Entry<Integer, Integer> integerFloatEntry : intExercisesRaw) {
+//            json.writeObjectStart();
+//            json.writeValue("exerciseNumber", integerFloatEntry.key);
+//            json.writeValue("exerciseRawValue", integerFloatEntry.value);
+//            json.writeObjectEnd();
+//        }
+//        json.writeArrayEnd();
+//    }
+//
+//    @Override
+//    public void read(Json json, JsonValue jsonData) {
+//        rank = Rank.values()[jsonData.getInt("rank")];
+//        sex = Sex.values()[jsonData.getInt("sex")];
+//        category = Category.values()[jsonData.getInt("category")];
+//        name = jsonData.getString("name");
+//        surname = jsonData.getString("surname");
+//        fatherName = jsonData.getString("fatherName");
+//        ageGroupNumber = jsonData.getInt("ageGroupNumber");
+//        index = jsonData.getInt("index");
+//        floatExercisesRaw.clear();
+//        JsonValue floatExercises = jsonData.get("floatExercises");
+//        for (JsonValue floatExercise : floatExercises) {
+//            floatExercisesRaw.put(floatExercise.getInt("exerciseNumber"), floatExercise.getFloat("exerciseRawValue"));
+//        }
+//
+//        intExercisesRaw.clear();
+//        JsonValue intExercises = jsonData.get("intExercises");
+//        for (JsonValue intExercise : intExercises) {
+//            intExercisesRaw.put(intExercise.getInt("exerciseNumber"), intExercise.getInt("exerciseRawValue"));
+//        }
+//    }
 }
