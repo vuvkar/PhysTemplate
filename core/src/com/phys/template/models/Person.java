@@ -2,14 +2,10 @@ package com.phys.template.models;
 
 import com.badlogic.gdx.utils.*;
 import com.phys.template.PhysTemplate;
-import org.apache.commons.collections4.map.LazySortedMap;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
-public class Person {
+public class Person implements Json.Serializable {
     private static final Logger logger = new Logger("PersonClass");
 
     public Rank rank;
@@ -28,8 +24,8 @@ public class Person {
     public transient PersonGradeCalculationError gradeCalculationError;
 
     private transient final OrderedMap<Integer, Integer> exercisesPoints;
-    private final TreeMap<Integer, Float> floatExercisesRaw;
-    private final TreeMap<Integer, Integer> intExercisesRaw;
+    private final OrderedMap<Integer, Float> floatExercisesRaw;
+    private final OrderedMap<Integer, Integer> intExercisesRaw;
     public transient ArrayList<Integer> attachedExercises;
 
     public ArrayList<String> notes;
@@ -37,8 +33,8 @@ public class Person {
     public Person() {
         attachedExercises = new ArrayList<>();
         exercisesPoints = new OrderedMap<>();
-        floatExercisesRaw = new TreeMap<>();
-        intExercisesRaw = new TreeMap<>();
+        floatExercisesRaw = new OrderedMap<>();
+        intExercisesRaw = new OrderedMap<>();
         notes = new ArrayList<>();
     }
 
@@ -105,12 +101,14 @@ public class Person {
         copy.gradeCalculationError = this.gradeCalculationError;
 
         copy.attachedExercises.addAll(attachedExercises);
-        for (ObjectMap.Entry<Integer, Float> integerFloatEntry : this.floatExercisesRaw) {
-            copy.floatExercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);
+        for (ObjectMap.Entry<Integer, Float> entry : floatExercisesRaw) {
+            copy.floatExercisesRaw.put(entry.key, entry.value);
         }
-        for (ObjectMap.Entry<Integer, Integer> integerFloatEntry : this.intExercisesRaw) {
-            copy.intExercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);
+
+        for (ObjectMap.Entry<Integer, Integer> entry : intExercisesRaw) {
+            copy.intExercisesRaw.put(entry.key, entry.value);
         }
+
         for (ObjectMap.Entry<Integer, Integer> exercisesPoint : exercisesPoints) {
             copy.exercisesPoints.put(exercisesPoint.key, exercisesPoint.value);
         }
@@ -153,8 +151,8 @@ public class Person {
             floatExercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);
         }
         intExercisesRaw.clear();
-        for (ObjectMap.Entry<Integer, Integer> integerFloatEntry : copyPerson.intExercisesRaw) {
-            intExercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);
+        for (ObjectMap.Entry<Integer, Integer> integerIntegerEntry : copyPerson.intExercisesRaw) {
+            intExercisesRaw.put(integerIntegerEntry.key, integerIntegerEntry.value);
         }
 
         exercisesPoints.clear();
@@ -180,56 +178,56 @@ public class Person {
         return finalGrade;
     }
 
-//    @Override
-//    public void write(Json json) {
-//        json.writeValue("rank", rank.ordinal());
-//        json.writeValue("name", name);
-//        json.writeValue("surname", surname);
-//        json.writeValue("fatherName", fatherName);
-//        json.writeValue("sex", sex.ordinal());
-//        json.writeValue("ageGroupNumber", ageGroupNumber);
-//        json.writeValue("category", category.ordinal());
-//        json.writeValue("index", index);
-//
-//        json.writeArrayStart("floatExercises");
-//        for (ObjectMap.Entry<Integer, Float> integerFloatEntry : floatExercisesRaw) {
-//            json.writeObjectEnd();
-//            json.writeValue("exerciseNumber", integerFloatEntry.key);
-//            json.writeValue("exerciseRawValue", integerFloatEntry.value);
-//            json.writeObjectEnd();
-//        }
-//        json.writeArrayEnd();
-//
-//        json.writeArrayStart("intExercises");
-//        for (ObjectMap.Entry<Integer, Integer> integerFloatEntry : intExercisesRaw) {
-//            json.writeObjectStart();
-//            json.writeValue("exerciseNumber", integerFloatEntry.key);
-//            json.writeValue("exerciseRawValue", integerFloatEntry.value);
-//            json.writeObjectEnd();
-//        }
-//        json.writeArrayEnd();
-//    }
-//
-//    @Override
-//    public void read(Json json, JsonValue jsonData) {
-//        rank = Rank.values()[jsonData.getInt("rank")];
-//        sex = Sex.values()[jsonData.getInt("sex")];
-//        category = Category.values()[jsonData.getInt("category")];
-//        name = jsonData.getString("name");
-//        surname = jsonData.getString("surname");
-//        fatherName = jsonData.getString("fatherName");
-//        ageGroupNumber = jsonData.getInt("ageGroupNumber");
-//        index = jsonData.getInt("index");
-//        floatExercisesRaw.clear();
-//        JsonValue floatExercises = jsonData.get("floatExercises");
-//        for (JsonValue floatExercise : floatExercises) {
-//            floatExercisesRaw.put(floatExercise.getInt("exerciseNumber"), floatExercise.getFloat("exerciseRawValue"));
-//        }
-//
-//        intExercisesRaw.clear();
-//        JsonValue intExercises = jsonData.get("intExercises");
-//        for (JsonValue intExercise : intExercises) {
-//            intExercisesRaw.put(intExercise.getInt("exerciseNumber"), intExercise.getInt("exerciseRawValue"));
-//        }
-//    }
+    @Override
+    public void write(Json json) {
+        json.writeValue("rank", rank.ordinal());
+        json.writeValue("name", name);
+        json.writeValue("surname", surname);
+        json.writeValue("fatherName", fatherName);
+        json.writeValue("sex", sex.ordinal());
+        json.writeValue("ageGroupNumber", ageGroupNumber);
+        json.writeValue("category", category.ordinal());
+        json.writeValue("index", index);
+
+        json.writeArrayStart("floatExercises");
+        for (ObjectMap.Entry<Integer, Float> integerFloatEntry : floatExercisesRaw) {
+            json.writeObjectStart();
+            json.writeValue("exerciseNumber", integerFloatEntry.key);
+            json.writeValue("exerciseRawValue", integerFloatEntry.value);
+            json.writeObjectEnd();
+        }
+        json.writeArrayEnd();
+
+        json.writeArrayStart("intExercises");
+        for (ObjectMap.Entry<Integer, Integer> integerFloatEntry : intExercisesRaw) {
+            json.writeObjectStart();
+            json.writeValue("exerciseNumber", integerFloatEntry.key);
+            json.writeValue("exerciseRawValue", integerFloatEntry.value);
+            json.writeObjectEnd();
+        }
+        json.writeArrayEnd();
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        rank = Rank.values()[jsonData.getInt("rank")];
+        sex = Sex.values()[jsonData.getInt("sex")];
+        category = Category.values()[jsonData.getInt("category")];
+        name = jsonData.getString("name");
+        surname = jsonData.getString("surname");
+        fatherName = jsonData.getString("fatherName");
+        ageGroupNumber = jsonData.getInt("ageGroupNumber");
+        index = jsonData.getInt("index");
+        floatExercisesRaw.clear();
+        JsonValue floatExercises = jsonData.get("floatExercises");
+        for (JsonValue floatExercise : floatExercises) {
+            floatExercisesRaw.put(floatExercise.getInt("exerciseNumber"), floatExercise.getFloat("exerciseRawValue"));
+        }
+
+        intExercisesRaw.clear();
+        JsonValue intExercises = jsonData.get("intExercises");
+        for (JsonValue intExercise : intExercises) {
+            intExercisesRaw.put(intExercise.getInt("exerciseNumber"), intExercise.getInt("exerciseRawValue"));
+        }
+    }
 }
