@@ -7,8 +7,8 @@ import com.phys.template.PhysTemplate;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 1600;
-		config.height = 900;
+		config.width = 1366;
+		config.height = 768;
 		new LwjglApplication(new PhysTemplate(), config);
 	}
 }
