@@ -10,8 +10,6 @@ public class Person implements Json.Serializable {
 
     public Rank rank;
     public String name;
-    public String surname;
-    public String fatherName;
     public Sex sex;
     public int ageGroupNumber;
     public Category category;
@@ -39,7 +37,7 @@ public class Person implements Json.Serializable {
     }
 
     public String getFullName() {
-        return surname + " " + name + " " + fatherName;
+        return name;
     }
 
     public void addExercise(int number) {
@@ -89,8 +87,6 @@ public class Person implements Json.Serializable {
         copy.rank = this.rank;
         copy.ageGroup = this.ageGroup;
         copy.ageGroupNumber = this.ageGroupNumber;
-        copy.surname = this.surname;
-        copy.fatherName = this.fatherName;
         copy.sex = this.sex;
         copy.notes.addAll(this.notes);
         copy.category = this.category;
@@ -132,8 +128,6 @@ public class Person implements Json.Serializable {
         this.rank = copyPerson.rank;
         this.ageGroup = copyPerson.ageGroup;
         this.ageGroupNumber = copyPerson.ageGroupNumber;
-        this.surname = copyPerson.surname;
-        this.fatherName = copyPerson.fatherName;
         this.sex = copyPerson.sex;
         notes.clear();
         notes.addAll(copyPerson.notes);
@@ -182,8 +176,6 @@ public class Person implements Json.Serializable {
     public void write(Json json) {
         json.writeValue("rank", rank.ordinal());
         json.writeValue("name", name);
-        json.writeValue("surname", surname);
-        json.writeValue("fatherName", fatherName);
         json.writeValue("sex", sex.ordinal());
         json.writeValue("ageGroupNumber", ageGroupNumber);
         json.writeValue("category", category.ordinal());
@@ -214,8 +206,6 @@ public class Person implements Json.Serializable {
         sex = Sex.values()[jsonData.getInt("sex")];
         category = Category.values()[jsonData.getInt("category")];
         name = jsonData.getString("name");
-        surname = jsonData.getString("surname");
-        fatherName = jsonData.getString("fatherName");
         ageGroupNumber = jsonData.getInt("ageGroupNumber");
         index = jsonData.getInt("index");
         floatExercisesRaw.clear();

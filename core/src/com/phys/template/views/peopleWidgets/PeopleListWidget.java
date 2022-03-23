@@ -28,6 +28,7 @@ public class PeopleListWidget extends Table {
         nameLabel = new VisLabel("Անձնակազմի անվանացուցակ", "big");
         top().left();
         pad(10);
+        defaults().top().left();
 
         add(nameLabel).left();
         row();
@@ -60,7 +61,7 @@ public class PeopleListWidget extends Table {
 
     private void createFirstRow() {
         topRow = new PeopleListRowWidget(true);
-        mainTable.add(topRow).padTop(5).height(90);
+        mainTable.add(topRow).padTop(5).height(60);
     }
 
     public void updateContent() {

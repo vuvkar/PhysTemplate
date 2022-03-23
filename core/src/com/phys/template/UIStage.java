@@ -105,25 +105,20 @@ public class UIStage {
         VisTextButton printButton = new VisTextButton("Տպել", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // TODO: 11/19/2021 handle export same as print
-                try {
-                    PhysTemplate.Instance().DocumentController().createDocumentForProject(PhysTemplate.Instance().ProjectController().getCurrentProject());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                printProjectAction();
             }
         });
 
         VisTextButton saveButton = new VisTextButton("Պահպանել պրոյեկտը", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                PhysTemplate.Instance().UIStage().saveProjectAction();
+                saveProjectAction();
             }
         });
         VisTextButton openButton = new VisTextButton("Բացել պրոյեկտ", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                PhysTemplate.Instance().UIStage().openProjectAction();
+                openProjectAction();
             }
         });
 
@@ -186,6 +181,43 @@ public class UIStage {
         stage.addActor(fileChooser.fadeIn());
     }
 
+    public void printProjectAction() {
+        final String ext = ".docx";
+
+        fileChooser.setMode(FileChooser.Mode.SAVE);
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory() || pathname.getAbsolutePath().endsWith(ext);
+            }
+        });
+        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+
+        fileChooser.setListener(new FileChooserAdapter() {
+            @Override
+            public void selected(Array<FileHandle> file) {
+                String path = file.first().file().getAbsolutePath();
+                if (!path.endsWith(ext)) {
+                    if (path.indexOf(".") > 0) {
+                        path = path.substring(0, path.indexOf("."));
+                    }
+                    path += ext;
+                }
+                FileHandle handle = Gdx.files.absolute(path);
+                try {
+                    PhysTemplate.Instance().DocumentController().createDocumentForProject(PhysTemplate.Instance().ProjectController().getCurrentProject(), handle);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        fileChooser.setName("");
+
+        stage.addActor(fileChooser.fadeIn());
+    }
+
     public void saveProjectAction() {
         final String ext = ".fpe";
         fileChooser.setMode(FileChooser.Mode.SAVE);
@@ -211,18 +243,12 @@ public class UIStage {
                 FileHandle handle = Gdx.files.absolute(path);
                 // TODO: 1/6/2022 save on a file
                 PhysTemplate.Instance().ProjectController().saveProject(handle);
-//                TalosMain.Instance().ProjectController().saveProject(handle);
             }
         });
 
         fileChooser.setName("a");
 
         stage.addActor(fileChooser.fadeIn());
-        // TODO: 11/19/2021 handle save project action
-    }
-
-    public void exportAction() {
-        // TODO: 11/19/2021 handle export project action same as print function
     }
 
     public void newProjectAction() {

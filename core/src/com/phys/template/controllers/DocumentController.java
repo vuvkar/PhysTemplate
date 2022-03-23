@@ -94,7 +94,7 @@ public class DocumentController {
         }
     }
 
-    public void createDocumentForProject(Project project) throws Exception {
+    public void createDocumentForProject(Project project, FileHandle handle) throws Exception {
         //Blank Document
         XWPFDocument document = new XWPFDocument();
         configurePageSizeAndOrientation(document);
@@ -113,8 +113,7 @@ public class DocumentController {
         formatTableCells(table, project);
 
         //Write the Document in file system
-        FileHandle fileHandle = Gdx.files.getFileHandle("C:\\Users\\vuvka\\Desktop\\a.docx", Files.FileType.Absolute);
-        FileOutputStream out = new FileOutputStream(fileHandle.path());
+        FileOutputStream out = new FileOutputStream(handle.path());
 
         document.write(out);
         out.close();

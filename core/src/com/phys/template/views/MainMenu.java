@@ -97,7 +97,7 @@ public class MainMenu extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                stage.exportAction();
+                stage.printProjectAction();
             }
         });
 
@@ -133,7 +133,7 @@ public class MainMenu extends Table {
                 }
                 if (keycode == Input.Keys.E && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
                     if (!saveProject.isDisabled()) {
-                        stage.exportAction();
+                        stage.printProjectAction();
                     }
                 }
 

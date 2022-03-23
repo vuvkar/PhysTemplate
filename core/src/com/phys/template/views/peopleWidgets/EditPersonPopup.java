@@ -15,13 +15,10 @@ import com.kotcrab.vis.ui.widget.*;
 import com.phys.template.PhysTemplate;
 import com.phys.template.models.*;
 
-import java.util.ArrayList;
 
 public class EditPersonPopup extends VisWindow {
 
     private VisTextField nameField;
-    private VisTextField surnameField;
-    private VisTextField fatherField;
     private VisSelectBox<Rank> rankSelectBox;
     private VisSelectBox<Sex> sexSelectBox;
     private VisSelectBox<Category> categorySelectBox;
@@ -31,7 +28,7 @@ public class EditPersonPopup extends VisWindow {
     private Table exercisesTable;
     private boolean isCreation;
     private int updatePersonIndex;
-    private static final int FIELD_HEIGHT = 50;
+    private static final int FIELD_HEIGHT = 40;
 
     private final OrderedMap<Exercise, VisTextField> exerciseMap = new OrderedMap<>();
 
@@ -49,14 +46,14 @@ public class EditPersonPopup extends VisWindow {
         invalidate();
 
         centerWindow();
-        setSize(1170, 850);
+        setSize(900, 700);
 //        debugAll();
     }
 
     private void initContent() {
         Table mainTable = new Table();
         ScrollPane pane = new ScrollPane(mainTable);
-        mainTable.defaults().pad(8);
+        mainTable.defaults().pad(6);
 
         //rank config
         VisLabel rankLabel = new VisLabel("Կոչումը");
@@ -67,24 +64,10 @@ public class EditPersonPopup extends VisWindow {
         mainTable.row();
 
         //name config
-        VisLabel nameLabel = new VisLabel("Անուն");
+        VisLabel nameLabel = new VisLabel("Ա.Ա.Հ.");
         mainTable.add(nameLabel);
         nameField = new VisTextField();
         mainTable.add(nameField).height(FIELD_HEIGHT).growX();
-        mainTable.row();
-
-        //surname config
-        VisLabel surnameConfig = new VisLabel("Ազգանուն");
-        mainTable.add(surnameConfig);
-        surnameField = new VisTextField();
-        mainTable.add(surnameField).height(FIELD_HEIGHT).growX();
-        mainTable.row();
-
-        //fathername config
-        VisLabel fathernameConfig = new VisLabel("Հայրանուն");
-        mainTable.add(fathernameConfig);
-        fatherField = new VisTextField();
-        mainTable.add(fatherField).height(FIELD_HEIGHT).growX();
         mainTable.row();
 
         //sex config
@@ -149,8 +132,6 @@ public class EditPersonPopup extends VisWindow {
         if (isCreation) {
             getTitleLabel().setText("Ավելացնել զինծառայող");
             nameField.clearText();
-            surnameField.clearText();
-            fatherField.clearText();
             categorySelectBox.setSelected(Category.FIRST);
             rankSelectBox.setSelected(Rank.SHN);
             sexSelectBox.setSelected(Sex.MALE);
@@ -179,8 +160,6 @@ public class EditPersonPopup extends VisWindow {
         AgeGroup selected = ageGroupSelectBox.getSelected();
         person.ageGroup = selected;
         person.ageGroupNumber = selected.number;
-        person.surname = surnameField.getText();
-        person.fatherName = fatherField.getText();
         person.category = categorySelectBox.getSelected();
         person.sex = sexSelectBox.getSelected();
 
@@ -227,8 +206,6 @@ public class EditPersonPopup extends VisWindow {
 
     public void updateFor(Person person) {
         nameField.setText(person.name);
-        surnameField.setText(person.surname);
-        fatherField.setText(person.fatherName);
         rankSelectBox.setSelected(person.rank);
         sexSelectBox.setSelected(person.sex);
         categorySelectBox.setSelected(person.category);
