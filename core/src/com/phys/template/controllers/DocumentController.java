@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.phys.template.PhysTemplate;
 import com.phys.template.models.Exercise;
+import com.phys.template.models.Metadata;
 import com.phys.template.models.Person;
 import com.phys.template.models.Project;
 
@@ -13,6 +14,7 @@ import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
@@ -95,9 +97,13 @@ public class DocumentController {
     }
 
     public void createDocumentForProject(Project project, FileHandle handle) throws Exception {
+        project.importMetaDatas();
         //Blank Document
         XWPFDocument document = new XWPFDocument();
         configurePageSizeAndOrientation(document);
+
+        //Header and date
+        configureHeaderAndDate(document, project);
 
         //create table
         XWPFTable table = document.createTable();
@@ -118,6 +124,27 @@ public class DocumentController {
         document.write(out);
         out.close();
         System.out.println("create_table.docx written successully");
+    }
+
+    private void configureHeaderAndDate(XWPFDocument document, Project project) {
+        XWPFParagraph headerParagraph = document.createParagraph();
+        XWPFRun run = headerParagraph.createRun();
+        run.setBold(true);
+        run.setFontSize(13);
+        run.setFontFamily("GHEA Grapalat");
+        headerParagraph.setAlignment(ParagraphAlignment.CENTER);
+        Metadata metadata = project.getMetadata();
+        run.setText("ՀՀ ՊՆ " + metadata.getBaseName() + " ԶՈՐԱՄԱՍԻ " +
+                metadata.getSquadName().toUpperCase() + "Ի ՖԻԶԻԿԱԿԱՆ ՊԱՏՐԱՍՏՈՒԹՅԱՆ ՍՏՈՒԳՄԱՆ ԱՐԴՅՈՒՆՔՆԵՐԻ" +
+                "\n ԱՄՓՈՓԱԳԻՐ");
+        run.addBreak();
+
+        XWPFParagraph dateParagraph = document.createParagraph();
+        XWPFRun dateRun = dateParagraph.createRun();
+        dateRun.setFontSize(13);
+        dateRun.setFontFamily("GHEA Grapalat");
+        dateRun.setText("<<__>> ________________ 20__թ.");
+        dateRun.addBreak();
     }
 
     private void configureTableCellsSize(XWPFTable table, Project project) {
@@ -184,16 +211,23 @@ public class DocumentController {
             XWPFTableRow row = table.getRow(i);
             int lastIndexStart = INITIAL_COLUMNS + project.getExercises().size * 2;
             for (int j = 0; j < lastIndexStart + 2; j++) {
-                row.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
-                row.getCell(j).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                XWPFTableCell cell = row.getCell(j);
+                XWPFParagraph xwpfParagraph = cell.getParagraphArray(0);
+                xwpfParagraph.setAlignment(ParagraphAlignment.CENTER);
+                List<XWPFRun> runs = xwpfParagraph.getRuns();
+                if (runs.isEmpty()) {
+                    continue;
+                }
+                runs.get(0).setFontFamily("GHEA Grapalat");
+                cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
 
                 if (i == 0 && (j == AGE_GROUP_INDEX || j == CATEGORY_INDEX || j == RESTRICTIONS_INDEX
                         || j == lastIndexStart || j == lastIndexStart + 1)) {
-                    row.getCell(j).getCTTc().getTcPr().addNewTextDirection().setVal(STTextDirection.BT_LR);
+                    cell.getCTTc().getTcPr().addNewTextDirection().setVal(STTextDirection.BT_LR);
                 }
 
                 if (i == 1 && (j >= INITIAL_COLUMNS && j < lastIndexStart)) {
-                    row.getCell(j).getCTTc().getTcPr().addNewTextDirection().setVal(STTextDirection.BT_LR);
+                    cell.getCTTc().getTcPr().addNewTextDirection().setVal(STTextDirection.BT_LR);
                 }
             }
         }
@@ -204,8 +238,14 @@ public class DocumentController {
         XWPFTableRow secondRow = table.getRow(1);
 
         firstRow.getCell(ORDER_COL_INDEX).setText("Հ/Հ");
+
         firstRow.getCell(RANK_INDEX).setText("Զին- \nկոչումը");
+
+
+
         firstRow.getCell(FULL_NAME_INDEX).setText("Ա․Ա․Հ․");
+
+
         firstRow.getCell(AGE_GROUP_INDEX).setText("Տարիքային խումբը");
         firstRow.getCell(CATEGORY_INDEX).setText("Կատեգորիան");
         firstRow.getCell(RESTRICTIONS_INDEX).setText("Առողջական սահմանափակում.");

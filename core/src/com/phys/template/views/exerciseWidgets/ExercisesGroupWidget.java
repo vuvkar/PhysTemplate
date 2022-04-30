@@ -10,12 +10,12 @@ import com.kotcrab.vis.ui.widget.VisImageTextButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.phys.template.PhysTemplate;
+import com.phys.template.UIStage;
 import com.phys.template.models.Exercise;
 
 import java.util.ArrayList;
 
 public class ExercisesGroupWidget extends Table {
-    ScrollPane scrollPane;
     Table mainContainer;
     VisLabel headerLabel;
 
@@ -35,9 +35,7 @@ public class ExercisesGroupWidget extends Table {
         updateContent();
 
         // TODO: 11/19/2021 add new exercise button creation
-        scrollPane = new ScrollPane(mainContainer);
-        scrollPane.setScrollingDisabled(false, true);
-        add(scrollPane).grow();
+        add(mainContainer).grow().height(UIStage.TOP_PART_HEIGHT);
     }
 
     public void updateContent() {

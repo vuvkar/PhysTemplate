@@ -19,9 +19,11 @@ import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.phys.template.controllers.ProjectController;
 import com.phys.template.models.Person;
+import com.phys.template.views.StatisticsWidget;
 import com.phys.template.views.exerciseWidgets.AddExercisePopup;
 import com.phys.template.views.exerciseWidgets.ExercisesGroupWidget;
 import com.phys.template.views.MainMenu;
+import com.phys.template.views.metaWidgets.MetaInfoGroupWidget;
 import com.phys.template.views.peopleWidgets.EditPersonPopup;
 import com.phys.template.views.peopleWidgets.PeopleListWidget;
 import com.phys.template.views.dialogs.SettingsDialog;
@@ -35,6 +37,8 @@ import java.io.FileFilter;
 
 public class UIStage {
 
+    public static int TOP_PART_HEIGHT = 82;
+
     private final Stage stage;
     private final Skin skin;
 
@@ -42,7 +46,9 @@ public class UIStage {
     private final DragAndDrop dragAndDrop;
 
     private Table fullScreenTable;
+    private MetaInfoGroupWidget metaInfoGroupWidget;
     private ExercisesGroupWidget exercisesGroupWidget;
+    private StatisticsWidget statisticsWidget;
     private PeopleListWidget peopleListWidget;
     private AddExercisePopup addExercisePopup;
     private EditPersonPopup addPersonPopup;
@@ -81,9 +87,13 @@ public class UIStage {
 
 //        constructMenu();
 //        fullScreenTable.row();
+
+//        fullScreenTable.row();
         constructExerciseWidget();
+        constructMetaInfoListWidget();
         fullScreenTable.row();
         constructPeopleListWidget();
+        constructStatisticsWidget();
         fullScreenTable.row();
         constructBottomTable();
 
@@ -92,12 +102,6 @@ public class UIStage {
         settingsDialog = new SettingsDialog();
         addExercisePopup = new AddExercisePopup();
         addPersonPopup = new EditPersonPopup();
-
-        // TODO: 11/19/2021 Handle exercise loading from file
-//        FileHandle list = Gdx.files.internal("modules.xml");
-//        XmlReader xmlReader = new XmlReader();
-//        XmlReader.Element root = xmlReader.parse(list);
-//        moduleListPopup = new ModuleListPopup(root);
     }
 
     private void constructBottomTable() {
@@ -127,7 +131,12 @@ public class UIStage {
         bottomButtonTable.add(printButton);
         bottomButtonTable.add(saveButton);
         bottomButtonTable.add(openButton);
-        fullScreenTable.add(bottomButtonTable);
+        fullScreenTable.add(bottomButtonTable).colspan(2);
+    }
+
+    private void constructMetaInfoListWidget() {
+        metaInfoGroupWidget = new MetaInfoGroupWidget();
+        fullScreenTable.add(metaInfoGroupWidget).growX();
     }
 
     private void constructPeopleListWidget() {
@@ -138,6 +147,11 @@ public class UIStage {
     private void constructExerciseWidget() {
         exercisesGroupWidget = new ExercisesGroupWidget();
         fullScreenTable.add(exercisesGroupWidget).growX();
+    }
+
+    private void constructStatisticsWidget() {
+        statisticsWidget = new StatisticsWidget();
+        fullScreenTable.add(statisticsWidget).growY().fillX();
     }
 
     private void constructMenu() {
@@ -181,6 +195,10 @@ public class UIStage {
         stage.addActor(fileChooser.fadeIn());
     }
 
+    public MetaInfoGroupWidget getMetaWidget() {
+        return metaInfoGroupWidget;
+    }
+
     public void printProjectAction() {
         final String ext = ".docx";
 
@@ -206,6 +224,7 @@ public class UIStage {
                 }
                 FileHandle handle = Gdx.files.absolute(path);
                 try {
+
                     PhysTemplate.Instance().DocumentController().createDocumentForProject(PhysTemplate.Instance().ProjectController().getCurrentProject(), handle);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -274,13 +293,23 @@ public class UIStage {
         addExercisePopup.fadeOut();
     }
 
-    public void updateExerciseContent() {
+    private void updateExerciseContent() {
         exercisesGroupWidget.updateContent();
+    }
+
+    private void updatePeopleContent() {
         peopleListWidget.updateContent();
     }
 
-    public void updatePeopleContent() {
-        peopleListWidget.updateContent();
+    public void updateStatistics() {
+        statisticsWidget.refreshContent();
+    }
+
+    public void updateContent() {
+        updateExerciseContent();
+        updateTopRow();
+        updatePeopleContent();
+        updateStatistics();
     }
 
     public void showEditPersonPopup(Person person) {
@@ -303,7 +332,7 @@ public class UIStage {
         }
     }
 
-    public void updateTopRow() {
+    private void updateTopRow() {
         peopleListWidget.topRow.updateTopRowForExercises(PhysTemplate.Instance().ProjectController().getCurrentProjectExercises());
     }
 }

@@ -42,9 +42,7 @@ public class ProjectController {
                 Json json = new Json();
                 currentProject = json.fromJson(Project.class, string);
                 currentProject.buildAfterLoad();
-                PhysTemplate.Instance().UIStage().updateTopRow();
-                PhysTemplate.Instance().UIStage().updatePeopleContent();
-                PhysTemplate.Instance().UIStage().updateExerciseContent();
+                PhysTemplate.Instance().UIStage().updateContent();
             } else {
                 //error handle
             }
@@ -80,9 +78,7 @@ public class ProjectController {
             logger.error("Current project is null", new GdxRuntimeException(""));
         }
         currentProject.addExercise(exerciseNumber);
-        PhysTemplate.Instance().UIStage().updateExerciseContent();
-        PhysTemplate.Instance().UIStage().updateTopRow();
-        PhysTemplate.Instance().UIStage().updatePeopleContent();
+        PhysTemplate.Instance().UIStage().updateContent();
     }
 
     public Array<Exercise> getCurrentProjectExercises() {
@@ -117,9 +113,7 @@ public class ProjectController {
             logger.error("Current project is null", new GdxRuntimeException(""));
         }
         currentProject.removeExercise(exerciseNumber);
-        PhysTemplate.Instance().UIStage().updateExerciseContent();
-        PhysTemplate.Instance().UIStage().updateTopRow();
-        PhysTemplate.Instance().UIStage().updatePeopleContent();
+        PhysTemplate.Instance().UIStage().updateContent();
         // TODO: 11/22/2021 refresh points
     }
 
@@ -145,7 +139,7 @@ public class ProjectController {
     public void deletePerson(int updatePersonIndex) {
         currentProject.deletePerson(updatePersonIndex);
         // TODO: 12/25/2021 update overall percentage
-        PhysTemplate.Instance().UIStage().updatePeopleContent();
+        PhysTemplate.Instance().UIStage().updateContent();
 
     }
 

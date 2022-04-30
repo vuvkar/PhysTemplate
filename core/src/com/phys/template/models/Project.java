@@ -2,6 +2,7 @@ package com.phys.template.models;
 
 import com.badlogic.gdx.utils.*;
 import com.phys.template.PhysTemplate;
+import com.phys.template.views.metaWidgets.MetaInfoGroupWidget;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,17 @@ public class Project {
         exerciseNumbers = new IntArray();
         people = new ArrayList<>();
         metadata = new Metadata();
+    }
+
+    public void importMetaDatas() {
+        MetaInfoGroupWidget metaWidget = PhysTemplate.Instance().UIStage().getMetaWidget();
+        metadata.setSquadName(metaWidget.getSquadName());
+        String baseNumber = metaWidget.getBaseNumber();
+        if (baseNumber.matches("[0-9]+")) {
+            metadata.setBaseNumber(baseNumber);
+        } else {
+            metadata.setBaseNumber("");
+        }
     }
 
     public void addExercise(int exerciseNumber) {
@@ -64,6 +76,10 @@ public class Project {
             peopleList.add(person.copy());
         }
         return peopleList;
+    }
+
+    public Metadata getMetadata() {
+        return metadata;
     }
 
     public Person getPersonWithIndex(int index) {
@@ -149,4 +165,16 @@ public class Project {
 
 
     }
+
+    public int getCountForGrade(int grade) {
+        int count = 0;
+        for (Person person : people) {
+            if (person.getGrade() == grade) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
 }

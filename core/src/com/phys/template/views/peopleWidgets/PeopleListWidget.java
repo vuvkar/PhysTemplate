@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.phys.template.PhysTemplate;
 import com.phys.template.models.Person;
@@ -37,17 +38,15 @@ public class PeopleListWidget extends Table {
         mainTable.row();
         mainPeopleTable = new Table();
         mainPeopleTable.top().left();
-        mainPeopleTable.padTop(30);
-        mainPeopleTable.defaults().padBottom(10);
+        mainPeopleTable.padTop(15);
+        mainPeopleTable.defaults().padBottom(6);
+        mainTable.add(mainPeopleTable).grow();
 
         updateContent();
-        scrollPane = new ScrollPane(mainPeopleTable);
+        scrollPane = new VisScrollPane(mainTable);
         scrollPane.setScrollingDisabled(false, false);
-        mainTable.add(scrollPane).grow();
 
-        ScrollPane mainScrollPane = new ScrollPane(mainTable);
-        mainScrollPane.setScrollingDisabled(false, true);
-        add(mainScrollPane).growY();
+        add(scrollPane).grow();
 
         row();
         addPerson = new VisTextButton("Նոր զինծառայող", new ChangeListener() {
@@ -56,7 +55,7 @@ public class PeopleListWidget extends Table {
                 PhysTemplate.Instance().UIStage().showPersonAddPopup();
             }
         });
-        add(addPerson).growX();
+        add(addPerson).padTop(5).growX();
     }
 
     private void createFirstRow() {

@@ -112,7 +112,7 @@ public class EditPersonPopup extends VisWindow {
                 } else {
                     PhysTemplate.Instance().ProjectController().updatePersonData(person);
                 }
-                PhysTemplate.Instance().UIStage().updatePeopleContent();
+                PhysTemplate.Instance().UIStage().updateContent();
                 PhysTemplate.Instance().UIStage().hidePersonAddPopup();
             }
         });
