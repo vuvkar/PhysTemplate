@@ -18,6 +18,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.phys.template.controllers.ProjectController;
+import com.phys.template.models.Metadata;
 import com.phys.template.models.Person;
 import com.phys.template.views.StatisticsWidget;
 import com.phys.template.views.exerciseWidgets.AddExercisePopup;
@@ -175,6 +176,8 @@ public class UIStage {
     public void openProjectAction() {
         fileChooser.setMode(FileChooser.Mode.OPEN);
         fileChooser.setMultiSelectionEnabled(false);
+        String desktopPath = System.getProperty("user.home") + "/Desktop";
+        fileChooser.setDirectory(desktopPath);
 
         fileChooser.setFileFilter(new FileFilter() {
             @Override
@@ -202,7 +205,10 @@ public class UIStage {
     public void printProjectAction() {
         final String ext = ".docx";
 
+        PhysTemplate.Instance().ProjectController().getCurrentProject().importMetaDatas();
         fileChooser.setMode(FileChooser.Mode.SAVE);
+        String desktopPath = System.getProperty("user.home") + "/Desktop";
+        fileChooser.setDirectory(desktopPath);
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setFileFilter(new FileFilter() {
             @Override
@@ -232,7 +238,10 @@ public class UIStage {
             }
         });
 
-        fileChooser.setName("");
+        Metadata metadata = PhysTemplate.Instance().ProjectController().getCurrentProject().getMetadata();
+        String squadName = metadata.getSquadName();
+        squadName = squadName.replace(" ", "_");
+        fileChooser.setDefaultFileName(squadName + "_ֆիզոյի_ամփոփագիր");
 
         stage.addActor(fileChooser.fadeIn());
     }
@@ -241,6 +250,8 @@ public class UIStage {
         final String ext = ".fpe";
         fileChooser.setMode(FileChooser.Mode.SAVE);
         fileChooser.setMultiSelectionEnabled(false);
+        String desktopPath = System.getProperty("user.home") + "/Desktop";
+        fileChooser.setDirectory(desktopPath);
         fileChooser.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File pathname) {

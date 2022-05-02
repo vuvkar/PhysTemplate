@@ -1,5 +1,6 @@
 package com.phys.template.models;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.*;
 import com.phys.template.PhysTemplate;
 import com.phys.template.views.metaWidgets.MetaInfoGroupWidget;
@@ -13,6 +14,8 @@ public class Project {
     private final  IntArray exerciseNumbers;
     private final ArrayList<Person> people;
     private final Metadata metadata;
+    public boolean areStudents = false;
+    public boolean isAviation = false;
 
     private transient Grade finalGrade = Grade.BAD;
     private transient String fileName;
@@ -192,7 +195,18 @@ public class Project {
         return count;
     }
 
+    public float getPercentForGrade(Grade grade) {
+        float percent = (getCountForGrade(grade) / (float) getPeopleCount()) * 100f;
+        return (float) Math.round((percent * 100.0) / 100.0);
+    }
+
     public Grade getFinalGrade() {
         return finalGrade;
+    }
+
+    public float getNormalPercent() {
+        int countForGrade = getPeopleCount() - getCountForGrade(Grade.BAD);
+        float overallOkPercent = countForGrade / ((float) getPeopleCount()) * 100f;
+        return (float) Math.round((overallOkPercent * 100.0) / 100.0);
     }
 }

@@ -92,7 +92,6 @@ public class DocumentController {
     }
 
     public void createDocumentForProject(Project project, FileHandle handle) throws Exception {
-        project.importMetaDatas();
         //Blank Document
         XWPFDocument document = new XWPFDocument();
         configurePageSizeAndOrientation(document);
@@ -113,12 +112,104 @@ public class DocumentController {
         //align table data
         formatTableCells(table, project);
 
+        //add statistics
+        addStatistics(document, project);
+
         //Write the Document in file system
         FileOutputStream out = new FileOutputStream(handle.path());
 
         document.write(out);
         out.close();
         System.out.println("create_table.docx written successully");
+    }
+
+    private void addStatistics(XWPFDocument document, Project project) {
+        Metadata metadata = project.getMetadata();
+        document.createParagraph().createRun().addBreak(BreakType.PAGE);
+
+        XWPFParagraph statisticsParagraph = document.createParagraph();
+        XWPFRun run = statisticsParagraph.createRun();
+        run.setBold(true);
+        run.setFontSize(13);
+        run.setFontFamily("GHEA Grapalat");
+        run.setText("Անձնակազմն ստուգված է");
+        run.addBreak();
+        run.setText("ՀՀ ՊՆ " + metadata.getBaseName() + " զորամասի շտաբի պետ՝");
+        run.addTab();
+        run.setText("_____________________________________________");
+        run.addBreak();
+        run.setText("Կ․տ․");
+        run.addBreak();
+        run.addBreak();
+        run.addBreak();
+
+        XWPFRun statisticsRun = statisticsParagraph.createRun();
+        statisticsRun.setFontSize(13);
+        statisticsRun.setFontFamily("GHEA Grapalat");
+
+        statisticsRun.setText("-գերազանց");
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.setText(project.getCountForGrade(Grade.EXCELLENT) + " զինծառայող, " + project.getPercentForGrade(Grade.EXCELLENT)+"%");
+        statisticsRun.addBreak();
+
+        statisticsRun.setText("-լավ");
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.setText(project.getCountForGrade(Grade.GOOD) + " զինծառայող, " + project.getPercentForGrade(Grade.GOOD)+"%");
+        statisticsRun.addBreak();
+
+        statisticsRun.setText("-բավարար");
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.setText(project.getCountForGrade(Grade.OK) + " զինծառայող, " + project.getPercentForGrade(Grade.OK)+"%");
+        statisticsRun.addBreak();
+
+        statisticsRun.setText("-անբավարար");
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.setText(project.getCountForGrade(Grade.BAD) + " զինծառայող, " + project.getPercentForGrade(Grade.BAD)+"%");
+        statisticsRun.addBreak();
+
+        statisticsRun.setText("Կատարման տոկոսը՝ ");
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.setText(project.getNormalPercent()+"%");
+        statisticsRun.addBreak();
+
+        statisticsRun.setText("Ընդհանուր գնահատականը՝");
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.setText(project.getFinalGrade().toString());
+        statisticsRun.addBreak();
+        statisticsRun.addBreak();
+        statisticsRun.addBreak();
+
+        statisticsRun.setText("Ստորաբաժանման հրամանատար՝");
+        statisticsRun.addTab();
+        statisticsRun.setText("_____________________________________________");
+        statisticsRun.addBreak();
+        statisticsRun.addBreak();
+        statisticsRun.setText("Ստուգող՝");
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.setText("_____________________________________________");
     }
 
     private void configureHeaderAndDate(XWPFDocument document, Project project) {

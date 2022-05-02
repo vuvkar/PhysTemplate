@@ -105,6 +105,184 @@ public class DataController {
         }
     }
 
+    public void fetchPersonAvailableExercises(Person person, Project project) {
+        IntArray availableExercises = person.availableExercises;
+        availableExercises.clear();
+
+        int ageGroupIndex = person.ageGroup.number;
+        switch (ageGroupIndex) {
+            // մալադոներ
+            case 1:
+                availableExercises.add(1, 4, 7, 8);
+                availableExercises.add(9, 12);
+                availableExercises.add(17, 18, 19, 21);
+                availableExercises.add(25, 26);
+                availableExercises.add(27, 28);
+                break;
+            // պարտադիր ժամկետային
+            case 2:
+                if (!project.isAviation) {
+                    switch (person.category) {
+                        case FIRST:
+                            availableExercises.add(1, 4, 7, 8);
+                            availableExercises.add(9, 14, 15, 16);
+                            availableExercises.add(17, 18, 20, 21);
+                            availableExercises.add(22, 23, 25, 26);
+                            availableExercises.add(27, 24, 29);
+                            break;
+                        case SECOND:
+                            availableExercises.add(1, 4, 7, 8);
+                            availableExercises.add(9, 13, 15, 16);
+                            availableExercises.add(17, 18, 20, 21);
+                            availableExercises.add(22, 24, 25, 26);
+                            availableExercises.add(27, 29);
+                            break;
+                        case THIRD:
+                            availableExercises.add(1, 4, 7, 8);
+                            availableExercises.add(9, 12, 15, 16);
+                            availableExercises.add(17, 19, 21, 25);
+                            availableExercises.add(26, 27, 29);
+                            break;
+                    }
+                }
+                break;
+            // կուրսանտներ
+            case 3:
+            case 4:
+            case 5:
+                if (project.isAviation) {
+                    for (int i = 1; i <= 11; i++) {
+                        availableExercises.add(i);
+                    }
+                    for (int i = 24; i <= 27; i++) {
+                        availableExercises.add(i);
+                    }
+                    availableExercises.add(28);
+                } else {
+                    switch (person.category) {
+                        case FIRST:
+                            for (int i = 1; i <= 9; i++) {
+                                availableExercises.add(i);
+                            }
+                            for (int i = 14; i <= 18; i++) {
+                                availableExercises.add(i);
+                            }
+                            for (int i = 21; i <= 27; i++) {
+                                availableExercises.add(i);
+                            }
+                            availableExercises.add(29);
+                            break;
+                        case SECOND:
+                            for (int i = 1; i <= 9; i++) {
+                                availableExercises.add(i);
+                            }
+                            availableExercises.add(13, 15, 16, 17);
+                            availableExercises.add(18, 29);
+                            for (int i = 21; i <= 27; i++) {
+                                availableExercises.add(i);
+                            }
+                            break;
+                        case THIRD:
+                            for (int i = 1; i <= 9; i++) {
+                                availableExercises.add(i);
+                            }
+                            availableExercises.add(12, 15, 16, 17);
+                            availableExercises.add(19, 21, 24, 25);
+                            availableExercises.add(26, 27, 29);
+                            break;
+                    }
+                }
+                break;
+            // 1-3 տարիքային խումբ
+            case 6:
+            case 7:
+            case 8:
+                if (project.isAviation) {
+                    for (int i = 1; i <= 11; i++) {
+                        availableExercises.add(i);
+                    }
+                    for (int i = 24; i <= 27; i++) {
+                        availableExercises.add(i);
+                    }
+                    availableExercises.add(29);
+                } else {
+                    switch (person.category) {
+                        case FIRST:
+                            for (int i = 1; i <= 9; i++) {
+                                availableExercises.add(i);
+                            }
+                            availableExercises.add(14, 15, 16, 17);
+                            availableExercises.add(18, 20, 21, 22);
+                            availableExercises.add(23);
+                            availableExercises.add(25, 26, 27, 29);
+                            // pahestazor as well
+                            availableExercises.add(24);
+                            break;
+                        case SECOND:
+                            for (int i = 1; i <= 9; i++) {
+                                availableExercises.add(i);
+                            }
+                            availableExercises.add(13, 15, 16, 17);
+                            availableExercises.add(18, 20, 21, 22);
+                            availableExercises.add(25, 26, 27, 29);
+                            // pahestazor as well
+                            availableExercises.add(24, 30);
+                            break;
+                        case THIRD:
+                            for (int i = 1; i <= 9; i++) {
+                                availableExercises.add(i);
+                            }
+                            availableExercises.add(12, 15, 16, 17);
+                            availableExercises.add(19, 21, 25, 26);
+                            availableExercises.add(27, 29);
+                            break;
+                    }
+                }
+                break;
+            // 4-5 տարիքային խումբ
+            case 9:
+            case 10:
+                for (int i = 1; i <= 7; i++) {
+                    availableExercises.add(i);
+                }
+                for (int i = 21; i <= 28; i++) {
+                    availableExercises.add(i);
+                }
+                availableExercises.add(30);
+                break;
+            // 6-7 տարիքային խումբ
+            case 11:
+            case 12:
+                availableExercises.add(1, 6, 21, 22);
+                availableExercises.add(23, 28, 30);
+                break;
+            // կին զինծառայողներ 3-րդ կուրս ու բարձր, ու 1-2 տարիքային խումբ
+            case 13:
+            case 14:
+            case 15:
+                if (project.areStudents) {
+                    if (person.category == Category.FIRST) {
+                        availableExercises.add(6, 21, 22, 23);
+                        availableExercises.add(25, 26, 27, 28);
+                    } else {
+                        availableExercises.add(6, 25, 26, 27);
+                        availableExercises.add(28);
+                    }
+                } else {
+                    if (ageGroupIndex == 14 || ageGroupIndex == 15) {
+                        availableExercises.add(6, 25, 26, 27);
+                        availableExercises.add(28);
+                    }
+                }
+                break;
+            // կին զինծառայողներ 3-րդ տարիքային խումբ ու բարձր
+            case 16:
+            case 17:
+                availableExercises.add(6, 28);
+                break;
+        }
+    }
+
     public void calculatePersonPoints(Person person) {
         int overallPoints = 0;
 

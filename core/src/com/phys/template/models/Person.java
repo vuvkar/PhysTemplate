@@ -20,6 +20,7 @@ public class Person implements Json.Serializable {
     private transient Grade finalGrade = Grade.BAD;
     public transient boolean canCalculateFinalGrade = false;
     public transient PersonGradeCalculationError gradeCalculationError;
+    public transient IntArray availableExercises;
 
     private transient final OrderedMap<Integer, Integer> exercisesPoints;
     private final OrderedMap<Integer, Float> floatExercisesRaw;
@@ -33,6 +34,7 @@ public class Person implements Json.Serializable {
         exercisesPoints = new OrderedMap<>();
         floatExercisesRaw = new OrderedMap<>();
         intExercisesRaw = new OrderedMap<>();
+        availableExercises = new IntArray();
         notes = new ArrayList<>();
     }
 

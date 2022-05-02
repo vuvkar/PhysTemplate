@@ -1,6 +1,7 @@
 package com.phys.template.views;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.IntArray;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.phys.template.PhysTemplate;
 import com.phys.template.controllers.ProjectController;
@@ -96,23 +97,19 @@ public class StatisticsWidget extends Table {
             overallPeople = 1;
             //lazy hack :)))
         }
-        float excPercent = excCount / ((float) overallPeople) * 100f;
-        excellent.setText( excCount + ", " + String.format("%.2f", excPercent) + "%");
-
-        float goodPercent = goodCount / ((float) overallPeople) * 100f;
-        good.setText( goodCount + ", " + String.format("%.2f", goodPercent) + "%");
-
-        float normPercent = normCount / ((float) overallPeople) * 100f;
-        ok.setText( normCount + ", " + String.format("%.2f", normPercent) + "%");
-
-        float badPercent = badCount / ((float) overallPeople) * 100f;
-        bad.setText( badCount + ", " + String.format("%.2f", badPercent) + "%");
+        excellent.setText( excCount + ", " + currentProject.getPercentForGrade(Grade.EXCELLENT) + "%");
+        good.setText( goodCount + ", " + currentProject.getPercentForGrade(Grade.GOOD) + "%");
+        ok.setText( normCount + ", " + currentProject.getPercentForGrade(Grade.OK) + "%");
+        bad.setText( badCount + ", " + currentProject.getPercentForGrade(Grade.BAD) + "%");
 
         // TODO: 4/29/2022 make calculation
         getFreed.setText("0 մարդ");
 
-        float overallOkPercent = enoughCount / ((float) overallPeople) * 100f;
-        overallOks.setText( enoughCount + ", " + String.format("%.2f", overallOkPercent) + "%");
+        IntArray availableExercises = new IntArray();
+        availableExercises.insertRange(0, 7);
+
+
+        overallOks.setText( enoughCount + ", " + currentProject.getNormalPercent() + "%");
 
         finalGradeLabel.setText(finalGrade.getNumericalGrade() + " " + finalGrade.getDescription(false, true));
     }
