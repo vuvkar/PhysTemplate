@@ -17,7 +17,7 @@ public class Person implements Json.Serializable {
 
     public transient AgeGroup ageGroup;
     private transient int overallPoints;
-    private transient int finalGrade;
+    private transient Grade finalGrade = Grade.BAD;
     public transient boolean canCalculateFinalGrade = false;
     public transient PersonGradeCalculationError gradeCalculationError;
 
@@ -156,7 +156,7 @@ public class Person implements Json.Serializable {
 
     }
 
-    public void setGrade(Integer grade) {
+    public void setGrade(Grade grade) {
         this.finalGrade = grade;
     }
 
@@ -168,7 +168,7 @@ public class Person implements Json.Serializable {
         exercisesPoints.put(attachedExercise, gradePoint);
     }
 
-    public int getGrade() {
+    public Grade getGrade() {
         return finalGrade;
     }
 

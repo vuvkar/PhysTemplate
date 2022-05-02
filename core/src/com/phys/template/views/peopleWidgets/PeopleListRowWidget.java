@@ -9,6 +9,7 @@ import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.phys.template.PhysTemplate;
 import com.phys.template.models.Exercise;
+import com.phys.template.models.Grade;
 import com.phys.template.models.Person;
 
 public class PeopleListRowWidget extends Table {
@@ -158,7 +159,8 @@ public class PeopleListRowWidget extends Table {
 
         finalPoints.setText(person.getOverallPoints());
         if (person.canCalculateFinalGrade) {
-            finalGrade.setText(person.getGrade());
+            Grade grade = person.getGrade();
+            finalGrade.setText(grade.getNumericalGrade() + " " + grade.getDescription(true, true));
         } else {
             finalGrade.setText("-");
         }

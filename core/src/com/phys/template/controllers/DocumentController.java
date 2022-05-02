@@ -1,14 +1,9 @@
 package com.phys.template.controllers;
 
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.phys.template.PhysTemplate;
-import com.phys.template.models.Exercise;
-import com.phys.template.models.Metadata;
-import com.phys.template.models.Person;
-import com.phys.template.models.Project;
+import com.phys.template.models.*;
 
 import java.io.FileOutputStream;
 import java.math.BigInteger;
@@ -305,7 +300,8 @@ public class DocumentController {
 
             String finalGrade = "-";
             if (person.canCalculateFinalGrade) {
-                finalGrade = String.valueOf(person.getGrade());
+                Grade grade = person.getGrade();
+                finalGrade = grade.getNumericalGrade() + " " + grade.getDescription(true, true);
             }
             row.getCell(offset + 1).setText(finalGrade);
         }

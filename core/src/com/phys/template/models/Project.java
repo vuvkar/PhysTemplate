@@ -14,6 +14,7 @@ public class Project {
     private final ArrayList<Person> people;
     private final Metadata metadata;
 
+    private transient Grade finalGrade = Grade.BAD;
     private transient String fileName;
 
     private static  final Logger logger = new Logger("Project logger");
@@ -49,6 +50,7 @@ public class Project {
             PhysTemplate.Instance().DataController().calculatePersonPoints(person);
             PhysTemplate.Instance().DataController().calculatePersonGrade(person);
         }
+        calculateFinalGrade();
     }
 
     public boolean containsExercise(int exerciseNumber) {
@@ -116,6 +118,7 @@ public class Project {
             PhysTemplate.Instance().DataController().calculatePersonPoints(person);
             PhysTemplate.Instance().DataController().calculatePersonGrade(person);
         }
+        calculateFinalGrade();
     }
 
     public int getPeopleCount() {
@@ -161,15 +164,27 @@ public class Project {
                 PhysTemplate.Instance().DataController().calculatePersonPoints(person);
                 PhysTemplate.Instance().DataController().calculatePersonGrade(person);
             }
+            calculateFinalGrade();
         }
+    }
 
+    public void calculateFinalGrade() {
+        int overallPoints = 5 * getCountForGrade(Grade.EXCELLENT) +
+                4 * getCountForGrade(Grade.GOOD) +
+                3 * getCountForGrade(Grade.OK) +
+                2 * getCountForGrade(Grade.BAD);
+        int gradeValue = Math.round(overallPoints / ((float) getPeopleCount()));
+        finalGrade = Grade.gradeTypeForGrade(gradeValue);
+        if (finalGrade == null) {
+            finalGrade = Grade.BAD;
+        }
 
     }
 
-    public int getCountForGrade(int grade) {
+    public int getCountForGrade(Grade grade) {
         int count = 0;
         for (Person person : people) {
-            if (person.getGrade() == grade) {
+            if (person.getGrade().getNumericalGrade() == grade.getNumericalGrade()) {
                 count++;
             }
         }
@@ -177,4 +192,7 @@ public class Project {
         return count;
     }
 
+    public Grade getFinalGrade() {
+        return finalGrade;
+    }
 }

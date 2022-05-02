@@ -34,7 +34,6 @@ public class ExercisesGroupWidget extends Table {
         mainContainer.top().left();
         updateContent();
 
-        // TODO: 11/19/2021 add new exercise button creation
         add(mainContainer).grow().height(UIStage.TOP_PART_HEIGHT);
     }
 
@@ -51,11 +50,10 @@ public class ExercisesGroupWidget extends Table {
         addExercise.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // TODO: 11/19/2021 create popup for adding exercise
                 PhysTemplate.Instance().UIStage().showExerciseAddPopup();
 
             }
         });
-        mainContainer.add(addExercise);
+        mainContainer.add(addExercise).growY();
     }
 }

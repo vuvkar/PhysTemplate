@@ -106,20 +106,20 @@ public class UIStage {
 
     private void constructBottomTable() {
         bottomButtonTable = new Table();
-        VisTextButton printButton = new VisTextButton("Տպել", new ChangeListener() {
+        VisTextButton printButton = new VisTextButton("Պահպանել որպես Word", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 printProjectAction();
             }
         });
 
-        VisTextButton saveButton = new VisTextButton("Պահպանել պրոյեկտը", new ChangeListener() {
+        VisTextButton saveButton = new VisTextButton("Պահպանել որպես ամփոփագիր", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 saveProjectAction();
             }
         });
-        VisTextButton openButton = new VisTextButton("Բացել պրոյեկտ", new ChangeListener() {
+        VisTextButton openButton = new VisTextButton("Բացել ամփոփագիր", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 openProjectAction();

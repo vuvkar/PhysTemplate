@@ -106,6 +106,7 @@ public class ProjectController {
         PhysTemplate.Instance().DataController().calculatePersonPoints(person);
         PhysTemplate.Instance().DataController().calculatePersonGrade(person);
         currentProject.addPerson(person);
+        currentProject.calculateFinalGrade();
     }
 
     public void removeExercise(int exerciseNumber) {
@@ -130,6 +131,7 @@ public class ProjectController {
         Person originalPerson = getPersonWithIndex(person.index);
         PhysTemplate.Instance().DataController().calculatePersonPoints(originalPerson);
         PhysTemplate.Instance().DataController().calculatePersonGrade(originalPerson);
+        currentProject.calculateFinalGrade();
     }
 
     private Person getPersonWithIndex(int index) {

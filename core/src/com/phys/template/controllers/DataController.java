@@ -191,19 +191,20 @@ public class DataController {
         intArray.sort();
 
         if (intArray.first() > person.getOverallPoints()) {
-            person.setGrade(2);
+            person.setGrade(Grade.BAD);
             return;
         }
 
         for (int i = 1; i < intArray.size; i++) {
             int iter = intArray.get(i);
             if (iter > person.getOverallPoints()) {
-                person.setGrade(exerciseCountMap.get(intArray.get(i - 1)));
+                person.setGrade(Grade.gradeTypeForGrade(exerciseCountMap.get(intArray.get(i - 1))));
                 return;
             }
         }
 
-        person.setGrade(5);
+        person.setGrade(Grade.EXCELLENT);
+
     }
 
     public Exercise getExerciseModelFor(int exerciseNumber) {
