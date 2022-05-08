@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.kotcrab.vis.ui.VisUI;
@@ -14,6 +15,8 @@ import com.kotcrab.vis.ui.util.NumberDigitsTextFieldFilter;
 import com.kotcrab.vis.ui.widget.*;
 import com.phys.template.PhysTemplate;
 import com.phys.template.models.*;
+
+import java.util.ArrayList;
 
 
 public class EditPersonPopup extends VisWindow {
@@ -29,6 +32,8 @@ public class EditPersonPopup extends VisWindow {
     private boolean isCreation;
     private int updatePersonIndex;
     private static final int FIELD_HEIGHT = 40;
+
+    private Person currentModifyingPerson;
 
     private final OrderedMap<Exercise, VisTextField> exerciseMap = new OrderedMap<>();
 
@@ -75,6 +80,13 @@ public class EditPersonPopup extends VisWindow {
         mainTable.add(sexLabel);
         sexSelectBox = new VisSelectBox<>();
         sexSelectBox.setItems(Sex.values());
+        sexSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(currentModifyingPerson, PhysTemplate.Instance().ProjectController().getCurrentProject());
+                updateExercisesFields();
+            }
+        });
         mainTable.add(sexSelectBox).growX();
         mainTable.row();
 
@@ -83,6 +95,13 @@ public class EditPersonPopup extends VisWindow {
         mainTable.add(ageLabel);
         ageGroupSelectBox = new VisSelectBox<>();
         ageGroupSelectBox.setItems(PhysTemplate.Instance().DataController().getAllAgeGroups());
+        ageGroupSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(currentModifyingPerson, PhysTemplate.Instance().ProjectController().getCurrentProject());
+                updateExercisesFields();
+            }
+        });
         mainTable.add(ageGroupSelectBox).growX();
         mainTable.row();
 
@@ -91,6 +110,13 @@ public class EditPersonPopup extends VisWindow {
         mainTable.add(categoryLabel);
         categorySelectBox = new VisSelectBox<>();
         categorySelectBox.setItems(Category.values());
+        categorySelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(currentModifyingPerson, PhysTemplate.Instance().ProjectController().getCurrentProject());
+                updateExercisesFields();
+            }
+        });
         mainTable.add(categorySelectBox).growX();
         mainTable.row();
 
@@ -124,25 +150,40 @@ public class EditPersonPopup extends VisWindow {
             }
         });
         add(saveButton).pad(8).left();
-//        debugAll();
+    }
+
+    private void updateExercisesFields() {
+        System.out.println("update fields");
+        for (ObjectMap.Entry<Exercise, VisTextField> exerciseVisTextFieldEntry : exerciseMap) {
+            VisTextField value = exerciseVisTextFieldEntry.value;
+            Exercise key = exerciseVisTextFieldEntry.key;
+
+            boolean isAvailable = currentModifyingPerson.availableExercises.contains(key.number);
+            value.setDisabled(!isAvailable);
+            if (!isAvailable) {
+                System.out.println("NOT AVAILABLE");
+                value.clearText();
+            }
+        }
     }
 
     public void updateForMode(boolean isCreation) {
         this.isCreation = isCreation;
         if (isCreation) {
-            getTitleLabel().setText("Ավելացնել զինծառայող");
-            nameField.clearText();
-            categorySelectBox.setSelected(Category.FIRST);
-            rankSelectBox.setSelected(Rank.SHN);
-            sexSelectBox.setSelected(Sex.MALE);
-            for (VisTextField value : exerciseMap.values()) {
-                value.clearText();
+            currentModifyingPerson = new Person();
+
+            Array<Exercise> currentProjectExercises = PhysTemplate.Instance().ProjectController().getCurrentProjectExercises();
+            for (Exercise currentProjectExercise : currentProjectExercises) {
+                currentModifyingPerson.addExercise(currentProjectExercise.number);
             }
+            getTitleLabel().setText("Ավելացնել զինծառայող");
             saveButton.setText("Ավելացնել");
             if (deleteSoldierButton.hasParent()) {
                 deleteSoldierButton.remove();
             }
+            updateFor(currentModifyingPerson);
         } else {
+            currentModifyingPerson = null;
             getTitleLabel().setText("Փոփոխել զինծառայողի տվյալները");
             saveButton.setText("Պահպանել");
             if (!deleteSoldierButton.hasParent()) {
@@ -154,34 +195,32 @@ public class EditPersonPopup extends VisWindow {
     private Person createPerson() {
         // TODO: 11/22/2021 validate all data from fields
 
-        Person person = new Person();
-        person.name = nameField.getText();
-        person.rank = rankSelectBox.getSelected();
+        currentModifyingPerson.name = nameField.getText();
+        currentModifyingPerson.rank = rankSelectBox.getSelected();
         AgeGroup selected = ageGroupSelectBox.getSelected();
-        person.ageGroup = selected;
-        person.ageGroupNumber = selected.number;
-        person.category = categorySelectBox.getSelected();
-        person.sex = sexSelectBox.getSelected();
+        currentModifyingPerson.ageGroup = selected;
+        currentModifyingPerson.ageGroupNumber = selected.number;
+        currentModifyingPerson.category = categorySelectBox.getSelected();
+        currentModifyingPerson.sex = sexSelectBox.getSelected();
 
         for (ObjectMap.Entry<Exercise, VisTextField> entry : exerciseMap) {
             Exercise exercise = entry.key;
             VisTextField field = entry.value;
-            person.addExercise(exercise.number);
             String text = field.getText();
             if (!text.isEmpty()) {
                 if (PhysTemplate.Instance().DataController().isFloatExercise(exercise.number)) {
-                    person.putFloatExerciseRawValue(exercise.number, Float.parseFloat(text));
+                    currentModifyingPerson.putFloatExerciseRawValue(exercise.number, Float.parseFloat(text));
                 } else {
-                    person.putIntExerciseRawValue(exercise.number, Integer.parseInt(text));
+                    currentModifyingPerson.putIntExerciseRawValue(exercise.number, Integer.parseInt(text));
                 }
             }
         }
 
-        return person;
+        return currentModifyingPerson;
     }
 
 
-    public void refreshExerciseContent(Array<Exercise> exerciseList) {
+    public void refreshExerciseContent(ArrayList<Integer> exerciseList) {
         exercisesTable.clearChildren();
         exerciseMap.clear();
         exercisesTable.defaults().pad(8);
@@ -190,7 +229,8 @@ public class EditPersonPopup extends VisWindow {
         exercisesTable.row();
 //        exercisesTable.debugAll();
 
-        for (Exercise exercise : exerciseList) {
+        for (Integer exerciseNumber : exerciseList) {
+            Exercise exercise = PhysTemplate.Instance().DataController().getExerciseModelFor(exerciseNumber);
             VisLabel exerciseName = new VisLabel(exercise.name + ", " + exercise.longName);
             exercisesTable.add(exerciseName).left();
             exercisesTable.row();
@@ -205,11 +245,14 @@ public class EditPersonPopup extends VisWindow {
     }
 
     public void updateFor(Person person) {
+        currentModifyingPerson = person;
         nameField.setText(person.name);
         rankSelectBox.setSelected(person.rank);
         sexSelectBox.setSelected(person.sex);
         categorySelectBox.setSelected(person.category);
         ageGroupSelectBox.setSelected(person.ageGroup);
+        ArrayList<Integer> attachedExercises = person.attachedExercises;
+        refreshExerciseContent(attachedExercises);
 
         for (ObjectMap.Entry<Exercise, VisTextField> exerciseVisTextFieldEntry : exerciseMap) {
             VisTextField fi = exerciseVisTextFieldEntry.value;
@@ -228,6 +271,7 @@ public class EditPersonPopup extends VisWindow {
                 fi.clearText();
             }
         }
+        updateExercisesFields();
         updatePersonIndex = person.index;
     }
 }

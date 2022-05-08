@@ -34,7 +34,7 @@ public class ExercisesGroupWidget extends Table {
         mainContainer.top().left();
         updateContent();
 
-        add(mainContainer).grow().height(UIStage.TOP_PART_HEIGHT);
+        add(mainContainer).grow();
     }
 
     public void updateContent() {

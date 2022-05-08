@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.IntArray;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.phys.template.PhysTemplate;
 import com.phys.template.controllers.ProjectController;
-import com.phys.template.models.AgeGroup;
 import com.phys.template.models.Grade;
 import com.phys.template.models.Project;
 

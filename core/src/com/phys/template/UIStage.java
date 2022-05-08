@@ -147,7 +147,7 @@ public class UIStage {
 
     private void constructExerciseWidget() {
         exercisesGroupWidget = new ExercisesGroupWidget();
-        fullScreenTable.add(exercisesGroupWidget).growX();
+        fullScreenTable.add(exercisesGroupWidget).growX().fillY();
     }
 
     private void constructStatisticsWidget() {
@@ -291,7 +291,6 @@ public class UIStage {
     }
 
     public void showPersonAddPopup() {
-        addPersonPopup.refreshExerciseContent(PhysTemplate.Instance().ProjectController().getCurrentProjectExercises());
         addPersonPopup.updateForMode(true);
         stage.addActor(addPersonPopup.fadeIn());
     }
@@ -324,7 +323,6 @@ public class UIStage {
     }
 
     public void showEditPersonPopup(Person person) {
-        addPersonPopup.refreshExerciseContent(PhysTemplate.Instance().ProjectController().getCurrentProjectExercises());
         addPersonPopup.updateForMode(false);
         addPersonPopup.updateFor(person);
         stage.addActor(addPersonPopup.fadeIn());

@@ -1,5 +1,6 @@
 package com.phys.template.views.peopleWidgets;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -135,26 +136,31 @@ public class PeopleListRowWidget extends Table {
             String valueText = "";
             RowCell value = new RowCell(EXERCISE_COLUMN_LENGTH);
             exerciseTable.add(value).spaceRight(2).growY();
-            if (person.hasFilledRawValue(attachedExercise)) {
-                if (PhysTemplate.Instance().DataController().isFloatExercise(attachedExercise)) {
-                    String rawValue = String.valueOf(person.getFloatExerciseRawValue(attachedExercise));
-                    valueText += rawValue;
-                } else {
-                    String rawValue = String.valueOf(person.getIntExerciseRawValue(attachedExercise));
-                    valueText += rawValue;
-                }
-            } else {
-                valueText += "-";
-            }
-            valueText += "/";
+            boolean contains = person.availableExercises.contains(attachedExercise);
 
-            if (person.hasFilledRawValue(attachedExercise)) {
-                String pointValueText = String.valueOf(person.getExercisePoint(attachedExercise));
-                valueText += pointValueText;
-            } else {
-                valueText += "-";
+            if (contains) {
+                if (person.hasFilledRawValue(attachedExercise)) {
+                    if (PhysTemplate.Instance().DataController().isFloatExercise(attachedExercise)) {
+                        String rawValue = String.valueOf(person.getFloatExerciseRawValue(attachedExercise));
+                        valueText += rawValue;
+                    } else {
+                        String rawValue = String.valueOf(person.getIntExerciseRawValue(attachedExercise));
+                        valueText += rawValue;
+                    }
+                } else {
+                    valueText += "-";
+                }
+                valueText += "/";
+
+                if (person.hasFilledRawValue(attachedExercise)) {
+                    String pointValueText = String.valueOf(person.getExercisePoint(attachedExercise));
+                    valueText += pointValueText;
+                } else {
+                    valueText += "-";
+                }
             }
             value.setText(valueText);
+            value.setAvailable(contains);
         }
 
         finalPoints.setText(person.getOverallPoints());
@@ -191,6 +197,10 @@ public class PeopleListRowWidget extends Table {
             } else {
                 setEllipsis(true);
             }
+        }
+
+        public void setAvailable(boolean isAvailable) {
+            setColor(isAvailable ? Color.CLEAR : Color.RED);
         }
 
         @Override

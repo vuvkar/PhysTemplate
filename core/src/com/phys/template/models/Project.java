@@ -209,4 +209,25 @@ public class Project {
         float overallOkPercent = countForGrade / ((float) getPeopleCount()) * 100f;
         return (float) Math.round((overallOkPercent * 100.0) / 100.0);
     }
+
+    public void setStudents(boolean areStudents) {
+        this.areStudents = areStudents;
+        for (Person person : people) {
+            updateAvailableExercises(person);
+        }
+
+        calculateFinalGrade();
+    }
+
+    public void setAviation(boolean isAviation) {
+        this.isAviation = isAviation;
+        for (Person person : people) {
+            updateAvailableExercises(person);
+        }
+    }
+
+    public void updateAvailableExercises(Person person) {
+        person.availableExercises.clear();
+        PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(person, this);
+    }
 }

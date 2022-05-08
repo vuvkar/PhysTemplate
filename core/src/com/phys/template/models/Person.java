@@ -36,6 +36,11 @@ public class Person implements Json.Serializable {
         intExercisesRaw = new OrderedMap<>();
         availableExercises = new IntArray();
         notes = new ArrayList<>();
+        ageGroup = PhysTemplate.Instance().DataController().getAgeGroupFor(6);
+        ageGroupNumber = 6;
+        category = Category.FIRST;
+        rank = Rank.SHN;
+        sex = Sex.MALE;
     }
 
     public String getFullName() {
@@ -76,10 +81,16 @@ public class Person implements Json.Serializable {
     }
 
     public void putFloatExerciseRawValue(int number, float value) {
+        if (!availableExercises.contains(number)) {
+            logger.error("PUTTING UNAVAILABLE EXERCISE VALUE");
+        }
         floatExercisesRaw.put(number, value);
     }
 
     public void putIntExerciseRawValue(int number, int value) {
+        if (!availableExercises.contains(number)) {
+            logger.error("PUTTING UNAVAILABLE EXERCISE VALUE");
+        }
         intExercisesRaw.put(number, value);
     }
 
