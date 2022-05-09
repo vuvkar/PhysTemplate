@@ -33,6 +33,10 @@ public class DataController {
         JsonValue base = json.parse(Gdx.files.internal("exercises.json"));
 
         for (JsonValue jsonValue : base) {
+            boolean isCustom = jsonValue.getBoolean("isCustom", false);
+            if (isCustom) {
+                continue;
+            }
             Exercise exercise = new Exercise();
             exercise.number = jsonValue.getInt("number");
             exercise.longName = jsonValue.getString("longName");
@@ -40,6 +44,7 @@ public class DataController {
             exercise.unit = jsonValue.getString("unit");
             exercise.arePointsDescending = jsonValue.getBoolean("arePointsDescending", false);
             exercise.isFloat = jsonValue.getBoolean("isFloat");
+            exercise.isCustom = isCustom;
 
             loadedExercises.put(exercise.number, exercise);
         }

@@ -56,6 +56,163 @@
     "isFloat": false
   },
   {
+    "number": 8,
+    "name": "Վարժություն 8",
+    "longName": "Ցատկ ոտքերը զատած մարմնամարզական նժույգի վրայով",
+    "isCustom": true,
+    "description": "",
+    "unit": "",
+    "isFloat": false
+  },
+  {
+    "number": 9,
+    "name": "Վարժություն 9",
+    "longName": "Ցատկ ոտքերը զատած մարմնամարզական այծիկի վրայով",
+    "isCustom": true,
+    "description": "",
+    "unit": "",
+    "isFloat": false
+  },
+  {
+    "number": 10,
+    "name": "Վարժություն 10",
+    "longName": "Պտույտներ անշարժ մարմնամարզական անիվի վրա",
+    "description": "",
+    "unit": "վրկ",
+    "arePointsDescending": true,
+    "isFloat": true
+  },
+  {
+    "number": 11,
+    "name": "Վարժություն 11",
+    "longName": "Պտույտներ առաջ և հետ, լոպինգի վրա",
+    "description": "",
+    "unit": "վրկ",
+    "arePointsDescending": true,
+    "isFloat": true
+  },
+  {
+    "number": 12,
+    "name": "Վարժություն 12",
+    "longName": "Ձեռնամարտ 1",
+    "isCustom": true,
+    "description": "",
+    "unit": "",
+    "isFloat": false
+  },
+  {
+    "number": 13,
+    "name": "Վարժություն 13",
+    "longName": "Ձեռնամարտ 2",
+    "isCustom": true,
+    "description": "",
+    "unit": "",
+    "isFloat": false
+  },
+  {
+    "number": 14,
+    "name": "Վարժություն 14",
+    "longName": "Ձեռնամարտ 3",
+    "isCustom": true,
+    "description": "",
+    "unit": "",
+    "isFloat": false
+  },
+  {
+    "number": 15,
+    "name": "Վարժություն 15",
+    "longName": "Դանակի նետում նշանակետին",
+    "description": "",
+    "unit": "միավոր",
+    "isFloat": false
+  },
+  {
+    "number": 16,
+    "name": "Վարժություն 16",
+    "longName": "Հետևակային փոքր բահի նետում նշանակետին",
+    "description": "",
+    "unit": "միավոր",
+    "isFloat": false
+  },
+  {
+    "number": 17,
+    "name": "Վարժություն 17",
+    "longName": "Ընդհանուր ստուգողական վարժություն միասնական արգելագոտում",
+    "description": "",
+    "unit": "րոպե, վրկ",
+    "arePointsDescending": true,
+    "isFloat": true
+  },
+  {
+    "number": 18,
+    "name": "Վարժություն 18",
+    "longName": "Արգելագոտու հաղթահարում",
+    "description": "",
+    "unit": "րոպե, վրկ",
+    "arePointsDescending": true,
+    "isFloat": true
+  },
+  {
+    "number": 19,
+    "name": "Վարժություն 19",
+    "longName": "Արգելագոտում հաղթահարում",
+    "description": "",
+    "unit": "րոպե, վրկ",
+    "arePointsDescending": true,
+    "isFloat": true
+  },
+  {
+    "number": 20,
+    "name": "Վարժություն 20",
+    "longName": "Արգելագոտում հաղթահարում",
+    "description": "",
+    "unit": "րոպե, վրկ",
+    "arePointsDescending": true,
+    "isFloat": true
+  },
+  {
+    "number": 21,
+    "name": "Վարժություն 21",
+    "longName": "Վազք ստորաբաժանման կազմով՝ արգելագոտու հաղթահարմամբ",
+    "description": "",
+    "isCustom": true,
+    "unit": "",
+    "isFloat": false
+  },
+  {
+    "number": 22,
+    "name": "Վարժություն 22",
+    "longName": "5կմ երթարշավ՝ ստորաբաժանման կազմով",
+    "description": "",
+    "unit": "րոպե, վրկ",
+    "isFloat": true
+  },
+  {
+    "number": 23,
+    "name": "Վարժություն 23",
+    "longName": "10 կմ երթարշավ՝ ստորաբաժանման կազմով",
+    "description": "",
+    "unit": "րոպե, վրկ",
+    "isFloat": true
+  },
+  {
+    "number": 24,
+    "name": "Վարժություն 24",
+    "longName": "Լող համազգեստով և զենքով (ինքանձիգ)",
+    "description": "",
+    "unit": "մ",
+    "isFloat": false
+  },
+  {
+    "number": 25,
+    "name": "Վարժություն 25",
+    "longName": "Վազք 60մ",
+    "description": "",
+    "unit": "վրկ",
+    "isFloat": true,
+    "arePointsDescending": true
+  },
+  {
     "number": 26,
     "name": "Վարժություն 26",
     "longName": "Վազք 100 մ",
@@ -65,9 +222,36 @@
     "arePointsDescending": true
   },
   {
+    "number": 27,
+    "name": "Վարժություն 27",
+    "longName": "Մաքոքավազք 10x10",
+    "description": "",
+    "unit": "վրկ",
+    "isFloat": true,
+    "arePointsDescending": true
+  },
+  {
+    "number": 28,
+    "name": "Վարժություն 28",
+    "longName": "Վազք 1կմ",
+    "description": "",
+    "unit": "րոպե, վրկ",
+    "arePointsDescending": true,
+    "isFloat": true
+  },
+  {
     "number": 29,
     "name": "Վարժություն 29",
     "longName": "վազք 3 կմ",
+    "description": "",
+    "unit": "րոպե, վրկ",
+    "isFloat": true,
+    "arePointsDescending": true
+  },
+  {
+    "number": 30,
+    "name": "Վարժություն 30",
+    "longName": "Կրոս 5կմ",
     "description": "",
     "unit": "րոպե, վրկ",
     "isFloat": true,

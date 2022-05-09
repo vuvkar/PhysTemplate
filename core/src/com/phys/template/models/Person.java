@@ -36,8 +36,8 @@ public class Person implements Json.Serializable {
         intExercisesRaw = new OrderedMap<>();
         availableExercises = new IntArray();
         notes = new ArrayList<>();
-        ageGroup = PhysTemplate.Instance().DataController().getAgeGroupFor(6);
-        ageGroupNumber = 6;
+        ageGroup = PhysTemplate.Instance().DataController().getAgeGroupFor(1);
+        ageGroupNumber = 1;
         category = Category.FIRST;
         rank = Rank.SHN;
         sex = Sex.MALE;
@@ -83,6 +83,7 @@ public class Person implements Json.Serializable {
     public void putFloatExerciseRawValue(int number, float value) {
         if (!availableExercises.contains(number)) {
             logger.error("PUTTING UNAVAILABLE EXERCISE VALUE");
+            return;
         }
         floatExercisesRaw.put(number, value);
     }
@@ -90,6 +91,7 @@ public class Person implements Json.Serializable {
     public void putIntExerciseRawValue(int number, int value) {
         if (!availableExercises.contains(number)) {
             logger.error("PUTTING UNAVAILABLE EXERCISE VALUE");
+            return;
         }
         intExercisesRaw.put(number, value);
     }
@@ -113,6 +115,7 @@ public class Person implements Json.Serializable {
         for (ObjectMap.Entry<Integer, Float> entry : floatExercisesRaw) {
             copy.floatExercisesRaw.put(entry.key, entry.value);
         }
+        copy.availableExercises.addAll(availableExercises);
 
         for (ObjectMap.Entry<Integer, Integer> entry : intExercisesRaw) {
             copy.intExercisesRaw.put(entry.key, entry.value);
@@ -153,6 +156,9 @@ public class Person implements Json.Serializable {
 
         attachedExercises.clear();
         attachedExercises.addAll(copyPerson.attachedExercises);
+
+        availableExercises.clear();
+        availableExercises.addAll(copyPerson.availableExercises);
         floatExercisesRaw.clear();
         for (ObjectMap.Entry<Integer, Float> integerFloatEntry : copyPerson.floatExercisesRaw) {
             floatExercisesRaw.put(integerFloatEntry.key, integerFloatEntry.value);

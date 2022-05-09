@@ -14,7 +14,9 @@ import com.kotcrab.vis.ui.util.IntDigitsOnlyFilter;
 import com.kotcrab.vis.ui.util.NumberDigitsTextFieldFilter;
 import com.kotcrab.vis.ui.widget.*;
 import com.phys.template.PhysTemplate;
+import com.phys.template.controllers.ProjectController;
 import com.phys.template.models.*;
+import com.phys.template.views.exerciseWidgets.ExerciseValueFillRow;
 
 import java.util.ArrayList;
 
@@ -31,11 +33,11 @@ public class EditPersonPopup extends VisWindow {
     private Table exercisesTable;
     private boolean isCreation;
     private int updatePersonIndex;
-    private static final int FIELD_HEIGHT = 40;
+    public static final int FIELD_HEIGHT = 40;
 
     private Person currentModifyingPerson;
 
-    private final OrderedMap<Exercise, VisTextField> exerciseMap = new OrderedMap<>();
+    private final OrderedMap<Exercise, ExerciseValueFillRow> exerciseMap = new OrderedMap<>();
 
     public EditPersonPopup() {
         super("Ավելացնել զինծառայող");
@@ -51,7 +53,7 @@ public class EditPersonPopup extends VisWindow {
         invalidate();
 
         centerWindow();
-        setSize(900, 700);
+        setSize(1000, 700);
 //        debugAll();
     }
 
@@ -83,6 +85,7 @@ public class EditPersonPopup extends VisWindow {
         sexSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                currentModifyingPerson.sex = sexSelectBox.getSelected();
                 PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(currentModifyingPerson, PhysTemplate.Instance().ProjectController().getCurrentProject());
                 updateExercisesFields();
             }
@@ -98,6 +101,9 @@ public class EditPersonPopup extends VisWindow {
         ageGroupSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                AgeGroup selected = ageGroupSelectBox.getSelected();
+                currentModifyingPerson.ageGroup = selected;
+                currentModifyingPerson.ageGroupNumber = selected.number;
                 PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(currentModifyingPerson, PhysTemplate.Instance().ProjectController().getCurrentProject());
                 updateExercisesFields();
             }
@@ -106,13 +112,14 @@ public class EditPersonPopup extends VisWindow {
         mainTable.row();
 
         //category config
-        VisLabel categoryLabel = new VisLabel("Կատեգորիա");
+        final VisLabel categoryLabel = new VisLabel("Կատեգորիա");
         mainTable.add(categoryLabel);
         categorySelectBox = new VisSelectBox<>();
         categorySelectBox.setItems(Category.values());
         categorySelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                currentModifyingPerson.category = categorySelectBox.getSelected();
                 PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(currentModifyingPerson, PhysTemplate.Instance().ProjectController().getCurrentProject());
                 updateExercisesFields();
             }
@@ -153,16 +160,16 @@ public class EditPersonPopup extends VisWindow {
     }
 
     private void updateExercisesFields() {
-        System.out.println("update fields");
-        for (ObjectMap.Entry<Exercise, VisTextField> exerciseVisTextFieldEntry : exerciseMap) {
-            VisTextField value = exerciseVisTextFieldEntry.value;
+        currentModifyingPerson.attachedExercises.clear();
+        for (ObjectMap.Entry<Exercise, ExerciseValueFillRow> exerciseVisTextFieldEntry : exerciseMap) {
+            ExerciseValueFillRow value = exerciseVisTextFieldEntry.value;
             Exercise key = exerciseVisTextFieldEntry.key;
 
             boolean isAvailable = currentModifyingPerson.availableExercises.contains(key.number);
-            value.setDisabled(!isAvailable);
-            if (!isAvailable) {
-                System.out.println("NOT AVAILABLE");
-                value.clearText();
+            value.setAvailable(isAvailable);
+
+            if (isAvailable) {
+                currentModifyingPerson.attachedExercises.add(key.number);
             }
         }
     }
@@ -172,10 +179,16 @@ public class EditPersonPopup extends VisWindow {
         if (isCreation) {
             currentModifyingPerson = new Person();
 
-            Array<Exercise> currentProjectExercises = PhysTemplate.Instance().ProjectController().getCurrentProjectExercises();
+            ProjectController projectController = PhysTemplate.Instance().ProjectController();
+            PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(currentModifyingPerson, projectController.getCurrentProject());
+            Array<Exercise> currentProjectExercises = projectController.getCurrentProjectExercises();
             for (Exercise currentProjectExercise : currentProjectExercises) {
-                currentModifyingPerson.addExercise(currentProjectExercise.number);
+                int number = currentProjectExercise.number;
+                if (currentModifyingPerson.availableExercises.contains(number)) {
+                    currentModifyingPerson.addExercise(number);
+                }
             }
+
             getTitleLabel().setText("Ավելացնել զինծառայող");
             saveButton.setText("Ավելացնել");
             if (deleteSoldierButton.hasParent()) {
@@ -203,15 +216,15 @@ public class EditPersonPopup extends VisWindow {
         currentModifyingPerson.category = categorySelectBox.getSelected();
         currentModifyingPerson.sex = sexSelectBox.getSelected();
 
-        for (ObjectMap.Entry<Exercise, VisTextField> entry : exerciseMap) {
+        for (ObjectMap.Entry<Exercise, ExerciseValueFillRow> entry : exerciseMap) {
             Exercise exercise = entry.key;
-            VisTextField field = entry.value;
-            String text = field.getText();
-            if (!text.isEmpty()) {
+            ExerciseValueFillRow field = entry.value;
+            Number number = field.getNumber();
+            if (number != null) {
                 if (PhysTemplate.Instance().DataController().isFloatExercise(exercise.number)) {
-                    currentModifyingPerson.putFloatExerciseRawValue(exercise.number, Float.parseFloat(text));
+                    currentModifyingPerson.putFloatExerciseRawValue(exercise.number, number.floatValue());
                 } else {
-                    currentModifyingPerson.putIntExerciseRawValue(exercise.number, Integer.parseInt(text));
+                    currentModifyingPerson.putIntExerciseRawValue(exercise.number, number.intValue());
                 }
             }
         }
@@ -220,27 +233,19 @@ public class EditPersonPopup extends VisWindow {
     }
 
 
-    public void refreshExerciseContent(ArrayList<Integer> exerciseList) {
+    public void refreshExerciseContent(Array<Exercise> exerciseList) {
         exercisesTable.clearChildren();
         exerciseMap.clear();
         exercisesTable.defaults().pad(8);
         exercisesTable.top().left();
         exercisesTable.add(new VisLabel("Վարժություններ", "big")).growX().colspan(2);
         exercisesTable.row();
-//        exercisesTable.debugAll();
 
-        for (Integer exerciseNumber : exerciseList) {
-            Exercise exercise = PhysTemplate.Instance().DataController().getExerciseModelFor(exerciseNumber);
-            VisLabel exerciseName = new VisLabel(exercise.name + ", " + exercise.longName);
-            exercisesTable.add(exerciseName).left();
+        for (Exercise exercise : exerciseList) {
+            ExerciseValueFillRow exerciseValueFillRow = new ExerciseValueFillRow(exercise);
+            exercisesTable.add(exerciseValueFillRow).growX();
             exercisesTable.row();
-            VisTextField exerciseField = new VisTextField();
-            NumberDigitsTextFieldFilter filter = PhysTemplate.Instance().DataController().isFloatExercise(exercise.number) ? new FloatDigitsOnlyFilter(false) : new IntDigitsOnlyFilter(false);
-            exerciseField.setTextFieldFilter(filter);
-            exercisesTable.add(exerciseField).height(FIELD_HEIGHT).growX();
-            exercisesTable.add(new VisLabel(exercise.getUnit()));
-            exercisesTable.row();
-            exerciseMap.put(exercise, exerciseField);
+            exerciseMap.put(exercise, exerciseValueFillRow);
         }
     }
 
@@ -251,24 +256,24 @@ public class EditPersonPopup extends VisWindow {
         sexSelectBox.setSelected(person.sex);
         categorySelectBox.setSelected(person.category);
         ageGroupSelectBox.setSelected(person.ageGroup);
-        ArrayList<Integer> attachedExercises = person.attachedExercises;
-        refreshExerciseContent(attachedExercises);
+        Array<Exercise> exercises = PhysTemplate.Instance().ProjectController().getCurrentProject().getExercises();
+        refreshExerciseContent(exercises);
 
-        for (ObjectMap.Entry<Exercise, VisTextField> exerciseVisTextFieldEntry : exerciseMap) {
-            VisTextField fi = exerciseVisTextFieldEntry.value;
+        for (ObjectMap.Entry<Exercise, ExerciseValueFillRow> exerciseVisTextFieldEntry : exerciseMap) {
+            ExerciseValueFillRow fi = exerciseVisTextFieldEntry.value;
             int exerciseNumber = exerciseVisTextFieldEntry.key.number;
             if (person.hasFilledRawValue(exerciseNumber)) {
                 boolean isFloatExercise = PhysTemplate.Instance().DataController().isFloatExercise(exerciseNumber);
                 if (isFloatExercise) {
                     float exerciseRawValue = person.getFloatExerciseRawValue(exerciseNumber);
-                    fi.setText(String.valueOf(exerciseRawValue));
+                    fi.setValue(exerciseRawValue);
                 } else {
                     int exerciseRawValue = person.getIntExerciseRawValue(exerciseNumber);
-                    fi.setText(String.valueOf(exerciseRawValue));
+                    fi.setValue(exerciseRawValue);
                 }
 
             } else {
-                fi.clearText();
+                fi.setValue(null);
             }
         }
         updateExercisesFields();

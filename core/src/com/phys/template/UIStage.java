@@ -14,7 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisWindow;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.phys.template.controllers.ProjectController;
@@ -33,8 +36,8 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.io.File;
-import java.io.FileFilter;
+import java.io.*;
+import java.nio.channels.Channel;
 
 public class UIStage {
 
@@ -221,19 +224,47 @@ public class UIStage {
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected(Array<FileHandle> file) {
-                String path = file.first().file().getAbsolutePath();
+                File selectedFile = file.first().file();
+                boolean isFileUnlocked;
+
+                String path = selectedFile.getAbsolutePath();
                 if (!path.endsWith(ext)) {
                     if (path.indexOf(".") > 0) {
                         path = path.substring(0, path.indexOf("."));
                     }
                     path += ext;
                 }
-                FileHandle handle = Gdx.files.absolute(path);
-                try {
 
-                    PhysTemplate.Instance().DocumentController().createDocumentForProject(PhysTemplate.Instance().ProjectController().getCurrentProject(), handle);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                File toBeSaved = new File(path);
+                FileOutputStream fos = null;
+                try {
+                    // Make sure that the output stream is in Append mode. Otherwise you will
+                    // truncate your file, which probably isn't what you want to do :-)
+                    fos = new FileOutputStream(toBeSaved, true);
+                    // -> file was closed
+                    isFileUnlocked = true;
+                } catch(IOException e) {
+                    // -> file still open
+                    isFileUnlocked = false;
+                } finally {
+                    if (fos != null) {
+                        try {
+                            fos.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                if (isFileUnlocked) {
+                    FileHandle handle = Gdx.files.absolute(path);
+                    try {
+                        PhysTemplate.Instance().DocumentController().createDocumentForProject(PhysTemplate.Instance().ProjectController().getCurrentProject(), handle);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Dialogs.showErrorDialog(stage, "Փակեք word Ֆայլը և կրկին փորձեք");
                 }
             }
         });
@@ -336,9 +367,31 @@ public class UIStage {
         try {
             // TODO: 12/21/2021 handle copy pasting
             String transferData = (String) t.getTransferData(DataFlavor.stringFlavor);
+            final String[] strings = processPastedData(transferData);
+            int length = strings.length;
+            if (length > 0) {
+                Dialogs.showConfirmDialog(stage, "Ավելացնել նոր զինծառայողներ", "Ցանկանում եք ավելացնել " + length + " զինծառայող",
+                        new String[]{"Այո", "Ոչ"}, new Boolean[]{true, false}, new ConfirmDialogListener<Boolean>() {
+                            @Override
+                            public void result(Boolean result) {
+                                if (result) {
+                                    for (String string : strings) {
+                                        PhysTemplate.Instance().ProjectController().createPersonByName(string);
+                                    }
+
+                                    PhysTemplate.Instance().UIStage().updateContent();
+                                }
+                            }
+                        });
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String[] processPastedData(String data) {
+        String[] split = data.split("\n");
+        return split;
     }
 
     private void updateTopRow() {

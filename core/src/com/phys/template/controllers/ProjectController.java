@@ -148,4 +148,19 @@ public class ProjectController {
     public Project getCurrentProject() {
         return currentProject;
     }
+
+    public void createPersonByName(String string) {
+        Person person = new Person();
+        person.name = string;
+
+        PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(person, currentProject);
+        Array<Exercise> currentProjectExercises = getCurrentProjectExercises();
+        for (Exercise currentProjectExercise : currentProjectExercises) {
+            if (person.availableExercises.contains(currentProjectExercise.number)) {
+                person.addExercise(currentProjectExercise.number);
+            }
+        }
+
+        addPersonToCurrentProject(person);
+    }
 }

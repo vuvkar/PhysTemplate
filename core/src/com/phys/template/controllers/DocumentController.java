@@ -120,7 +120,6 @@ public class DocumentController {
 
         document.write(out);
         out.close();
-        System.out.println("create_table.docx written successully");
     }
 
     private void addStatistics(XWPFDocument document, Project project) {
@@ -229,7 +228,7 @@ public class DocumentController {
         XWPFRun dateRun = dateParagraph.createRun();
         dateRun.setFontSize(13);
         dateRun.setFontFamily("GHEA Grapalat");
-        dateRun.setText("<<__>> ________________ 20__թ.");
+        dateRun.setText("«___» ________________ 20__թ.");
         dateRun.addBreak();
     }
 

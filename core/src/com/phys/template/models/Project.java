@@ -49,9 +49,11 @@ public class Project {
         exercises.add(exercise);
         exerciseNumbers.add(exerciseNumber);
         for (Person person : people) {
-            person.addExercise(exerciseNumber);
-            PhysTemplate.Instance().DataController().calculatePersonPoints(person);
-            PhysTemplate.Instance().DataController().calculatePersonGrade(person);
+            if (person.availableExercises.contains(exerciseNumber)) {
+                person.addExercise(exerciseNumber);
+                PhysTemplate.Instance().DataController().calculatePersonPoints(person);
+                PhysTemplate.Instance().DataController().calculatePersonGrade(person);
+            }
         }
         calculateFinalGrade();
     }
@@ -162,26 +164,66 @@ public class Project {
             Exercise exercise = PhysTemplate.Instance().ProjectController().getExerciseModelFor(exerciseNumber);
             exercises.add(exercise);
             for (Person person : people) {
-                person.addExercise(exerciseNumber);
                 person.ageGroup = PhysTemplate.Instance().DataController().getAgeGroupFor(person.ageGroupNumber);
-                PhysTemplate.Instance().DataController().calculatePersonPoints(person);
-                PhysTemplate.Instance().DataController().calculatePersonGrade(person);
+                if (person.availableExercises.contains(exerciseNumber)) {
+                    person.addExercise(exerciseNumber);
+                    PhysTemplate.Instance().DataController().calculatePersonPoints(person);
+                    PhysTemplate.Instance().DataController().calculatePersonGrade(person);
+                }
             }
             calculateFinalGrade();
         }
     }
 
     public void calculateFinalGrade() {
-        int overallPoints = 5 * getCountForGrade(Grade.EXCELLENT) +
-                4 * getCountForGrade(Grade.GOOD) +
-                3 * getCountForGrade(Grade.OK) +
-                2 * getCountForGrade(Grade.BAD);
-        int gradeValue = Math.round(overallPoints / ((float) getPeopleCount()));
-        finalGrade = Grade.gradeTypeForGrade(gradeValue);
-        if (finalGrade == null) {
+        float peopleCount = (float)getPeopleCount();
+
+        int countForExc = getCountForGrade(Grade.EXCELLENT);
+        float excPercent = countForExc / peopleCount * 100f;
+
+        int countForGood = getCountForGrade(Grade.GOOD);
+        float goodPercent = countForGood / peopleCount * 100f;
+
+        int countForOk = getCountForGrade(Grade.OK);
+        int countForBadGrade = getCountForGrade(Grade.BAD);
+
+        float overallOkPercent = (peopleCount - countForBadGrade) / peopleCount * 100f;
+
+        if (areStudents) {
+            if (overallOkPercent >= 95 && excPercent >= 50) {
+                finalGrade = Grade.EXCELLENT;
+                return;
+            }
+
+            if (overallOkPercent >= 90 && excPercent + goodPercent >= 50) {
+                finalGrade = Grade.GOOD;
+                return;
+            }
+
+            if (overallOkPercent >= 85) {
+                finalGrade = Grade.OK;
+                return;
+            }
+
+            finalGrade = Grade.BAD;
+        } else {
+            if (overallOkPercent >= 90 && excPercent >= 50) {
+                finalGrade = Grade.EXCELLENT;
+                return;
+            }
+
+            if (overallOkPercent >= 80 && excPercent + goodPercent >= 50) {
+                finalGrade = Grade.GOOD;
+                return;
+            }
+
+            if (overallOkPercent >= 70) {
+                finalGrade = Grade.OK;
+                return;
+            }
+
             finalGrade = Grade.BAD;
         }
-
     }
 
     public int getCountForGrade(Grade grade) {

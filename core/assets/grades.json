@@ -124,6 +124,141 @@
     ]
   },
   {
+    "ageGroup": 3,
+    "description": "ՌՈՒՀ-ի 1-ին կուրսի կուրսանտներ, դիմորդներ",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 150
+              },
+              {
+                "grade": 4,
+                "point": 130
+              },
+              {
+                "grade": 3,
+                "point": 100
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 210
+              },
+              {
+                "grade": 4,
+                "point": 180
+              },
+              {
+                "grade": 3,
+                "point": 140
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 4,
+    "description": "ՌՈՒՀ-ի 2-րդ կուրսի կուրսանտներ",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 190
+              },
+              {
+                "grade": 4,
+                "point": 170
+              },
+              {
+                "grade": 3,
+                "point": 120
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 250
+              },
+              {
+                "grade": 4,
+                "point": 220
+              },
+              {
+                "grade": 3,
+                "point": 160
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 5,
+    "description": "ՌՈՒՀ-ի 3-րդ և բարձր կուրսերի կուրսանտներ",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 210
+              },
+              {
+                "grade": 4,
+                "point": 190
+              },
+              {
+                "grade": 3,
+                "point": 130
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 280
+              },
+              {
+                "grade": 4,
+                "point": 250
+              },
+              {
+                "grade": 3,
+                "point": 170
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "ageGroup": 6,
     "description": "1-ին տարիքային խմբի սպաներ, ենթասպաներ, պայմանագրային զինծառայողներ (մինչև 25)",
     "category": [
@@ -290,6 +425,810 @@
               {
                 "grade": 3,
                 "point": 160
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 7,
+    "description": "2-րդ տարիքային խմբի սպաներ, ենթասպաներ, պայմանագրային զինծառայողներ (25-29)",
+    "category": [
+      {
+        "ord": [1],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 135
+              },
+              {
+                "grade": 4,
+                "point": 115
+              },
+              {
+                "grade": 3,
+                "point": 95
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 200
+              },
+              {
+                "grade": 4,
+                "point": 180
+              },
+              {
+                "grade": 3,
+                "point": 130
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 260
+              },
+              {
+                "grade": 4,
+                "point": 230
+              },
+              {
+                "grade": 3,
+                "point": 170
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "ord": [2],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 130
+              },
+              {
+                "grade": 4,
+                "point": 115
+              },
+              {
+                "grade": 3,
+                "point": 90
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 190
+              },
+              {
+                "grade": 4,
+                "point": 170
+              },
+              {
+                "grade": 3,
+                "point": 120
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 250
+              },
+              {
+                "grade": 4,
+                "point": 220
+              },
+              {
+                "grade": 3,
+                "point": 160
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "ord": [3],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 120
+              },
+              {
+                "grade": 4,
+                "point": 110
+              },
+              {
+                "grade": 3,
+                "point": 80
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 180
+              },
+              {
+                "grade": 4,
+                "point": 160
+              },
+              {
+                "grade": 3,
+                "point": 115
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 240
+              },
+              {
+                "grade": 4,
+                "point": 210
+              },
+              {
+                "grade": 3,
+                "point": 155
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 8,
+    "description": "3-րդ տարիքային խմբի սպաներ, ենթասպաներ, պայմանագրային զինծառայողներ (30-34)",
+    "category": [
+      {
+        "ord": [1],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 120
+              },
+              {
+                "grade": 4,
+                "point": 105
+              },
+              {
+                "grade": 3,
+                "point": 80
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 180
+              },
+              {
+                "grade": 4,
+                "point": 160
+              },
+              {
+                "grade": 3,
+                "point": 120
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 240
+              },
+              {
+                "grade": 4,
+                "point": 210
+              },
+              {
+                "grade": 3,
+                "point": 160
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "ord": [2],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 115
+              },
+              {
+                "grade": 4,
+                "point": 100
+              },
+              {
+                "grade": 3,
+                "point": 75
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 170
+              },
+              {
+                "grade": 4,
+                "point": 150
+              },
+              {
+                "grade": 3,
+                "point": 110
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 230
+              },
+              {
+                "grade": 4,
+                "point": 200
+              },
+              {
+                "grade": 3,
+                "point": 150
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "ord": [3],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 110
+              },
+              {
+                "grade": 4,
+                "point": 95
+              },
+              {
+                "grade": 3,
+                "point": 70
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 160
+              },
+              {
+                "grade": 4,
+                "point": 140
+              },
+              {
+                "grade": 3,
+                "point": 100
+              }
+            ]
+          },
+          {
+            "exerciseCount": 4,
+            "values": [
+              {
+                "grade": 5,
+                "point": 220
+              },
+              {
+                "grade": 4,
+                "point": 190
+              },
+              {
+                "grade": 3,
+                "point": 140
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 9,
+    "description": "4-րդ տարիքային խմբի սպաներ, ենթասպաներ, պայմանագրային զինծառայողներ (35-39)",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 100
+              },
+              {
+                "grade": 4,
+                "point": 80
+              },
+              {
+                "grade": 3,
+                "point": 60
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 140
+              },
+              {
+                "grade": 4,
+                "point": 120
+              },
+              {
+                "grade": 3,
+                "point": 90
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 10,
+    "description": "5-րդ տարիքային խմբի սպաներ, ենթասպաներ, պայմանագրային զինծառայողներ (40-44)",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 80
+              },
+              {
+                "grade": 4,
+                "point": 70
+              },
+              {
+                "grade": 3,
+                "point": 55
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 120
+              },
+              {
+                "grade": 4,
+                "point": 100
+              },
+              {
+                "grade": 3,
+                "point": 80
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 11,
+    "description": "6-րդ տարիքային խմբի սպաներ, ենթասպաներ, պայմանագրային զինծառայողներ (45-49)",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 1,
+            "values": [
+              {
+                "grade": 5,
+                "point": 29
+              },
+              {
+                "grade": 4,
+                "point": 22
+              },
+              {
+                "grade": 3,
+                "point": 16
+              }
+            ]
+          },
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 60
+              },
+              {
+                "grade": 4,
+                "point": 40
+              },
+              {
+                "grade": 3,
+                "point": 30
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 90
+              },
+              {
+                "grade": 4,
+                "point": 60
+              },
+              {
+                "grade": 3,
+                "point": 50
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 12,
+    "description": "7-րդ տարիքային խմբի սպաներ, ենթասպաներ, պայմանագրային զինծառայողներ (50-54)",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 1,
+            "values": [
+              {
+                "grade": 5,
+                "point": 35
+              },
+              {
+                "grade": 4,
+                "point": 29
+              },
+              {
+                "grade": 3,
+                "point": 22
+              }
+            ]
+          },
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 70
+              },
+              {
+                "grade": 4,
+                "point": 50
+              },
+              {
+                "grade": 3,
+                "point": 40
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 100
+              },
+              {
+                "grade": 4,
+                "point": 70
+              },
+              {
+                "grade": 3,
+                "point": 60
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 13,
+    "description": "3-րդ և բարձր կուրսի կին զինծառայող կուրսանտներ",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 170
+              },
+              {
+                "grade": 4,
+                "point": 150
+              },
+              {
+                "grade": 3,
+                "point": 120
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 14,
+    "description": "1-ին տարիքային խմբի կին զինծառայողներ (մինչև 25), 2-րդ կուրսի կուրսանտներ",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 110
+              },
+              {
+                "grade": 4,
+                "point": 95
+              },
+              {
+                "grade": 3,
+                "point": 80
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 160
+              },
+              {
+                "grade": 4,
+                "point": 140
+              },
+              {
+                "grade": 3,
+                "point": 110
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 15,
+    "description": "2-րդ տարիքային խմբի կին զինծառայողներ (25-29), 1-ին կուրսի կուրսանտներ, դիմորդներ",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 100
+              },
+              {
+                "grade": 4,
+                "point": 80
+              },
+              {
+                "grade": 3,
+                "point": 60
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 140
+              },
+              {
+                "grade": 4,
+                "point": 120
+              },
+              {
+                "grade": 3,
+                "point": 90
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 16,
+    "description": "3-րդ տարիքային խմբի կին զինծառայողներ (30-34), կուրսանտներ",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 1,
+            "values": [
+              {
+                "grade": 5,
+                "point": 42
+              },
+              {
+                "grade": 4,
+                "point": 36
+              },
+              {
+                "grade": 3,
+                "point": 26
+              }
+            ]
+          },
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 85
+              },
+              {
+                "grade": 4,
+                "point": 75
+              },
+              {
+                "grade": 3,
+                "point": 50
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 130
+              },
+              {
+                "grade": 4,
+                "point": 110
+              },
+              {
+                "grade": 3,
+                "point": 80
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ageGroup": 17,
+    "description": "4-րդ տարիքային խմբի կին զինծառայողներ (35-39)",
+    "category": [
+      {
+        "ord": [1, 2, 3],
+        "points": [
+          {
+            "exerciseCount": 1,
+            "values": [
+              {
+                "grade": 5,
+                "point": 40
+              },
+              {
+                "grade": 4,
+                "point": 34
+              },
+              {
+                "grade": 3,
+                "point": 22
+              }
+            ]
+          },
+          {
+            "exerciseCount": 2,
+            "values": [
+              {
+                "grade": 5,
+                "point": 80
+              },
+              {
+                "grade": 4,
+                "point": 70
+              },
+              {
+                "grade": 3,
+                "point": 45
+              }
+            ]
+          },
+          {
+            "exerciseCount": 3,
+            "values": [
+              {
+                "grade": 5,
+                "point": 120
+              },
+              {
+                "grade": 4,
+                "point": 100
+              },
+              {
+                "grade": 3,
+                "point": 70
               }
             ]
           }

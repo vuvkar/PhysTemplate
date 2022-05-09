@@ -12,6 +12,7 @@ import com.phys.template.PhysTemplate;
 import com.phys.template.models.Exercise;
 import com.phys.template.models.Grade;
 import com.phys.template.models.Person;
+import com.phys.template.models.Project;
 
 public class PeopleListRowWidget extends Table {
 
@@ -132,7 +133,9 @@ public class PeopleListRowWidget extends Table {
         ageGroup.setText(person.ageGroup.toString());
         category.setText(person.category.toString());
         exerciseTable.clearChildren();
-        for (Integer attachedExercise : person.attachedExercises) {
+        Project currentProject = PhysTemplate.Instance().ProjectController().getCurrentProject();
+        for (Exercise attachedExerciseModel : currentProject.getExercises()) {
+            int attachedExercise = attachedExerciseModel.number;
             String valueText = "";
             RowCell value = new RowCell(EXERCISE_COLUMN_LENGTH);
             exerciseTable.add(value).spaceRight(2).growY();
@@ -200,7 +203,7 @@ public class PeopleListRowWidget extends Table {
         }
 
         public void setAvailable(boolean isAvailable) {
-            setColor(isAvailable ? Color.CLEAR : Color.RED);
+            setColor(isAvailable ? Color.WHITE : Color.RED);
         }
 
         @Override

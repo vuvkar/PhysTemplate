@@ -65,7 +65,6 @@ public class PeopleListWidget extends Table {
 
     public void updateContent() {
         mainPeopleTable.clearChildren();
-        // TODO: 11/19/2021 handle top row
         ArrayList<Person> currentProjectPeople = PhysTemplate.Instance().ProjectController().getCurrentProjectPeople();
         for (Person currentProjectPerson : currentProjectPeople) {
             PeopleListRowWidget peopleListRowWidget = new PeopleListRowWidget();
