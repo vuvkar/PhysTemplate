@@ -1,0 +1,17 @@
+{
+  "soldier": [
+    {
+      "name": "10բ",
+      "restrict": [
+        4,
+        5
+      ]
+    }
+  ],
+  "officer": [
+    {
+      "name": "20g",
+      "restrict": []
+    }
+  ]
+}

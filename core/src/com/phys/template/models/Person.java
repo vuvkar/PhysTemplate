@@ -14,6 +14,7 @@ public class Person implements Json.Serializable {
     public int ageGroupNumber;
     public Category category;
     public int index;
+    private Array<Restriction> restrictions;
 
     public transient AgeGroup ageGroup;
     private transient int overallPoints;
@@ -41,6 +42,7 @@ public class Person implements Json.Serializable {
         category = Category.FIRST;
         rank = Rank.SHN;
         sex = Sex.MALE;
+        restrictions = new Array<>();
     }
 
     public String getFullName() {
@@ -110,6 +112,7 @@ public class Person implements Json.Serializable {
         copy.index = this.index;
         copy.canCalculateFinalGrade = this.canCalculateFinalGrade;
         copy.gradeCalculationError = this.gradeCalculationError;
+        copy.restrictions.addAll(this.restrictions);
 
         copy.attachedExercises.addAll(attachedExercises);
         for (ObjectMap.Entry<Integer, Float> entry : floatExercisesRaw) {
@@ -157,6 +160,9 @@ public class Person implements Json.Serializable {
         attachedExercises.clear();
         attachedExercises.addAll(copyPerson.attachedExercises);
 
+        restrictions.clear();
+        restrictions.addAll(copyPerson.restrictions);
+
         availableExercises.clear();
         availableExercises.addAll(copyPerson.availableExercises);
         floatExercisesRaw.clear();
@@ -199,6 +205,8 @@ public class Person implements Json.Serializable {
         json.writeValue("ageGroupNumber", ageGroupNumber);
         json.writeValue("category", category.ordinal());
         json.writeValue("index", index);
+        // TODO: 5/11/2022 test
+        json.writeValue("restrictions", restrictions);
 
         json.writeArrayStart("floatExercises");
         for (ObjectMap.Entry<Integer, Float> integerFloatEntry : floatExercisesRaw) {
@@ -221,6 +229,7 @@ public class Person implements Json.Serializable {
 
     @Override
     public void read(Json json, JsonValue jsonData) {
+        // TODO: 5/11/2022 fix restriction importing
         rank = Rank.values()[jsonData.getInt("rank")];
         sex = Sex.values()[jsonData.getInt("sex")];
         category = Category.values()[jsonData.getInt("category")];

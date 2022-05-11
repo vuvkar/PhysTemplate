@@ -11,7 +11,6 @@ public class DataController {
 
     private final JsonReader json = new JsonReader();
 
-
     // AgeGroup -> Category -> ExerciseCount -> Point -> Grade
     private final ObjectMap<AgeGroup, ObjectMap<Category, IntMap<IntMap<Integer>>>> gradeMap = new ObjectMap<>();
 

@@ -69,7 +69,7 @@ public class DocumentController {
 
         // initial cell is already created
         for (int i = 1; i < overallColumnSize; i++) {
-            firstRow.addNewTableCell();
+            XWPFTableCell xwpfTableCell = firstRow.addNewTableCell();
             secondRow.addNewTableCell();
         }
 
