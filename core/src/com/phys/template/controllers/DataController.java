@@ -378,6 +378,15 @@ public class DataController {
     }
 
     public void calculatePersonGrade(Person person) {
+
+        int possibleExerciseCount = person.attachedExercises.size();
+        int restrictedExercisesCount = person.getRestrictedExercisesCount();
+        if (restrictedExercisesCount >= 2) {
+            person.gradeCalculationError = new PersonGradeCalculationError(CalculationErrorType.TOO_MANY_RESTRICTIONS);
+            person.canCalculateFinalGrade = false;
+            return;
+        }
+
         ObjectMap<Category, IntMap<IntMap<Integer>>> ageGroup = gradeMap.get(person.ageGroup);
         if (ageGroup == null) {
             person.gradeCalculationError = new PersonGradeCalculationError(CalculationErrorType.MISSING_AGE_GROUP);
@@ -390,12 +399,14 @@ public class DataController {
             person.canCalculateFinalGrade = false;
             return;
         }
-        IntMap<Integer> exerciseCountMap = categoryMap.get(person.attachedExercises.size());
+
+        IntMap<Integer> exerciseCountMap = categoryMap.get(possibleExerciseCount - restrictedExercisesCount);
         if (exerciseCountMap == null) {
             person.gradeCalculationError = new PersonGradeCalculationError(CalculationErrorType.EXERCISE_COUNT);
             person.canCalculateFinalGrade = false;
             return;
         }
+
 
         person.gradeCalculationError = null;
         person.canCalculateFinalGrade = true;
@@ -408,16 +419,27 @@ public class DataController {
             return;
         }
 
+        boolean isSet = false;
         for (int i = 1; i < intArray.size; i++) {
             int iter = intArray.get(i);
             if (iter > person.getOverallPoints()) {
                 person.setGrade(Grade.gradeTypeForGrade(exerciseCountMap.get(intArray.get(i - 1))));
-                return;
+                isSet = true;
+                break;
             }
         }
 
-        person.setGrade(Grade.EXCELLENT);
+        if (!isSet) {
+            person.setGrade(Grade.EXCELLENT);
+        }
 
+        if (restrictedExercisesCount == 1) {
+            if (person.getGrade().equals(Grade.EXCELLENT) || person.getGrade().equals(Grade.GOOD)) {
+                person.setGrade(Grade.OK);
+            } else {
+                person.setGrade(Grade.BAD);
+            }
+        }
     }
 
     public Exercise getExerciseModelFor(int exerciseNumber) {

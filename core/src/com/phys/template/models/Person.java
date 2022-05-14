@@ -257,4 +257,15 @@ public class Person implements Json.Serializable {
         }
         return false;
     }
+
+    public int getRestrictedExercisesCount() {
+        int count = 0;
+        for (Integer attachedExercise : attachedExercises) {
+            if (PhysTemplate.Instance().ProjectController().isPersonRestrictedFrom(this, attachedExercise)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
 }

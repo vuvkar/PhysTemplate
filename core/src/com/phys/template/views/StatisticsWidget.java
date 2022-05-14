@@ -15,6 +15,7 @@ public class StatisticsWidget extends Table {
     private VisLabel headerLabel;
 
     private VisLabel allNumberLabel = new VisLabel();
+    private VisLabel checkedNumberLabel = new VisLabel();
     private VisLabel excellent = new VisLabel();
     private VisLabel good = new VisLabel();
     private VisLabel ok = new VisLabel();
@@ -46,8 +47,12 @@ public class StatisticsWidget extends Table {
 
         mainContainer.defaults().left().pad(5);
 
-        mainContainer.add(new VisLabel("Ստուգվել է"));
+        mainContainer.add(new VisLabel("Ցուցակով"));
         mainContainer.add(allNumberLabel);
+        mainContainer.row();
+
+        mainContainer.add(new VisLabel("Ստուգվել է"));
+        mainContainer.add(checkedNumberLabel);
         mainContainer.row();
 
         mainContainer.add(new VisLabel("Գերազանց"));
@@ -82,7 +87,8 @@ public class StatisticsWidget extends Table {
         ProjectController projectController = PhysTemplate.Instance().ProjectController();
         Project currentProject = projectController.getCurrentProject();
 
-        int overallPeople = projectController.getPeopleCount();
+        int overallPeople = currentProject.getPeopleCount();
+        int checkedPeople = currentProject.getCheckedCount();
         int excCount = currentProject.getCountForGrade(Grade.EXCELLENT);
         int goodCount = currentProject.getCountForGrade(Grade.GOOD);
         int normCount = currentProject.getCountForGrade(Grade.OK);
@@ -91,24 +97,19 @@ public class StatisticsWidget extends Table {
         Grade finalGrade = currentProject.getFinalGrade();
 
         allNumberLabel.setText(overallPeople + " մարդ");
+        checkedNumberLabel.setText(checkedPeople + " մարդ");
 
-        if (overallPeople == 0) {
-            overallPeople = 1;
-            //lazy hack :)))
-        }
         excellent.setText( excCount + ", " + currentProject.getPercentForGrade(Grade.EXCELLENT) + "%");
         good.setText( goodCount + ", " + currentProject.getPercentForGrade(Grade.GOOD) + "%");
         ok.setText( normCount + ", " + currentProject.getPercentForGrade(Grade.OK) + "%");
         bad.setText( badCount + ", " + currentProject.getPercentForGrade(Grade.BAD) + "%");
 
-        // TODO: 4/29/2022 make calculation
-        getFreed.setText("0 մարդ");
+        getFreed.setText(currentProject.getRestrictedPeopleCount() + " մարդ");
 
         IntArray availableExercises = new IntArray();
         availableExercises.insertRange(0, 7);
 
-
-        overallOks.setText( enoughCount + ", " + currentProject.getNormalPercent() + "%");
+        overallOks.setText(enoughCount + ", " + currentProject.getNormalPercent() + "%");
 
         finalGradeLabel.setText(finalGrade.getNumericalGrade() + " " + finalGrade.getDescription(false, true));
     }

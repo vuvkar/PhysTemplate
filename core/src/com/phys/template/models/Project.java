@@ -176,7 +176,7 @@ public class Project {
     }
 
     public void calculateFinalGrade() {
-        float peopleCount = (float)getPeopleCount();
+        float peopleCount = (float)getCheckedCount();
 
         int countForExc = getCountForGrade(Grade.EXCELLENT);
         float excPercent = countForExc / peopleCount * 100f;
@@ -229,8 +229,10 @@ public class Project {
     public int getCountForGrade(Grade grade) {
         int count = 0;
         for (Person person : people) {
-            if (person.getGrade().getNumericalGrade() == grade.getNumericalGrade()) {
-                count++;
+            if (person.canCalculateFinalGrade) {
+                if (person.getGrade().getNumericalGrade() == grade.getNumericalGrade()) {
+                    count++;
+                }
             }
         }
 
@@ -238,7 +240,9 @@ public class Project {
     }
 
     public float getPercentForGrade(Grade grade) {
-        float percent = (getCountForGrade(grade) / (float) getPeopleCount()) * 100f;
+        int checkedCount = getCheckedCount();
+        if (checkedCount == 0) return 0;
+        float percent = (getCountForGrade(grade) / (float) checkedCount) * 100f;
         return (float) Math.round((percent * 100.0) / 100.0);
     }
 
@@ -247,8 +251,8 @@ public class Project {
     }
 
     public float getNormalPercent() {
-        int countForGrade = getPeopleCount() - getCountForGrade(Grade.BAD);
-        float overallOkPercent = countForGrade / ((float) getPeopleCount()) * 100f;
+        int countForGrade = getCheckedCount() - getCountForGrade(Grade.BAD);
+        float overallOkPercent = countForGrade / ((float) getCheckedCount()) * 100f;
         return (float) Math.round((overallOkPercent * 100.0) / 100.0);
     }
 
@@ -291,5 +295,28 @@ public class Project {
         Restriction restriction = PhysTemplate.Instance().DataController().getRestrictionFor(restrictionIndex);
         person.restrictions.add(restriction);
         PhysTemplate.Instance().UIStage().updateContent();
+    }
+
+    public int getCheckedCount() {
+        int counter = 0;
+        for (Person person : people) {
+            if (person.canCalculateFinalGrade) {
+                counter++;
+            }
+        }
+
+        return counter;
+    }
+
+    public int getRestrictedPeopleCount() {
+        int counter = 0;
+        for (Person person : people) {
+            PersonGradeCalculationError gradeCalculationError = person.gradeCalculationError;
+            if (gradeCalculationError != null && gradeCalculationError.type.equals(CalculationErrorType.TOO_MANY_RESTRICTIONS)) {
+                counter++;
+            }
+        }
+
+        return counter;
     }
 }

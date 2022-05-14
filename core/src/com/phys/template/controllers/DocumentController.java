@@ -101,6 +101,7 @@ public class DocumentController {
 
         //create table
         XWPFTable table = document.createTable();
+
         createTableStructure(table, project);
 
         // configure table cells size
@@ -114,6 +115,10 @@ public class DocumentController {
 
         //add statistics
         addStatistics(document, project);
+        CTTblPr tblPr = table.getCTTbl().getTblPr();
+        CTJcTable jc = (tblPr.isSetJc() ? tblPr.getJc() : tblPr.addNewJc());
+        STJcTable.Enum en = STJcTable.Enum.forInt(1);
+        jc.setVal(en);
 
         //Write the Document in file system
         FileOutputStream out = new FileOutputStream(handle.path());
@@ -145,6 +150,24 @@ public class DocumentController {
         XWPFRun statisticsRun = statisticsParagraph.createRun();
         statisticsRun.setFontSize(13);
         statisticsRun.setFontFamily("GHEA Grapalat");
+
+        statisticsRun.setText("-Ցուցակով");
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.setText(project.getPeopleCount() + " զինծառայող");
+        statisticsRun.addBreak();
+
+        statisticsRun.setText("-Ստուգված է");
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.addTab();
+        statisticsRun.setText(project.getCheckedCount() + " զինծառայող");
+        statisticsRun.addBreak();
+        statisticsRun.addBreak();
 
         statisticsRun.setText("-գերազանց");
         statisticsRun.addTab();
@@ -322,31 +345,55 @@ public class DocumentController {
         XWPFTableRow firstRow = table.getRow(0);
         XWPFTableRow secondRow = table.getRow(1);
 
-        firstRow.getCell(ORDER_COL_INDEX).setText("Հ/Հ");
+        XWPFTableCell orderCell = firstRow.getCell(ORDER_COL_INDEX);
+        orderCell.setText("Հ/Հ");
+        orderCell.getCTTc().addNewTcPr().addNewShd().setFill("909090");
 
-        firstRow.getCell(RANK_INDEX).setText("Զին- \nկոչումը");
+        XWPFTableCell rankCell = firstRow.getCell(RANK_INDEX);
+        rankCell.setText("Զին- \nկոչումը");
+        rankCell.getCTTc().addNewTcPr().addNewShd().setFill("909090");
+
+        XWPFTableCell nameCell = firstRow.getCell(FULL_NAME_INDEX);
+        nameCell.setText("Ա․Ա․Հ․");
+        nameCell.getCTTc().addNewTcPr().addNewShd().setFill("909090");
 
 
+        XWPFTableCell ageGroupCell = firstRow.getCell(AGE_GROUP_INDEX);
+        ageGroupCell.setText("Տարիքային խումբը");
+        ageGroupCell.getCTTc().addNewTcPr().addNewShd().setFill("909090");
 
-        firstRow.getCell(FULL_NAME_INDEX).setText("Ա․Ա․Հ․");
+        XWPFTableCell categroyCell = firstRow.getCell(CATEGORY_INDEX);
+        categroyCell.setText("Կատեգորիան");
+        categroyCell.getCTTc().addNewTcPr().addNewShd().setFill("909090");
 
-
-        firstRow.getCell(AGE_GROUP_INDEX).setText("Տարիքային խումբը");
-        firstRow.getCell(CATEGORY_INDEX).setText("Կատեգորիան");
-        firstRow.getCell(RESTRICTIONS_INDEX).setText("Առողջական սահմանափակում.");
+        XWPFTableCell restrictionsCell = firstRow.getCell(RESTRICTIONS_INDEX);
+        restrictionsCell.setText("Առողջական սահմանափակում.");
+        restrictionsCell.getCTTc().addNewTcPr().addNewShd().setFill("909090");
 
         Array<Exercise> exercises = project.getExercises();
         int exerciseSize = exercises.size;
         for (int i = 0; i < exerciseSize; i++) {
             Exercise exercise = exercises.get(i);
-            firstRow.getCell(INITIAL_COLUMNS + i * 2).setText(exercise.getVeryShortDescription());
+            XWPFTableCell cell = firstRow.getCell(INITIAL_COLUMNS + i * 2);
+            cell.setText(exercise.getVeryShortDescription());
+            cell.getCTTc().addNewTcPr().addNewShd().setFill("909090");
 
-            secondRow.getCell(INITIAL_COLUMNS + i * 2).setText("արդյունքը");
-            secondRow.getCell(INITIAL_COLUMNS + i * 2 + 1).setText("բալը");
+            XWPFTableCell cell1 = secondRow.getCell(INITIAL_COLUMNS + i * 2);
+            cell1.setText("արդյունքը");
+            cell1.getCTTc().addNewTcPr().addNewShd().setFill("909090");
+
+            XWPFTableCell cell2 = secondRow.getCell(INITIAL_COLUMNS + i * 2 + 1);
+            cell2.setText("բալը");
+            cell2.getCTTc().addNewTcPr().addNewShd().setFill("909090");
         }
 
-        firstRow.getCell(INITIAL_COLUMNS + 2 * exerciseSize).setText("Վարժությունների կատարման ընդհանուր բալը");
-        firstRow.getCell(INITIAL_COLUMNS + 2 * exerciseSize + 1).setText("Ֆիզիկական պատրաստվածության ընդհանուր գնահատականը");
+        XWPFTableCell overallPointCell = firstRow.getCell(INITIAL_COLUMNS + 2 * exerciseSize);
+        overallPointCell.setText("Վարժությունների կատարման ընդհանուր բալը");
+        overallPointCell.getCTTc().addNewTcPr().addNewShd().setFill("909090");
+
+        XWPFTableCell gradeCell = firstRow.getCell(INITIAL_COLUMNS + 2 * exerciseSize + 1);
+        gradeCell.setText("Ֆիզիկական պատրաստվածության ընդհանուր գնահատականը");
+        gradeCell.getCTTc().addNewTcPr().addNewShd().setFill("909090");
 
         fillPeopleData(table, project);
     }
@@ -363,9 +410,35 @@ public class DocumentController {
             row.getCell(AGE_GROUP_INDEX).setText(String.valueOf(person.ageGroup.number));
             row.getCell(CATEGORY_INDEX).setText(String.valueOf(person.category.ordinal() + 1));
 
-            int exerciseSize = person.attachedExercises.size();
-            for (int j = 0; j < exerciseSize; j++) {
-                Integer exerciseNumber = person.attachedExercises.get(j);
+            StringBuilder restrictionText = new StringBuilder();
+            for (Restriction restriction : person.restrictions) {
+                restrictionText.append(restriction.getName()).append(", ");
+            }
+
+            if (restrictionText.length() > 0) {
+                row.getCell(RESTRICTIONS_INDEX).setText(restrictionText.substring(0, restrictionText.length() - 2));
+            }
+
+            Array<Exercise> exercises = project.getExercises();
+            int exerciseSize = exercises.size;
+            int j = 0;
+            for (Exercise exercise : exercises) {
+                int exerciseNumber = exercise.number;
+                XWPFTableCell valueCell = row.getCell(INITIAL_COLUMNS + j * 2);
+                XWPFTableCell pointCell = row.getCell(INITIAL_COLUMNS + j++ * 2 + 1);
+
+                if (PhysTemplate.Instance().ProjectController().isPersonRestrictedFrom(person, exerciseNumber)) {
+                    valueCell.getCTTc().addNewTcPr().addNewShd().setFill("7f00ff");
+                    pointCell.getCTTc().addNewTcPr().addNewShd().setFill("7f00ff");
+                    continue;
+                }
+
+                if (!person.availableExercises.contains(exerciseNumber)) {
+                    valueCell.getCTTc().addNewTcPr().addNewShd().setFill("ff0000");
+                    pointCell.getCTTc().addNewTcPr().addNewShd().setFill("ff0000");
+                    continue;
+                }
+
                 String rawValue = "-";
 
                 boolean hasFilled = person.hasFilledRawValue(exerciseNumber);
@@ -376,13 +449,13 @@ public class DocumentController {
                         rawValue = String.valueOf(person.getIntExerciseRawValue(exerciseNumber));
                     }
                 }
-                row.getCell(INITIAL_COLUMNS + j * 2).setText(rawValue);
+                valueCell.setText(rawValue);
 
                 String pointValue = "-";
                 if (hasFilled) {
                     pointValue = String.valueOf(person.getExercisePoint(exerciseNumber));
                 }
-                row.getCell(INITIAL_COLUMNS + j * 2 + 1).setText(pointValue);
+                pointCell.setText(pointValue);
             }
 
             int offset = INITIAL_COLUMNS + exerciseSize * 2;

@@ -3,10 +3,7 @@ package com.phys.template.controllers;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.*;
 import com.phys.template.PhysTemplate;
-import com.phys.template.models.Exercise;
-import com.phys.template.models.Person;
-import com.phys.template.models.Project;
-import com.phys.template.models.Restriction;
+import com.phys.template.models.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -119,10 +116,6 @@ public class ProjectController {
         // TODO: 11/22/2021 refresh points
     }
 
-    public int getPeopleCount() {
-        return currentProject.getPeopleCount();
-    }
-
     public void updatePersonData(Person person) {
         if (currentProject == null) {
             logger.error("Current project is null", new GdxRuntimeException(""));
@@ -187,4 +180,5 @@ public class ProjectController {
 
         return false;
     }
+
 }

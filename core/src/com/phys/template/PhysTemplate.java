@@ -37,12 +37,6 @@ public class PhysTemplate extends ApplicationAdapter {
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		skin.addRegions(atlas);
 
-		// TODO: 11/19/2021 create fonts
-//		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/myfont.ttf"));
-//		BitmapFont font12 = generator.generateFont(FreeTypeFontGenerator.FreeTypeFontParameter.); // font size 12 pixels
-//		BitmapFont font25 = generator.generateFont(25); // font size 25 pixels
-//		generator.dispose();
-
 		VisUI.load(skin);
 
 		uiStage = new UIStage(skin);
