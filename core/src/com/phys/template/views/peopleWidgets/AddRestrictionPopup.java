@@ -1,22 +1,20 @@
-package com.phys.template.views.exerciseWidgets;
+package com.phys.template.views.peopleWidgets;
 
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.layout.GridGroup;
 import com.kotcrab.vis.ui.widget.VisWindow;
-import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.phys.template.PhysTemplate;
 import com.phys.template.models.Exercise;
+import com.phys.template.models.Person;
+import com.phys.template.models.Restriction;
+import com.phys.template.views.exerciseWidgets.ExercisePreviewWidget;
 
-import java.util.ArrayList;
-
-public class AddExercisePopup extends VisWindow {
-
+public class AddRestrictionPopup extends VisWindow {
     private GridGroup widgetGrid;
 
-    public AddExercisePopup() {
-        super("Ավելացնել վարժություն");
+    public AddRestrictionPopup() {
+        super("Ավելացնել Սահմանափակում");
 
         setCenterOnAdd(true);
         setResizable(false);
@@ -30,26 +28,25 @@ public class AddExercisePopup extends VisWindow {
         invalidate();
 
         centerWindow();
-        setSize(1000, 500);
+        setSize(350, 500);
     }
 
     private void initContent() {
         widgetGrid = new GridGroup();
-        widgetGrid.setItemSize(300, 100);
+        widgetGrid.setItemSize(100, 100);
         ScrollPane scrollPane = new ScrollPane(widgetGrid);
         scrollPane.setScrollingDisabled(true, false);
         add(scrollPane).grow();
     }
 
-    public void refreshContent() {
+    public void refreshContent(Person person) {
         widgetGrid.clear();
-        Array<Exercise> availableExercises = PhysTemplate.Instance().ProjectController().getAvailableExercises();
+        Array<Restriction> availableRestrictions = PhysTemplate.Instance().ProjectController().getAvailableRestrictionsFor(person);
 
-        for (Exercise availableExercise : availableExercises) {
-            ExercisePreviewWidget exercisePreviewWidget = new ExercisePreviewWidget(availableExercise);
+        for (Restriction availableRestriction : availableRestrictions) {
+            RestrictionWidget exercisePreviewWidget = new RestrictionWidget(availableRestriction, person, true);
             widgetGrid.addActor(exercisePreviewWidget);
         }
         widgetGrid.invalidate();
     }
-
 }

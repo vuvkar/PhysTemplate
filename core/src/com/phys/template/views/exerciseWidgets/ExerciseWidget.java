@@ -27,7 +27,6 @@ public class ExerciseWidget extends Table {
         deleteButton = new VisTextButton("Ջնջել", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // TODO: 11/19/2021 handle deletion
                 PhysTemplate.Instance().ProjectController().removeExercise(ExerciseWidget.this.exerciseNumber);
             }
         });

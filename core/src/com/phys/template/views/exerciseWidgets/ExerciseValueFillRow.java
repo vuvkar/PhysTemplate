@@ -67,18 +67,24 @@ public class ExerciseValueFillRow extends Table {
         return null;
     }
 
-    public void setAvailable (boolean isAvailable) {
-        if (!isAvailable) {
-            exerciseName.setColor(Color.RED);
+    public void setAvailable(boolean isAvailable, boolean isAllowed) {
+        if (!isAllowed) {
+            Color color = Color.PURPLE;
+            exerciseName.setColor(color);
             exerciseField.setDisabled(true);
             exerciseField.clearText();
-        } else {
-            exerciseName.setColor(Color.WHITE);
-            exerciseField.setDisabled(false);
+            return;
         }
-//        if (!isAvailable) {
-//            value.setText("ԱՆՀԱՍԱՆԵԼԻ");
-//        }
-//        value.setDisabled(!isAvailable);
+
+        if (!isAvailable) {
+            Color color = Color.RED;
+            exerciseName.setColor(color);
+            exerciseField.setDisabled(true);
+            exerciseField.clearText();
+            return;
+        }
+
+        exerciseName.setColor(Color.WHITE);
+        exerciseField.setDisabled(false);
     }
 }

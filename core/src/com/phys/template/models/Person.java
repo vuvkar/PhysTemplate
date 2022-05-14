@@ -6,6 +6,7 @@ import com.phys.template.PhysTemplate;
 import java.util.*;
 
 public class Person implements Json.Serializable {
+
     private static final Logger logger = new Logger("PersonClass");
 
     public Rank rank;
@@ -14,7 +15,7 @@ public class Person implements Json.Serializable {
     public int ageGroupNumber;
     public Category category;
     public int index;
-    private Array<Restriction> restrictions;
+    public final Array<Restriction> restrictions;
 
     public transient AgeGroup ageGroup;
     private transient int overallPoints;
@@ -132,7 +133,6 @@ public class Person implements Json.Serializable {
     }
 
     public void removeExercise(int exerciseNumber) {
-        // TODO: 11/23/2021 np exception here
         attachedExercises.remove(Integer.valueOf(exerciseNumber));
         exercisesPoints.remove(exerciseNumber);
         if (PhysTemplate.Instance().DataController().isFloatExercise(exerciseNumber)) {
@@ -247,5 +247,14 @@ public class Person implements Json.Serializable {
         for (JsonValue intExercise : intExercises) {
             intExercisesRaw.put(intExercise.getInt("exerciseNumber"), intExercise.getInt("exerciseRawValue"));
         }
+    }
+
+    public boolean hasRestriction(int restrictionIndex) {
+        for (Restriction restriction : restrictions) {
+            if (restriction.getIndex() == restrictionIndex) {
+                return true;
+            }
+        }
+        return false;
     }
 }

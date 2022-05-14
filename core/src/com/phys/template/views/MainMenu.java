@@ -101,14 +101,6 @@ public class MainMenu extends Table {
             }
         });
 
-        settings.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                stage.getStage().addActor(stage.settingsDialog.fadeIn());
-            }
-        });
-
         add(menuBar.getTable()).left().grow();
 
 

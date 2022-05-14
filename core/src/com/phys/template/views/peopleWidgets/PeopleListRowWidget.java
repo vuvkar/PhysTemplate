@@ -140,8 +140,10 @@ public class PeopleListRowWidget extends Table {
             RowCell value = new RowCell(EXERCISE_COLUMN_LENGTH);
             exerciseTable.add(value).spaceRight(2).growY();
             boolean contains = person.availableExercises.contains(attachedExercise);
+            boolean restrictedFrom = PhysTemplate.Instance().ProjectController().isPersonRestrictedFrom(person, attachedExercise);
+            value.setAvailable(contains, restrictedFrom);
 
-            if (contains) {
+            if (contains && !restrictedFrom) {
                 if (person.hasFilledRawValue(attachedExercise)) {
                     if (PhysTemplate.Instance().DataController().isFloatExercise(attachedExercise)) {
                         String rawValue = String.valueOf(person.getFloatExerciseRawValue(attachedExercise));
@@ -163,7 +165,6 @@ public class PeopleListRowWidget extends Table {
                 }
             }
             value.setText(valueText);
-            value.setAvailable(contains);
         }
 
         finalPoints.setText(person.getOverallPoints());
@@ -202,8 +203,8 @@ public class PeopleListRowWidget extends Table {
             }
         }
 
-        public void setAvailable(boolean isAvailable) {
-            setColor(isAvailable ? Color.WHITE : Color.RED);
+        public void setAvailable(boolean isAvailable, boolean isRestricted) {
+            setColor(isAvailable ? isRestricted ? Color.PURPLE : Color.WHITE : isRestricted ? Color.PURPLE : Color.RED);
         }
 
         @Override

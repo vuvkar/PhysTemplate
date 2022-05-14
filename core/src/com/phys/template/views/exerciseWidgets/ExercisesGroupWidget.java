@@ -54,6 +54,6 @@ public class ExercisesGroupWidget extends Table {
 
             }
         });
-        mainContainer.add(addExercise).growY();
+        mainContainer.add(addExercise);
     }
 }

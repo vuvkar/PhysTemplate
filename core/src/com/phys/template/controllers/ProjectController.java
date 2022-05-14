@@ -6,6 +6,7 @@ import com.phys.template.PhysTemplate;
 import com.phys.template.models.Exercise;
 import com.phys.template.models.Person;
 import com.phys.template.models.Project;
+import com.phys.template.models.Restriction;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -162,5 +163,28 @@ public class ProjectController {
         }
 
         addPersonToCurrentProject(person);
+    }
+
+    public Array<Restriction> getAvailableRestrictionsFor(Person person) {
+        Array<Restriction> allRestrictions = PhysTemplate.Instance().DataController().getAllRestrictions();
+        allRestrictions.removeAll(person.restrictions, false);
+
+        return allRestrictions;
+    }
+
+    public boolean isPersonRestrictedFrom(Person person, int number) {
+        int ageGroupIndex = person.ageGroup.number;
+        boolean isSoldier = ageGroupIndex == 1 || ageGroupIndex == 2;
+        for (Restriction restriction : person.restrictions) {
+            if (isSoldier != restriction.isForSoldier()) {
+                continue;
+            }
+
+            if (restriction.doesRestrictFrom(number)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

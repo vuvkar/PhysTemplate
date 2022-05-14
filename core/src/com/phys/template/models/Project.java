@@ -272,4 +272,24 @@ public class Project {
         person.availableExercises.clear();
         PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(person, this);
     }
+
+    public void removeRestrictionFrom(Person person, int restrictionIndex) {
+        if (!person.hasRestriction(restrictionIndex)) {
+            logger.error("Person doesn't have the restriction " + restrictionIndex);
+        }
+
+        Restriction restriction = PhysTemplate.Instance().DataController().getRestrictionFor(restrictionIndex);
+        person.restrictions.removeValue(restriction, false);
+        PhysTemplate.Instance().UIStage().updateContent();
+    }
+
+    public void addRestrictionTo(Person person, int restrictionIndex) {
+        if (person.hasRestriction(restrictionIndex)) {
+            logger.error("Person already has the restriction " + restrictionIndex);
+        }
+
+        Restriction restriction = PhysTemplate.Instance().DataController().getRestrictionFor(restrictionIndex);
+        person.restrictions.add(restriction);
+        PhysTemplate.Instance().UIStage().updateContent();
+    }
 }

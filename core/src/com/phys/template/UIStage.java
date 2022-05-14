@@ -28,6 +28,7 @@ import com.phys.template.views.exerciseWidgets.AddExercisePopup;
 import com.phys.template.views.exerciseWidgets.ExercisesGroupWidget;
 import com.phys.template.views.MainMenu;
 import com.phys.template.views.metaWidgets.MetaInfoGroupWidget;
+import com.phys.template.views.peopleWidgets.AddRestrictionPopup;
 import com.phys.template.views.peopleWidgets.EditPersonPopup;
 import com.phys.template.views.peopleWidgets.PeopleListWidget;
 import com.phys.template.views.dialogs.SettingsDialog;
@@ -55,13 +56,11 @@ public class UIStage {
     private StatisticsWidget statisticsWidget;
     private PeopleListWidget peopleListWidget;
     private AddExercisePopup addExercisePopup;
+    private AddRestrictionPopup addRestrictionPopup;
     private EditPersonPopup addPersonPopup;
     private Table bottomButtonTable;
 
-    // TODO: 11/19/2021 Handle file chooser
     FileChooser fileChooser;
-    // TODO: 11/19/2021 Handle settings dialog
-    public SettingsDialog settingsDialog;
 
     private MainMenu mainMenu;
 
@@ -103,8 +102,8 @@ public class UIStage {
 
         initFileChoosers();
 
-        settingsDialog = new SettingsDialog();
         addExercisePopup = new AddExercisePopup();
+        addRestrictionPopup = new AddRestrictionPopup();
         addPersonPopup = new EditPersonPopup();
     }
 
@@ -351,6 +350,15 @@ public class UIStage {
         updateTopRow();
         updatePeopleContent();
         updateStatistics();
+
+        updateEditPopupWindow();
+    }
+
+    private void updateEditPopupWindow() {
+        if (addPersonPopup.hasParent()) {
+            addPersonPopup.refreshRestrictionContent();
+            // TODO: 5/13/2022 update coloring for restriction addition and deleteion
+        }
     }
 
     public void showEditPersonPopup(Person person) {
@@ -396,5 +404,14 @@ public class UIStage {
 
     private void updateTopRow() {
         peopleListWidget.topRow.updateTopRowForExercises(PhysTemplate.Instance().ProjectController().getCurrentProjectExercises());
+    }
+
+    public void showRestrictionAddPopup(Person person) {
+        addRestrictionPopup.refreshContent(person);
+        stage.addActor(addRestrictionPopup.fadeIn());
+    }
+
+    public void hideRestrictionPopup() {
+        addRestrictionPopup.fadeOut();
     }
 }

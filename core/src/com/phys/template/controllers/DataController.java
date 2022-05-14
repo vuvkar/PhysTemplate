@@ -15,6 +15,8 @@ public class DataController {
     private final ObjectMap<AgeGroup, ObjectMap<Category, IntMap<IntMap<Integer>>>> gradeMap = new ObjectMap<>();
 
     private final IntMap<Exercise> loadedExercises = new IntMap<>();
+    private final Array<Restriction> loadedSoldierRestrictions = new Array<>();
+    private final Array<Restriction> loadedOfficerRestrictions = new Array<>();
 
     private final IntMap<ObjectMap<Float, Integer>> pointMap = new IntMap<>();
     private final IntMap<Array<Float>> sortedExercisePointKey = new IntMap<>();
@@ -25,6 +27,7 @@ public class DataController {
         logger.setLevel(Logger.DEBUG);
         loadExercisesData();
         loadExercisePointData();
+        loadRestrictionsData();
         loadGradePointData();
     }
 
@@ -46,6 +49,34 @@ public class DataController {
             exercise.isCustom = isCustom;
 
             loadedExercises.put(exercise.number, exercise);
+        }
+    }
+
+    private void loadRestrictionsData() {
+        JsonValue base = json.parse(Gdx.files.internal("restrictions.json"));
+
+        for (JsonValue jsonValue : base.get("soldier")) {
+            int index = jsonValue.getInt("index");
+            String name = jsonValue.getString("name");
+            IntArray restrictsFrom = new IntArray();
+            int[] restrictsFromJson = jsonValue.get("restricts").asIntArray();
+            for (int i : restrictsFromJson) {
+                restrictsFrom.add(i);
+            }
+            Restriction restriction = new Restriction(index, name, true, restrictsFrom);
+            loadedSoldierRestrictions.add(restriction);
+        }
+
+        for (JsonValue jsonValue : base.get("officer")) {
+            int index = jsonValue.getInt("index");
+            String name = jsonValue.getString("name");
+            IntArray restrictsFrom = new IntArray();
+            int[] restrictsFromJson = jsonValue.get("restricts").asIntArray();
+            for (int i : restrictsFromJson) {
+                restrictsFrom.add(i);
+            }
+            Restriction restriction = new Restriction(index, name, false, restrictsFrom);
+            loadedOfficerRestrictions.add(restriction);
         }
     }
 
@@ -423,6 +454,34 @@ public class DataController {
         }
 
         logger.error("No age group found for " + ageGroupNumber);
+        return null;
+    }
+
+    public Array<Restriction> getAllRestrictions() {
+        Array<Restriction> restrictions = new Array<>();
+        for (Restriction loadedSoldierRestriction : loadedSoldierRestrictions) {
+            restrictions.add(loadedSoldierRestriction.copy());
+        }
+
+        for (Restriction loadedOfficerRestriction : loadedOfficerRestrictions) {
+            restrictions.add(loadedOfficerRestriction.copy());
+        }
+        return restrictions;
+    }
+
+    public Restriction getRestrictionFor(int restrictionIndex) {
+        for (Restriction loadedOfficerRestriction : loadedOfficerRestrictions) {
+            if (restrictionIndex == loadedOfficerRestriction.getIndex()) {
+                return loadedOfficerRestriction.copy();
+            }
+        }
+
+        for (Restriction loadedSoldierRestriction : loadedSoldierRestrictions) {
+            if (restrictionIndex == loadedSoldierRestriction.getIndex()) {
+                return  loadedSoldierRestriction.copy();
+            }
+        }
+
         return null;
     }
 }

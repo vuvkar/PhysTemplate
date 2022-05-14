@@ -28,6 +28,7 @@ public class EditPersonPopup extends VisWindow {
     private VisSelectBox<Sex> sexSelectBox;
     private VisSelectBox<Category> categorySelectBox;
     private VisSelectBox<AgeGroup> ageGroupSelectBox;
+    private RestrictionGroupTable restrictionsGroupTable;
     private VisTextButton saveButton;
     private VisTextButton deleteSoldierButton;
     private Table exercisesTable;
@@ -126,6 +127,11 @@ public class EditPersonPopup extends VisWindow {
         });
         mainTable.add(categorySelectBox).growX();
         mainTable.row();
+        restrictionsGroupTable = new RestrictionGroupTable();
+        mainTable.add(restrictionsGroupTable).colspan(2).growX();
+        mainTable.row();
+
+
 
         exercisesTable = new Table();
         exercisesTable.setSkin(VisUI.getSkin());
@@ -166,7 +172,8 @@ public class EditPersonPopup extends VisWindow {
             Exercise key = exerciseVisTextFieldEntry.key;
 
             boolean isAvailable = currentModifyingPerson.availableExercises.contains(key.number);
-            value.setAvailable(isAvailable);
+            boolean canDoTheExercise = !PhysTemplate.Instance().ProjectController().isPersonRestrictedFrom(currentModifyingPerson, key.number);
+            value.setAvailable(isAvailable, canDoTheExercise);
 
             if (isAvailable) {
                 currentModifyingPerson.attachedExercises.add(key.number);
@@ -256,6 +263,7 @@ public class EditPersonPopup extends VisWindow {
         sexSelectBox.setSelected(person.sex);
         categorySelectBox.setSelected(person.category);
         ageGroupSelectBox.setSelected(person.ageGroup);
+        refreshRestrictionContent();
         Array<Exercise> exercises = PhysTemplate.Instance().ProjectController().getCurrentProject().getExercises();
         refreshExerciseContent(exercises);
 
@@ -278,5 +286,10 @@ public class EditPersonPopup extends VisWindow {
         }
         updateExercisesFields();
         updatePersonIndex = person.index;
+    }
+
+    public void refreshRestrictionContent() {
+        restrictionsGroupTable.updateForPerson(currentModifyingPerson);
+        updateExercisesFields();
     }
 }
