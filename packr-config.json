@@ -13,7 +13,7 @@
     "Xmx1G"
   ],
   "resources": [
-    "core/assets"
+    "android/assets"
   ],
   "output": "out-windows"
 }

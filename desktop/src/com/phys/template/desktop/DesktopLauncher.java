@@ -12,10 +12,10 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration.disableAudio = true;
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		config.width = 1366;
-		config.height = 768;
-		config.x = (screenSize.width - 1366) / 2;
-		config.y = (screenSize.height - 768) / 2;
+		config.width = 1600;
+		config.height = 900;
+		config.x = (screenSize.width - config.width) / 2;
+		config.y = (screenSize.height - config.height) / 2;
 		config.resizable = false;
 		new LwjglApplication(new PhysTemplate(), config);
 	}

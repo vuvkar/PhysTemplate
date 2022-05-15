@@ -3,6 +3,7 @@ package com.phys.template;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -65,7 +66,7 @@ public class UIStage {
     private MainMenu mainMenu;
 
     public UIStage(Skin skin) {
-        this.stage = new Stage(new ScreenViewport(), new PolygonSpriteBatch());
+        this.stage = new Stage(new FixedHeightViewport(1080, new OrthographicCamera()), new PolygonSpriteBatch());
         this.skin = skin;
         this.dragAndDrop = new DragAndDrop();
 
