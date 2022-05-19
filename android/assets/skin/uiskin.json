@@ -1,9 +1,5 @@
 {
-com.badlogic.gdx.graphics.g2d.BitmapFont: {
-	grapalat_20: {file: grapalat_15.fnt },
-	grapalat_25: {file: grapalat_20.fnt },
-	grapalat_15: {file: grapalat_10.fnt }
-},
+
 com.badlogic.gdx.graphics.Color: {
 	black: {a: 1, b: 0, g: 0, r: 0 },
 	white: {a: 1, b: 1, g: 1, r: 1 },

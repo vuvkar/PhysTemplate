@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
@@ -66,7 +68,9 @@ public class UIStage {
     private MainMenu mainMenu;
 
     public UIStage(Skin skin) {
-        this.stage = new Stage(new FixedHeightViewport(1080, new OrthographicCamera()), new PolygonSpriteBatch());
+        OrthographicCamera camera = new OrthographicCamera();
+        PolygonSpriteBatch batch = new PolygonSpriteBatch();
+        this.stage = new Stage(new FixedHeightViewport( 1080, camera), batch);
         this.skin = skin;
         this.dragAndDrop = new DragAndDrop();
 

@@ -44,7 +44,6 @@ project(":desktop") {
         implementation project(":core")
         api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         
     }
@@ -80,6 +79,7 @@ project(":core") {
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         api "com.kotcrab.vis:vis-ui:1.5.0"
         // https://mvnrepository.com/artifact/org.apache.poi/poi
         api group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.2'

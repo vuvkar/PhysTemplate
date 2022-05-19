@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class FixedHeightViewport extends Viewport {
 
     public static int notchSize;
-    public static boolean isDebug = true;
+    public static boolean isDebug = false;
     private final float worldHeight;
 
     public static float debugScalingFactor = 1f;

@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -34,8 +36,11 @@ public class PhysTemplate extends ApplicationAdapter {
 		preferences = Gdx.app.getPreferences("phys-template-preferences");
 
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("skin/uiskin.atlas"));
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		FileHandle internal = Gdx.files.internal("skin/uiskin.json");
+		skin = new Skin();
 		skin.addRegions(atlas);
+		generateFonts(skin);
+		skin.load(internal);
 
 		VisUI.load(skin);
 
@@ -54,6 +59,20 @@ public class PhysTemplate extends ApplicationAdapter {
 		inputMultiplexer = new InputMultiplexer(uiStage.getStage());
 
 		Gdx.input.setInputProcessor(inputMultiplexer);
+	}
+
+	private void generateFonts(Skin skin) {
+		SmartFontGenerator fontGen = new SmartFontGenerator();
+		fontGen.setReferenceScreenWidth(1920);
+		fontGen.setForceGeneration(true);
+		FileHandle exoFile = Gdx.files.internal("GHEAGrpalatReg.otf");
+		BitmapFont fontLarge = fontGen.createFont(exoFile, "grapalat_25", 30);
+		BitmapFont fontMedium = fontGen.createFont(exoFile, "grapalat_20", 25);
+		BitmapFont fontSmall = fontGen.createFont(exoFile, "grapalat_15", 20);
+
+		skin.add("grapalat_20", fontMedium);
+		skin.add("grapalat_25", fontLarge);
+		skin.add("grapalat_15", fontSmall);
 	}
 
 	public static PhysTemplate Instance() {
