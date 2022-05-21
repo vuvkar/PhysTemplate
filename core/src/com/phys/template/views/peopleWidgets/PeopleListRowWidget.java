@@ -16,15 +16,15 @@ import com.phys.template.models.Project;
 
 public class PeopleListRowWidget extends Table {
 
-    public static int NUMBER_LENGTH = 40;
-    public static int RANK_LENGTH = 60;
-    public static int NAME_LENGTH = 400;
-    public static int SEX_LENGTH = 80;
-    public static int AGE_GROUP_LENGTH = 90;
-    public static int CATEGORY_LENGTH = 100;
-    public static int POINTS_LENGTH = 90;
-    public static int FINAL_GRADE_LENGTH = 120;
-    public static int EXERCISE_COLUMN_LENGTH = 120;
+    public static int NUMBER_LENGTH = 80;
+    public static int RANK_LENGTH = 120;
+    public static int NAME_LENGTH = 600;
+    public static int SEX_LENGTH = 100;
+    public static int AGE_GROUP_LENGTH = 180;
+    public static int CATEGORY_LENGTH = 200;
+    public static int POINTS_LENGTH = 180;
+    public static int FINAL_GRADE_LENGTH = 240;
+    public static int EXERCISE_COLUMN_LENGTH = 240;
 
     private VisImage invalidRowImage;
 

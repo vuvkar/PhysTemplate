@@ -30,12 +30,12 @@ public class AddExercisePopup extends VisWindow {
         invalidate();
 
         centerWindow();
-        setSize(1000, 500);
+        setSize(1280, 720);
     }
 
     private void initContent() {
         widgetGrid = new GridGroup();
-        widgetGrid.setItemSize(300, 100);
+        widgetGrid.setItemSize(400, 180);
         ScrollPane scrollPane = new ScrollPane(widgetGrid);
         scrollPane.setScrollingDisabled(true, false);
         add(scrollPane).grow();

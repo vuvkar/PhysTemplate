@@ -28,12 +28,12 @@ public class AddRestrictionPopup extends VisWindow {
         invalidate();
 
         centerWindow();
-        setSize(350, 500);
+        setSize(700, 500);
     }
 
     private void initContent() {
         widgetGrid = new GridGroup();
-        widgetGrid.setItemSize(100, 100);
+        widgetGrid.setItemSize(180, 140);
         ScrollPane scrollPane = new ScrollPane(widgetGrid);
         scrollPane.setScrollingDisabled(true, false);
         add(scrollPane).grow();

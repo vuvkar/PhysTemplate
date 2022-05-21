@@ -90,10 +90,10 @@ public class SmartFontGenerator {
         PixmapPacker packer = new PixmapPacker(pageWidth, pageHeight, Pixmap.Format.RGBA8888, 2, false);
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = fontSize;
-        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS;
+        String defaultChars = FreeTypeFontGenerator.DEFAULT_CHARS;
+        parameter.characters = defaultChars + "ԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՈՒՓՔՕՖաբգդեզէըթժիլխծկհձղճմյնշոչպջռսվտրցուփքևօֆ՝․";
         parameter.flip = false;
         parameter.packer = packer;
-        parameter.mono = true;
         FreeTypeFontGenerator.FreeTypeBitmapFontData fontData = generator.generateData(parameter);
         Array<PixmapPacker.Page> pages = packer.getPages();
         Array<TextureRegion> texRegions = new Array<>();

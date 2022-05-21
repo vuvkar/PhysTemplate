@@ -6,10 +6,10 @@ filter: Nearest, Nearest
 repeat: none
 border
   rotate: false
-  xy: 301, 3
-  size: 3, 3
-  split: 1, 1, 1, 1
-  orig: 3, 3
+  xy: 301, 1
+  size: 5, 5
+  split: 2, 2, 2, 2
+  orig: 5, 5
   offset: 0, 0
   index: -1
 border-circle
@@ -212,14 +212,14 @@ default-select-selection
   index: -1
 grey
   rotate: false
-  xy: 301, 1
+  xy: 251, 62
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 menu-bg
   rotate: false
-  xy: 301, 1
+  xy: 251, 62
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
@@ -373,14 +373,14 @@ icon-trash
   index: -1
 list-selection
   rotate: false
-  xy: 251, 62
+  xy: 253, 62
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 vis-blue
   rotate: false
-  xy: 251, 62
+  xy: 253, 62
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
@@ -478,14 +478,14 @@ scroll-knob-vertical
   index: -1
 select-box-list-bg
   rotate: false
-  xy: 253, 62
+  xy: 220, 3
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 window-bg
   rotate: false
-  xy: 253, 62
+  xy: 220, 3
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
@@ -506,28 +506,28 @@ select-up
   index: -1
 selection
   rotate: false
-  xy: 220, 3
+  xy: 255, 17
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 separator
   rotate: false
-  xy: 303, 1
+  xy: 307, 5
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 tree-over
   rotate: false
-  xy: 303, 1
+  xy: 307, 5
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 separator-menu
   rotate: false
-  xy: 255, 17
+  xy: 90, 81
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
@@ -712,7 +712,7 @@ vis-radio-tick-disabled
   index: -1
 vis-red
   rotate: false
-  xy: 90, 81
+  xy: 90, 79
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

@@ -63,15 +63,17 @@ public class PhysTemplate extends ApplicationAdapter {
 
 	private void generateFonts(Skin skin) {
 		SmartFontGenerator fontGen = new SmartFontGenerator();
-		fontGen.setReferenceScreenWidth(1920);
-		fontGen.setForceGeneration(true);
 		FileHandle exoFile = Gdx.files.internal("GHEAGrpalatReg.otf");
-		BitmapFont fontLarge = fontGen.createFont(exoFile, "grapalat_25", 30);
-		BitmapFont fontMedium = fontGen.createFont(exoFile, "grapalat_20", 25);
-		BitmapFont fontSmall = fontGen.createFont(exoFile, "grapalat_15", 20);
 
-		skin.add("grapalat_20", fontMedium);
+		int bigFontSize = 35;
+		BitmapFont fontLarge = fontGen.createFont(exoFile, "grapalat_25", bigFontSize);
+		int mediumFontSize = 30;
+		BitmapFont fontMedium = fontGen.createFont(exoFile, "grapalat_20", mediumFontSize );
+		int smallFontSize = 25;
+		BitmapFont fontSmall = fontGen.createFont(exoFile, "grapalat_15", smallFontSize );
+
 		skin.add("grapalat_25", fontLarge);
+		skin.add("grapalat_20", fontMedium);
 		skin.add("grapalat_15", fontSmall);
 	}
 

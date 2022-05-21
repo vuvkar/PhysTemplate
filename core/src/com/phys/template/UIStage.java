@@ -41,7 +41,6 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.io.*;
-import java.nio.channels.Channel;
 
 public class UIStage {
 
@@ -68,9 +67,8 @@ public class UIStage {
     private MainMenu mainMenu;
 
     public UIStage(Skin skin) {
-        OrthographicCamera camera = new OrthographicCamera();
         PolygonSpriteBatch batch = new PolygonSpriteBatch();
-        this.stage = new Stage(new FixedHeightViewport( 1080, camera), batch);
+        this.stage = new Stage(new FixedHeightViewport(1080, new OrthographicCamera()), batch);
         this.skin = skin;
         this.dragAndDrop = new DragAndDrop();
 
@@ -136,9 +134,10 @@ public class UIStage {
 
         bottomButtonTable.left();
         bottomButtonTable.defaults().pad(10);
-        bottomButtonTable.add(printButton);
-        bottomButtonTable.add(saveButton);
-        bottomButtonTable.add(openButton);
+        int buttonHeight = 60;
+        bottomButtonTable.add(printButton).height(buttonHeight);
+        bottomButtonTable.add(saveButton).height(buttonHeight);
+        bottomButtonTable.add(openButton).height(buttonHeight);
         fullScreenTable.add(bottomButtonTable).colspan(2);
     }
 

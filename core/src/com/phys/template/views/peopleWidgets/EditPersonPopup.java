@@ -54,7 +54,7 @@ public class EditPersonPopup extends VisWindow {
         invalidate();
 
         centerWindow();
-        setSize(1000, 700);
+        setSize(1700, 1000);
 //        debugAll();
     }
 
@@ -162,7 +162,7 @@ public class EditPersonPopup extends VisWindow {
                 PhysTemplate.Instance().UIStage().hidePersonAddPopup();
             }
         });
-        add(saveButton).pad(8).left();
+        add(saveButton).height(60).pad(8).left();
     }
 
     private void updateExercisesFields() {
@@ -207,7 +207,7 @@ public class EditPersonPopup extends VisWindow {
             getTitleLabel().setText("Փոփոխել զինծառայողի տվյալները");
             saveButton.setText("Պահպանել");
             if (!deleteSoldierButton.hasParent()) {
-                add(deleteSoldierButton).pad(8).right();
+                add(deleteSoldierButton).height(60).pad(8).right();
             }
         }
     }

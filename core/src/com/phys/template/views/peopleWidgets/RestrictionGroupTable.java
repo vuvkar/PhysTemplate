@@ -78,7 +78,7 @@ class RestrictionWidget extends Table {
                 }
             }
         });
-        add(deleteButton);
+        add(deleteButton).height(60);
         pack();
     }
 }

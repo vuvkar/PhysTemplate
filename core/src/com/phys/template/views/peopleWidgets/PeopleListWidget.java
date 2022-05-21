@@ -55,12 +55,12 @@ public class PeopleListWidget extends Table {
                 PhysTemplate.Instance().UIStage().showPersonAddPopup();
             }
         });
-        add(addPerson).padTop(5).growX();
+        add(addPerson).height(70).padTop(5).growX();
     }
 
     private void createFirstRow() {
         topRow = new PeopleListRowWidget(true);
-        mainTable.add(topRow).padTop(5).height(60);
+        mainTable.add(topRow).growX().padTop(5).height(100);
     }
 
     public void updateContent() {
@@ -69,7 +69,7 @@ public class PeopleListWidget extends Table {
         for (Person currentProjectPerson : currentProjectPeople) {
             PeopleListRowWidget peopleListRowWidget = new PeopleListRowWidget();
             peopleListRowWidget.updateForPerson(currentProjectPerson);
-            mainPeopleTable.add(peopleListRowWidget).growX();
+            mainPeopleTable.add(peopleListRowWidget).height(70).growX();
             mainPeopleTable.row();
         }
     }
