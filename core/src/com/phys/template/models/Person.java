@@ -268,4 +268,8 @@ public class Person implements Json.Serializable {
 
         return count;
     }
+
+    public boolean isWoman() {
+        return ageGroupNumber >= 13 && ageGroupNumber <=17;
+    }
 }

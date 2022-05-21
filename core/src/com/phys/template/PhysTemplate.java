@@ -13,6 +13,8 @@ import com.kotcrab.vis.ui.VisUI;
 import com.phys.template.controllers.DataController;
 import com.phys.template.controllers.DocumentController;
 import com.phys.template.controllers.ProjectController;
+import com.phys.template.input.IKeyboardHandler;
+import com.phys.template.views.peopleWidgets.PeopleListRowWidget;
 
 public class PhysTemplate extends ApplicationAdapter {
 
@@ -25,8 +27,13 @@ public class PhysTemplate extends ApplicationAdapter {
 	private DataController dataController;
 	private DocumentController documentController;
 	private InputMultiplexer inputMultiplexer;
+	private IKeyboardHandler keyboardHandler;
 
 	private static PhysTemplate instance;
+
+	public PhysTemplate (IKeyboardHandler keyboardHandler) {
+		this.keyboardHandler = keyboardHandler;
+	}
 
 	@Override
 	public void create () {
@@ -44,7 +51,7 @@ public class PhysTemplate extends ApplicationAdapter {
 
 		VisUI.load(skin);
 
-		uiStage = new UIStage(skin);
+		uiStage = new UIStage(skin, keyboardHandler);
 
 		dataController = new DataController();
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.phys.template.PhysTemplate;
+import com.phys.template.input.KeyboardHandlerImpl;
 
 import java.awt.*;
 
@@ -18,6 +19,6 @@ public class DesktopLauncher {
 		config.x = (screenSize.width - config.width) / 2;
 		config.y = (screenSize.height - config.height) / 2;
 		config.resizable = false;
-		new LwjglApplication(new PhysTemplate(), config);
+		new LwjglApplication(new PhysTemplate(new KeyboardHandlerImpl()), config);
 	}
 }

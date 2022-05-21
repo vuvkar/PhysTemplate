@@ -28,7 +28,7 @@ public class AddRestrictionPopup extends VisWindow {
         invalidate();
 
         centerWindow();
-        setSize(700, 500);
+        setSize(600, 500);
     }
 
     private void initContent() {

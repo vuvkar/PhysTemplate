@@ -14,18 +14,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisWindow;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
-import com.phys.template.controllers.ProjectController;
 import com.phys.template.models.Metadata;
 import com.phys.template.models.Person;
+import com.phys.template.input.IKeyboardHandler;
 import com.phys.template.views.StatisticsWidget;
 import com.phys.template.views.exerciseWidgets.AddExercisePopup;
 import com.phys.template.views.exerciseWidgets.ExercisesGroupWidget;
@@ -34,7 +32,6 @@ import com.phys.template.views.metaWidgets.MetaInfoGroupWidget;
 import com.phys.template.views.peopleWidgets.AddRestrictionPopup;
 import com.phys.template.views.peopleWidgets.EditPersonPopup;
 import com.phys.template.views.peopleWidgets.PeopleListWidget;
-import com.phys.template.views.dialogs.SettingsDialog;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -62,15 +59,18 @@ public class UIStage {
     private EditPersonPopup addPersonPopup;
     private Table bottomButtonTable;
 
+    IKeyboardHandler keyboardHandler;
+
     FileChooser fileChooser;
 
     private MainMenu mainMenu;
 
-    public UIStage(Skin skin) {
+    public UIStage(Skin skin, IKeyboardHandler keyboardHandler) {
         PolygonSpriteBatch batch = new PolygonSpriteBatch();
         this.stage = new Stage(new FixedHeightViewport(1080, new OrthographicCamera()), batch);
         this.skin = skin;
         this.dragAndDrop = new DragAndDrop();
+        this.keyboardHandler = keyboardHandler;
 
         stage.addListener(new InputListener() {
             @Override
@@ -417,5 +417,9 @@ public class UIStage {
 
     public void hideRestrictionPopup() {
         addRestrictionPopup.fadeOut();
+    }
+
+    public IKeyboardHandler<?> getKeyboardHandler() {
+        return keyboardHandler;
     }
 }

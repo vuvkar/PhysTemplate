@@ -169,11 +169,7 @@ public class ProjectController {
         int ageGroupIndex = person.ageGroup.number;
         boolean isSoldier = ageGroupIndex == 1 || ageGroupIndex == 2;
         for (Restriction restriction : person.restrictions) {
-            if (isSoldier != restriction.isForSoldier()) {
-                continue;
-            }
-
-            if (restriction.doesRestrictFrom(number)) {
+            if (restriction.doesRestrictFrom(number, isSoldier)) {
                 return true;
             }
         }

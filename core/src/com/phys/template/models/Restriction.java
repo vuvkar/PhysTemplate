@@ -7,14 +7,14 @@ import java.util.Objects;
 public class Restriction {
     private final int index;
     private final String name;
-    private final boolean isForSoldier;
-    private final IntArray restrictsFrom;
+    private final IntArray restrictsSoldiersFrom;
+    private final IntArray restrictsOfficersFrom;
 
-    public Restriction (int index, String name, boolean isForSoldier, IntArray restrictsFrom) {
+    public Restriction (int index, String name, IntArray restrictsSoldiersFrom, IntArray restrictsOfficersFrom) {
         this.index = index;
         this.name = name;
-        this.isForSoldier = isForSoldier;
-        this.restrictsFrom = restrictsFrom;
+        this.restrictsSoldiersFrom = restrictsSoldiersFrom;
+        this.restrictsOfficersFrom = restrictsOfficersFrom;
     }
 
     public int getIndex() {
@@ -25,12 +25,8 @@ public class Restriction {
         return name;
     }
 
-    public boolean isForSoldier() {
-        return isForSoldier;
-    }
-
-    public boolean doesRestrictFrom (int exerciseNumber) {
-        return restrictsFrom.contains(exerciseNumber);
+    public boolean doesRestrictFrom (int exerciseNumber, boolean isSoldier) {
+        return isSoldier ? restrictsSoldiersFrom.contains(exerciseNumber) : restrictsOfficersFrom.contains(exerciseNumber);
     }
 
     @Override
@@ -47,8 +43,6 @@ public class Restriction {
     }
 
     public Restriction copy() {
-        Restriction restriction = new Restriction(index, name, isForSoldier, restrictsFrom);
-
-        return restriction;
+        return new Restriction(index, name, restrictsSoldiersFrom, restrictsOfficersFrom);
     }
 }

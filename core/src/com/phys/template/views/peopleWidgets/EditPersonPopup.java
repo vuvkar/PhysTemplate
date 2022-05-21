@@ -15,6 +15,8 @@ import com.kotcrab.vis.ui.util.NumberDigitsTextFieldFilter;
 import com.kotcrab.vis.ui.widget.*;
 import com.phys.template.PhysTemplate;
 import com.phys.template.controllers.ProjectController;
+import com.phys.template.input.KeyboardHandledTextField;
+import com.phys.template.input.KeyboardType;
 import com.phys.template.models.*;
 import com.phys.template.views.exerciseWidgets.ExerciseValueFillRow;
 
@@ -74,7 +76,7 @@ public class EditPersonPopup extends VisWindow {
         //name config
         VisLabel nameLabel = new VisLabel("Ա.Ա.Հ.");
         mainTable.add(nameLabel);
-        nameField = new VisTextField();
+        nameField = new KeyboardHandledTextField("", PhysTemplate.Instance().UIStage().getKeyboardHandler(), KeyboardType.TEXT);
         mainTable.add(nameField).height(FIELD_HEIGHT).growX();
         mainTable.row();
 

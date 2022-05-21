@@ -19,7 +19,9 @@ public class DataController {
     private final Array<Restriction> loadedOfficerRestrictions = new Array<>();
 
     private final IntMap<ObjectMap<Float, Integer>> pointMap = new IntMap<>();
+    private final IntMap<ObjectMap<Float, Integer>> womenPointMap = new IntMap<>();
     private final IntMap<Array<Float>> sortedExercisePointKey = new IntMap<>();
+    private final IntMap<Array<Float>> sortedWomenExercisePointKey = new IntMap<>();
 
     private final Array<AgeGroup> loadedAgeGroups = new Array<>();
 
@@ -36,9 +38,7 @@ public class DataController {
 
         for (JsonValue jsonValue : base) {
             boolean isCustom = jsonValue.getBoolean("isCustom", false);
-            if (isCustom) {
-                continue;
-            }
+
             Exercise exercise = new Exercise();
             exercise.number = jsonValue.getInt("number");
             exercise.longName = jsonValue.getString("longName");
@@ -54,29 +54,29 @@ public class DataController {
 
     private void loadRestrictionsData() {
         JsonValue base = json.parse(Gdx.files.internal("restrictions.json"));
-
-        for (JsonValue jsonValue : base.get("soldier")) {
+        for (JsonValue jsonValue : base) {
             int index = jsonValue.getInt("index");
             String name = jsonValue.getString("name");
-            IntArray restrictsFrom = new IntArray();
-            int[] restrictsFromJson = jsonValue.get("restricts").asIntArray();
-            for (int i : restrictsFromJson) {
-                restrictsFrom.add(i);
+            IntArray restrictsSoldiersFrom = new IntArray();
+            JsonValue jsonValueRes = jsonValue.get("restrictsSoldiersFrom");
+            if (jsonValueRes != null) {
+                int[] restrictsSoldiersFromJson = jsonValueRes.asIntArray();
+                for (int i : restrictsSoldiersFromJson) {
+                    restrictsSoldiersFrom.add(i);
+                }
             }
-            Restriction restriction = new Restriction(index, name, true, restrictsFrom);
+
+            IntArray restrictsOfficersFrom = new IntArray();
+            JsonValue jsonValueOfficer = jsonValue.get("restrictsOfficersFrom");
+            if (jsonValueOfficer != null) {
+                int[] restrictsOfficersFromJson = jsonValueOfficer.asIntArray();
+                for (int i : restrictsOfficersFromJson) {
+                    restrictsOfficersFrom.add(i);
+                }
+            }
+
+            Restriction restriction = new Restriction(index, name, restrictsSoldiersFrom, restrictsOfficersFrom);
             loadedSoldierRestrictions.add(restriction);
-        }
-
-        for (JsonValue jsonValue : base.get("officer")) {
-            int index = jsonValue.getInt("index");
-            String name = jsonValue.getString("name");
-            IntArray restrictsFrom = new IntArray();
-            int[] restrictsFromJson = jsonValue.get("restricts").asIntArray();
-            for (int i : restrictsFromJson) {
-                restrictsFrom.add(i);
-            }
-            Restriction restriction = new Restriction(index, name, false, restrictsFrom);
-            loadedOfficerRestrictions.add(restriction);
         }
     }
 
@@ -125,8 +125,13 @@ public class DataController {
         for (JsonValue exercise : base) {
             int exerciseNumber = exercise.getInt("number");
             JsonValue points = exercise.get("points");
+            boolean isForWomen = exercise.getBoolean("isForWomen", false);
             ObjectMap<Float, Integer> floatMap = new ObjectMap<>();
-            pointMap.put(exerciseNumber, floatMap);
+            if (isForWomen) {
+                womenPointMap.put(exerciseNumber, floatMap);
+            } else {
+                pointMap.put(exerciseNumber, floatMap);
+            }
             for (JsonValue point : points) {
                 JsonValue child = point.child();
                 float rawPoint = Float.parseFloat(child.name);
@@ -136,7 +141,11 @@ public class DataController {
             //add sorted array for fast searching
             Array<Float> floatArray = floatMap.keys().toArray();
             floatArray.sort();
-            sortedExercisePointKey.put(exerciseNumber, floatArray);
+            if (isForWomen) {
+                sortedWomenExercisePointKey.put(exerciseNumber, floatArray);
+            } else {
+                sortedExercisePointKey.put(exerciseNumber, floatArray);
+            }
         }
     }
 
@@ -326,12 +335,14 @@ public class DataController {
                 continue;
             }
             int gradePoint;
-            if (PhysTemplate.Instance().DataController().isFloatExercise(attachedExercise)) {
+            if (isCustomExercise(attachedExercise)) {
+                gradePoint = person.getIntExerciseRawValue(attachedExercise);
+            } else if (isFloatExercise(attachedExercise)) {
                 float exerciseRawValue = person.getFloatExerciseRawValue(attachedExercise);
-                gradePoint = getGradePointForExercise(attachedExercise, exerciseRawValue);
+                gradePoint = getGradePointForExercise(attachedExercise, exerciseRawValue, person.isWoman());
             } else {
                 int intExerciseRawValue = person.getIntExerciseRawValue(attachedExercise);
-                gradePoint = getGradePointForExercise(attachedExercise, intExerciseRawValue);
+                gradePoint = getGradePointForExercise(attachedExercise, intExerciseRawValue, person.isWoman());
             }
             person.putExercisePoint(attachedExercise, gradePoint);
             overallPoints += gradePoint;
@@ -340,8 +351,21 @@ public class DataController {
         person.setOverallPoints(overallPoints);
     }
 
-    private int getGradePointForExercise(int attachedExercise, float exerciseRawValue) {
-        ObjectMap<Float, Integer> exerciseGradePoints = pointMap.get(attachedExercise);
+    public boolean isCustomExercise(int number) {
+        return getExerciseModelFor(number).isCustom;
+    }
+
+    private int getGradePointForExercise(int attachedExercise, float exerciseRawValue, boolean isForWomen) {
+        ObjectMap<Float, Integer> exerciseGradePoints;
+        if (isForWomen) {
+            exerciseGradePoints = womenPointMap.get(attachedExercise);
+            if (exerciseGradePoints == null) {
+                exerciseGradePoints = pointMap.get(attachedExercise);
+            }
+        } else {
+            exerciseGradePoints = pointMap.get(attachedExercise);
+        }
+
         if (exerciseGradePoints == null) {
             throw new GdxRuntimeException("No points found for exercise " + attachedExercise);
         }
@@ -351,7 +375,15 @@ public class DataController {
             return point;
         }
 
-        Array<Float> pointSortedArray = sortedExercisePointKey.get(attachedExercise);
+        Array<Float> pointSortedArray;
+        if (isForWomen) {
+            pointSortedArray = sortedWomenExercisePointKey.get(attachedExercise);
+            if (pointSortedArray == null) {
+                pointSortedArray = sortedExercisePointKey.get(attachedExercise);
+            }
+        } else {
+            pointSortedArray = sortedExercisePointKey.get(attachedExercise);
+        }
         boolean arePointsDescending = loadedExercises.get(attachedExercise).arePointsDescending;
 
         int arraySize = pointSortedArray.size;

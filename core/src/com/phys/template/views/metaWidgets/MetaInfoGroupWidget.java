@@ -9,6 +9,8 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.phys.template.PhysTemplate;
 import com.phys.template.UIStage;
+import com.phys.template.input.KeyboardHandledTextField;
+import com.phys.template.input.KeyboardType;
 import com.phys.template.models.Project;
 
 public class MetaInfoGroupWidget extends Table {
@@ -30,8 +32,8 @@ public class MetaInfoGroupWidget extends Table {
         add(headerLabel);
         row();
 
-        baseNumberField = new VisTextField();
-        squadNameField = new VisTextField();
+        baseNumberField = new KeyboardHandledTextField("", PhysTemplate.Instance().UIStage().getKeyboardHandler(), KeyboardType.NUMERIC);
+        squadNameField = new KeyboardHandledTextField("", PhysTemplate.Instance().UIStage().getKeyboardHandler(), KeyboardType.TEXT);
         areStudentsCheckbox = new VisCheckBox("Կուրսանտներ");
         areStudentsCheckbox.addListener(new ChangeListener() {
             @Override
