@@ -1,14 +1,16 @@
 package com.phys.template.models;
 
 import com.badlogic.gdx.utils.IntArray;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 
 import java.util.Objects;
 
 public class Restriction {
     private final int index;
-    private final String name;
-    private final IntArray restrictsSoldiersFrom;
-    private final IntArray restrictsOfficersFrom;
+    private transient final String name;
+    private transient final IntArray restrictsSoldiersFrom;
+    private transient final IntArray restrictsOfficersFrom;
 
     public Restriction (int index, String name, IntArray restrictsSoldiersFrom, IntArray restrictsOfficersFrom) {
         this.index = index;

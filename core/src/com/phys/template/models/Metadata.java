@@ -7,8 +7,7 @@ public class Metadata implements Json.Serializable {
 
     private String baseName = "";
     private String squadName =  "";
-//    private String SHPName;
-//    private String CheckerName;
+
 
     @Override
     public void write(Json json) {
@@ -37,4 +36,5 @@ public class Metadata implements Json.Serializable {
     public String getSquadName() {
         return squadName;
     }
+
 }

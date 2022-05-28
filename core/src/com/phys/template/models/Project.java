@@ -159,20 +159,38 @@ public class Project {
     }
 
     public void buildAfterLoad() {
+        for (Person person : people) {
+            person.ageGroup = PhysTemplate.Instance().DataController().getAgeGroupFor(person.ageGroupNumber);
+
+            IntArray restrictions = new IntArray();
+            for (Restriction restriction : person.restrictions) {
+                restrictions.add(restriction.getIndex());
+            }
+
+            IntArray restrictionIndexes = person.restrictionIndexes;
+            for (int i = 0; i< restrictionIndexes.size; i++) {
+                person.restrictions.add(PhysTemplate.Instance().DataController().getRestrictionFor(restrictionIndexes.get(i)));
+            }
+            PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(person, this);
+        }
+
         for (int i = 0; i < exerciseNumbers.size; i++) {
             int exerciseNumber = exerciseNumbers.get(i);
             Exercise exercise = PhysTemplate.Instance().ProjectController().getExerciseModelFor(exerciseNumber);
             exercises.add(exercise);
             for (Person person : people) {
-                person.ageGroup = PhysTemplate.Instance().DataController().getAgeGroupFor(person.ageGroupNumber);
                 if (person.availableExercises.contains(exerciseNumber)) {
                     person.addExercise(exerciseNumber);
-                    PhysTemplate.Instance().DataController().calculatePersonPoints(person);
-                    PhysTemplate.Instance().DataController().calculatePersonGrade(person);
                 }
             }
-            calculateFinalGrade();
         }
+
+        for (Person person : people) {
+            PhysTemplate.Instance().DataController().calculatePersonPoints(person);
+            PhysTemplate.Instance().DataController().calculatePersonGrade(person);
+        }
+
+        calculateFinalGrade();
     }
 
     public void calculateFinalGrade() {
@@ -284,6 +302,7 @@ public class Project {
 
         Restriction restriction = PhysTemplate.Instance().DataController().getRestrictionFor(restrictionIndex);
         person.restrictions.removeValue(restriction, false);
+        person.restrictionIndexes.removeValue(restrictionIndex);
         PhysTemplate.Instance().UIStage().updateContent();
     }
 
@@ -294,6 +313,7 @@ public class Project {
 
         Restriction restriction = PhysTemplate.Instance().DataController().getRestrictionFor(restrictionIndex);
         person.restrictions.add(restriction);
+        person.restrictionIndexes.add(restrictionIndex);
         PhysTemplate.Instance().UIStage().updateContent();
     }
 

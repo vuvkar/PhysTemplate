@@ -1,5 +1,6 @@
 package com.phys.template;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
@@ -14,8 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.reflect.ClassReflection;
-import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -23,7 +22,7 @@ import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.phys.template.models.Metadata;
 import com.phys.template.models.Person;
-import com.phys.template.input.IKeyboardHandler;
+import com.phys.template.input.PlatformSpecificManager;
 import com.phys.template.views.StatisticsWidget;
 import com.phys.template.views.exerciseWidgets.AddExercisePopup;
 import com.phys.template.views.exerciseWidgets.ExercisesGroupWidget;
@@ -59,18 +58,16 @@ public class UIStage {
     private EditPersonPopup addPersonPopup;
     private Table bottomButtonTable;
 
-    IKeyboardHandler keyboardHandler;
-
-    FileChooser fileChooser;
+    PlatformSpecificManager platformSpecificManager;
 
     private MainMenu mainMenu;
 
-    public UIStage(Skin skin, IKeyboardHandler keyboardHandler) {
+    public UIStage(Skin skin, PlatformSpecificManager platformSpecificManager) {
         PolygonSpriteBatch batch = new PolygonSpriteBatch();
         this.stage = new Stage(new FixedHeightViewport(1080, new OrthographicCamera()), batch);
         this.skin = skin;
         this.dragAndDrop = new DragAndDrop();
-        this.keyboardHandler = keyboardHandler;
+        this.platformSpecificManager = platformSpecificManager;
 
         stage.addListener(new InputListener() {
             @Override
@@ -90,11 +87,6 @@ public class UIStage {
         fullScreenTable.defaults().pad(5);
 
         stage.addActor(fullScreenTable);
-
-//        constructMenu();
-//        fullScreenTable.row();
-
-//        fullScreenTable.row();
         constructExerciseWidget();
         constructMetaInfoListWidget();
         fullScreenTable.row();
@@ -103,8 +95,6 @@ public class UIStage {
         fullScreenTable.row();
         constructBottomTable();
 
-        initFileChoosers();
-
         addExercisePopup = new AddExercisePopup();
         addRestrictionPopup = new AddRestrictionPopup();
         addPersonPopup = new EditPersonPopup();
@@ -112,12 +102,6 @@ public class UIStage {
 
     private void constructBottomTable() {
         bottomButtonTable = new Table();
-        VisTextButton printButton = new VisTextButton("Պահպանել որպես Word", new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                printProjectAction();
-            }
-        });
 
         VisTextButton saveButton = new VisTextButton("Պահպանել որպես ամփոփագիր", new ChangeListener() {
             @Override
@@ -135,7 +119,15 @@ public class UIStage {
         bottomButtonTable.left();
         bottomButtonTable.defaults().pad(10);
         int buttonHeight = 60;
-        bottomButtonTable.add(printButton).height(buttonHeight);
+        if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+            VisTextButton printButton = new VisTextButton("Պահպանել որպես Word", new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    printProjectAction();
+                }
+            });
+            bottomButtonTable.add(printButton).height(buttonHeight);
+        }
         bottomButtonTable.add(saveButton).height(buttonHeight);
         bottomButtonTable.add(openButton).height(buttonHeight);
         fullScreenTable.add(bottomButtonTable).colspan(2);
@@ -175,33 +167,12 @@ public class UIStage {
         return skin;
     }
 
-    private void initFileChoosers() {
-        fileChooser = new FileChooser(FileChooser.Mode.SAVE);
-    }
 
     public void openProjectAction() {
-        fileChooser.setMode(FileChooser.Mode.OPEN);
-        fileChooser.setMultiSelectionEnabled(false);
-        String desktopPath = System.getProperty("user.home") + "/Desktop";
-        fileChooser.setDirectory(desktopPath);
+        platformSpecificManager.openProject();
 
-        fileChooser.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isDirectory() || pathname.getAbsolutePath().endsWith("fpe");
-            }
-        });
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
 
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected(Array<FileHandle> file) {
-                String path = file.first().file().getAbsolutePath();
-                PhysTemplate.Instance().ProjectController().loadProject(Gdx.files.absolute(path));
-            }
-        });
 
-        stage.addActor(fileChooser.fadeIn());
     }
 
     public MetaInfoGroupWidget getMetaWidget() {
@@ -209,110 +180,13 @@ public class UIStage {
     }
 
     public void printProjectAction() {
-        final String ext = ".docx";
-
         PhysTemplate.Instance().ProjectController().getCurrentProject().importMetaDatas();
-        fileChooser.setMode(FileChooser.Mode.SAVE);
-        String desktopPath = System.getProperty("user.home") + "/Desktop";
-        fileChooser.setDirectory(desktopPath);
-        fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isDirectory() || pathname.getAbsolutePath().endsWith(ext);
-            }
-        });
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected(Array<FileHandle> file) {
-                File selectedFile = file.first().file();
-                boolean isFileUnlocked;
-
-                String path = selectedFile.getAbsolutePath();
-                if (!path.endsWith(ext)) {
-                    if (path.indexOf(".") > 0) {
-                        path = path.substring(0, path.indexOf("."));
-                    }
-                    path += ext;
-                }
-
-                File toBeSaved = new File(path);
-                FileOutputStream fos = null;
-                try {
-                    // Make sure that the output stream is in Append mode. Otherwise you will
-                    // truncate your file, which probably isn't what you want to do :-)
-                    fos = new FileOutputStream(toBeSaved, true);
-                    // -> file was closed
-                    isFileUnlocked = true;
-                } catch(IOException e) {
-                    // -> file still open
-                    isFileUnlocked = false;
-                } finally {
-                    if (fos != null) {
-                        try {
-                            fos.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                if (isFileUnlocked) {
-                    FileHandle handle = Gdx.files.absolute(path);
-                    try {
-                        PhysTemplate.Instance().DocumentController().createDocumentForProject(PhysTemplate.Instance().ProjectController().getCurrentProject(), handle);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Dialogs.showErrorDialog(stage, "Փակեք word Ֆայլը և կրկին փորձեք");
-                }
-            }
-        });
-
-        Metadata metadata = PhysTemplate.Instance().ProjectController().getCurrentProject().getMetadata();
-        String squadName = metadata.getSquadName();
-        squadName = squadName.replace(" ", "_");
-        fileChooser.setDefaultFileName(squadName + "_ֆիզոյի_ամփոփագիր");
-
-        stage.addActor(fileChooser.fadeIn());
+        platformSpecificManager.saveWord();
     }
 
     public void saveProjectAction() {
-        final String ext = ".fpe";
-        fileChooser.setMode(FileChooser.Mode.SAVE);
-        fileChooser.setMultiSelectionEnabled(false);
-        String desktopPath = System.getProperty("user.home") + "/Desktop";
-        fileChooser.setDirectory(desktopPath);
-        fileChooser.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isDirectory() || pathname.getAbsolutePath().endsWith(ext);
-            }
-        });
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected(Array<FileHandle> file) {
-                String path = file.first().file().getAbsolutePath();
-                if (!path.endsWith(ext)) {
-                    if (path.indexOf(".") > 0) {
-                        path = path.substring(0, path.indexOf("."));
-                    }
-                    path += ext;
-                }
-                FileHandle handle = Gdx.files.absolute(path);
-                // TODO: 1/6/2022 save on a file
-                PhysTemplate.Instance().ProjectController().saveProject(handle);
-            }
-        });
-
-        fileChooser.setName("a");
-
-        stage.addActor(fileChooser.fadeIn());
+        PhysTemplate.Instance().ProjectController().getCurrentProject().importMetaDatas();
+        platformSpecificManager.saveProject();
     }
 
     public void newProjectAction() {
@@ -354,8 +228,13 @@ public class UIStage {
         updateTopRow();
         updatePeopleContent();
         updateStatistics();
+        updateMetadata();
 
         updateEditPopupWindow();
+    }
+
+    private void updateMetadata() {
+        metaInfoGroupWidget.refreshContent();
     }
 
     private void updateEditPopupWindow() {
@@ -419,7 +298,7 @@ public class UIStage {
         addRestrictionPopup.fadeOut();
     }
 
-    public IKeyboardHandler<?> getKeyboardHandler() {
-        return keyboardHandler;
+    public PlatformSpecificManager<?> getPlatformSpecificManager() {
+        return platformSpecificManager;
     }
 }

@@ -116,3 +116,17 @@ Thumbs.db
 
 # Project exclude paths
 /desktop/out/
+/android/assets/generated-fonts/25_grapalat_15.fnt
+/generated-fonts/25_grapalat_15.fnt
+/android/assets/generated-fonts/30_grapalat_20.fnt
+/generated-fonts/30_grapalat_20.fnt
+/android/assets/generated-fonts/35_grapalat_25.fnt
+/generated-fonts/35_grapalat_25.fnt
+/gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.properties
+/android/assets/generated-fonts/25_grapalat_15/grapalat_15.png
+/generated-fonts/25_grapalat_15/grapalat_15.png
+/android/assets/generated-fonts/30_grapalat_20/grapalat_20.png
+/generated-fonts/30_grapalat_20/grapalat_20.png
+/android/assets/generated-fonts/35_grapalat_25/grapalat_25.png
+/generated-fonts/35_grapalat_25/grapalat_25.png

@@ -4,10 +4,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 public class CustomOnScreenKeyboard implements TextField.OnscreenKeyboard {
 
-	private IKeyboardHandler keyboardHandler;
+	private PlatformSpecificManager keyboardHandler;
 	private KeyboardFeedbackInterface keyboardFeedbackInterface;
 
-	public CustomOnScreenKeyboard (IKeyboardHandler keyboardHandler, KeyboardFeedbackInterface keyboardFeedbackInterface) {
+	public CustomOnScreenKeyboard (PlatformSpecificManager keyboardHandler, KeyboardFeedbackInterface keyboardFeedbackInterface) {
 		this.keyboardHandler = keyboardHandler;
 		this.keyboardFeedbackInterface = keyboardFeedbackInterface;
 	}

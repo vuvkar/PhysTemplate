@@ -15,8 +15,9 @@ public class Person implements Json.Serializable {
     public int ageGroupNumber;
     public Category category;
     public int index;
-    public final Array<Restriction> restrictions;
 
+    public final IntArray restrictionIndexes;
+    public transient final Array<Restriction> restrictions;
     public transient AgeGroup ageGroup;
     private transient int overallPoints;
     private transient Grade finalGrade = Grade.BAD;
@@ -37,9 +38,10 @@ public class Person implements Json.Serializable {
         floatExercisesRaw = new OrderedMap<>();
         intExercisesRaw = new OrderedMap<>();
         availableExercises = new IntArray();
+        restrictionIndexes = new IntArray();
         notes = new ArrayList<>();
-        ageGroup = PhysTemplate.Instance().DataController().getAgeGroupFor(1);
-        ageGroupNumber = 1;
+        ageGroup = PhysTemplate.Instance().DataController().getAgeGroupFor(2);
+        ageGroupNumber = 2;
         category = Category.FIRST;
         rank = Rank.SHN;
         sex = Sex.MALE;
@@ -114,6 +116,7 @@ public class Person implements Json.Serializable {
         copy.canCalculateFinalGrade = this.canCalculateFinalGrade;
         copy.gradeCalculationError = this.gradeCalculationError;
         copy.restrictions.addAll(this.restrictions);
+        copy.restrictionIndexes.addAll(this.restrictionIndexes);
 
         copy.attachedExercises.addAll(attachedExercises);
         for (ObjectMap.Entry<Integer, Float> entry : floatExercisesRaw) {
@@ -163,6 +166,9 @@ public class Person implements Json.Serializable {
         restrictions.clear();
         restrictions.addAll(copyPerson.restrictions);
 
+        restrictionIndexes.clear();
+        restrictionIndexes.addAll(copyPerson.restrictionIndexes);
+
         availableExercises.clear();
         availableExercises.addAll(copyPerson.availableExercises);
         floatExercisesRaw.clear();
@@ -206,7 +212,7 @@ public class Person implements Json.Serializable {
         json.writeValue("category", category.ordinal());
         json.writeValue("index", index);
         // TODO: 5/11/2022 test
-        json.writeValue("restrictions", restrictions);
+        json.writeValue("restrictions", restrictionIndexes);
 
         json.writeArrayStart("floatExercises");
         for (ObjectMap.Entry<Integer, Float> integerFloatEntry : floatExercisesRaw) {

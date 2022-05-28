@@ -91,7 +91,7 @@ public class DocumentController {
         }
     }
 
-    public void createDocumentForProject(Project project, FileHandle handle) throws Exception {
+    public XWPFDocument createDocumentForProject(Project project) throws Exception {
         //Blank Document
         XWPFDocument document = new XWPFDocument();
         configurePageSizeAndOrientation(document);
@@ -120,11 +120,7 @@ public class DocumentController {
         STJcTable.Enum en = STJcTable.Enum.forInt(1);
         jc.setVal(en);
 
-        //Write the Document in file system
-        FileOutputStream out = new FileOutputStream(handle.path());
-
-        document.write(out);
-        out.close();
+        return document;
     }
 
     private void addStatistics(XWPFDocument document, Project project) {

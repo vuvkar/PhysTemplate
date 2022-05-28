@@ -25,7 +25,7 @@ public class ExerciseValueFillRow extends Table {
     public ExerciseValueFillRow(final Exercise exercise) {
         pad(3);
         defaults().pad(3);
-        exerciseField = new KeyboardHandledTextField("", PhysTemplate.Instance().UIStage().getKeyboardHandler(), KeyboardType.NUMERIC);
+        exerciseField = new KeyboardHandledTextField("", PhysTemplate.Instance().UIStage().getPlatformSpecificManager(), KeyboardType.NUMERIC);
         exerciseName = new VisLabel(exercise.name + ", " + exercise.longName);
         add(exerciseName).left();
         row();

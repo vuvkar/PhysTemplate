@@ -1,16 +1,15 @@
 package com.phys.template.views.metaWidgets;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.phys.template.PhysTemplate;
-import com.phys.template.UIStage;
 import com.phys.template.input.KeyboardHandledTextField;
 import com.phys.template.input.KeyboardType;
+import com.phys.template.models.Metadata;
 import com.phys.template.models.Project;
 
 public class MetaInfoGroupWidget extends Table {
@@ -32,8 +31,8 @@ public class MetaInfoGroupWidget extends Table {
         add(headerLabel);
         row();
 
-        baseNumberField = new KeyboardHandledTextField("", PhysTemplate.Instance().UIStage().getKeyboardHandler(), KeyboardType.NUMERIC);
-        squadNameField = new KeyboardHandledTextField("", PhysTemplate.Instance().UIStage().getKeyboardHandler(), KeyboardType.TEXT);
+        baseNumberField = new KeyboardHandledTextField("", PhysTemplate.Instance().UIStage().getPlatformSpecificManager(), KeyboardType.NUMERIC);
+        squadNameField = new KeyboardHandledTextField("", PhysTemplate.Instance().UIStage().getPlatformSpecificManager(), KeyboardType.TEXT);
         areStudentsCheckbox = new VisCheckBox("Կուրսանտներ");
         areStudentsCheckbox.addListener(new ChangeListener() {
             @Override
@@ -95,4 +94,12 @@ public class MetaInfoGroupWidget extends Table {
         return baseNumberField.getText();
     }
 
+    public void refreshContent() {
+        Project currentProject = PhysTemplate.Instance().ProjectController().getCurrentProject();
+        Metadata metadata = currentProject.getMetadata();
+        squadNameField.setText(metadata.getSquadName());
+        baseNumberField.setText(metadata.getBaseName());
+        isAviationCheckbox.setChecked(currentProject.isAviation);
+        areStudentsCheckbox.setChecked(currentProject.areStudents);
+    }
 }

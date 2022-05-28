@@ -2,6 +2,10 @@ package com.phys.template.input;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -15,7 +19,9 @@ import com.badlogic.gdx.Gdx;
 import com.phys.template.AndroidLauncher;
 import com.phys.template.R;
 
-public class KeyboardHandlerImpl implements IKeyboardHandler<AndroidLauncher> {
+import static android.app.Activity.RESULT_OK;
+
+public class PlatformSpecificManagerImpl implements PlatformSpecificManager<AndroidLauncher> {
 
     private Activity activity;
 
@@ -121,9 +127,10 @@ public class KeyboardHandlerImpl implements IKeyboardHandler<AndroidLauncher> {
                     activity.addContentView(keyboardView, keyboardView.getLayoutParams());
                 }
 
+                textBox.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
                 KeyboardType style = textFieldListener.getType();
-                int keyboardType = style.equals(KeyboardType.NUMERIC) ? InputType.TYPE_CLASS_NUMBER : InputType.TYPE_CLASS_TEXT;
+                int keyboardType = style.equals(KeyboardType.NUMERIC) ? InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL : InputType.TYPE_CLASS_TEXT;
 
                 textBox.setInputType(keyboardType);
                 if (shouldShowCurrentText) {
@@ -134,7 +141,6 @@ public class KeyboardHandlerImpl implements IKeyboardHandler<AndroidLauncher> {
                 textBox.setSelection(textBox.getText().length());
 
                 textBox.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_FLAG_NO_FULLSCREEN);
-                textBox.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
                 textBox.requestFocus();
 
@@ -190,6 +196,37 @@ public class KeyboardHandlerImpl implements IKeyboardHandler<AndroidLauncher> {
     @Override
     public boolean isKeyboardShown () {
         return keyboardShown;
+    }
+
+    @Override
+    public void openProject() {
+        Intent chooseFile;
+        Intent intent;
+        chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+        chooseFile.setType("application/json");
+        intent = Intent.createChooser(chooseFile, "Choose a file");
+
+        activity.startActivityForResult(intent, 0);
+    }
+
+
+
+    @Override
+    public void saveWord() {
+
+    }
+
+    @Override
+    public void saveProject() {
+        Intent chooseFile;
+        Intent intent;
+        chooseFile = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+        chooseFile.setType("application/json");
+        intent = Intent.createChooser(chooseFile, "Save project");
+
+        activity.startActivityForResult(intent, 2);
     }
 
     @Override

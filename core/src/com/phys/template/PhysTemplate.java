@@ -13,8 +13,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.phys.template.controllers.DataController;
 import com.phys.template.controllers.DocumentController;
 import com.phys.template.controllers.ProjectController;
-import com.phys.template.input.IKeyboardHandler;
-import com.phys.template.views.peopleWidgets.PeopleListRowWidget;
+import com.phys.template.input.PlatformSpecificManager;
 
 public class PhysTemplate extends ApplicationAdapter {
 
@@ -27,11 +26,11 @@ public class PhysTemplate extends ApplicationAdapter {
 	private DataController dataController;
 	private DocumentController documentController;
 	private InputMultiplexer inputMultiplexer;
-	private IKeyboardHandler keyboardHandler;
+	private PlatformSpecificManager keyboardHandler;
 
 	private static PhysTemplate instance;
 
-	public PhysTemplate (IKeyboardHandler keyboardHandler) {
+	public PhysTemplate (PlatformSpecificManager keyboardHandler) {
 		this.keyboardHandler = keyboardHandler;
 	}
 

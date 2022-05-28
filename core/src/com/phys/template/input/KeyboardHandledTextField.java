@@ -13,7 +13,7 @@ public class KeyboardHandledTextField extends VisTextField {
     private boolean shouldShowCurrentText = true;
 
 
-    public KeyboardHandledTextField (String text, IKeyboardHandler<?> keyboardHandler, final KeyboardType type) {
+    public KeyboardHandledTextField (String text, PlatformSpecificManager<?> keyboardHandler, final KeyboardType type) {
         super(text);
 
         KeyboardFeedbackInterface keyboardFeedbackInterface = new KeyboardFeedbackInterface() {

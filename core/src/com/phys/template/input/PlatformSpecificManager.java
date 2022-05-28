@@ -3,7 +3,7 @@ package com.phys.template.input;
 
 import com.phys.template.LauncherInjectable;
 
-public interface IKeyboardHandler<T> extends LauncherInjectable<T> {
+public interface PlatformSpecificManager<T> extends LauncherInjectable<T> {
 
     /**
      * Request the keyboard for the specific TextField/TextArea
@@ -24,4 +24,9 @@ public interface IKeyboardHandler<T> extends LauncherInjectable<T> {
      */
     boolean isKeyboardShown();
 
+    void openProject();
+
+    void saveWord();
+
+    void saveProject();
 }

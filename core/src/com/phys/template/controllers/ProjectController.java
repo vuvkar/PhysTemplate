@@ -25,11 +25,14 @@ public class ProjectController {
 
     public void saveProject(FileHandle destination) {
         try {
-            String data = currentProject.getProjectString();
-            destination.writeString(data, false);
+            destination.writeString(getProjectString(), false);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public String getProjectString() {
+        return currentProject.getProjectString();
     }
 
     public void loadProject(FileHandle projectFileHandle) {
@@ -37,16 +40,20 @@ public class ProjectController {
             if (projectFileHandle.exists()) {
 
                 String string = projectFileHandle.readString();
-                Json json = new Json();
-                currentProject = json.fromJson(Project.class, string);
-                currentProject.buildAfterLoad();
-                PhysTemplate.Instance().UIStage().updateContent();
+                loadProject(string);
             } else {
                 //error handle
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public void loadProject(String projectString) {
+        Json json = new Json();
+        currentProject = json.fromJson(Project.class, projectString);
+        currentProject.buildAfterLoad();
+        PhysTemplate.Instance().UIStage().updateContent();
     }
 
     public Exercise getExerciseModelFor(int exerciseNumber) {
