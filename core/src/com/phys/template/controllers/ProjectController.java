@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.*;
 import com.phys.template.PhysTemplate;
 import com.phys.template.models.*;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -18,14 +19,13 @@ public class ProjectController {
     }
 
     public void newProject() {
-        // TODO: 11/19/2021 handle new project creation
         Project project = new Project();
         currentProject = project;
     }
 
     public void saveProject(FileHandle destination) {
         try {
-            destination.writeString(getProjectString(), false);
+            destination.writeString(getProjectString(), false, "UTF-8");
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -39,7 +39,7 @@ public class ProjectController {
         try {
             if (projectFileHandle.exists()) {
 
-                String string = projectFileHandle.readString();
+                String string = projectFileHandle.readString("UTF-8");
                 loadProject(string);
             } else {
                 //error handle

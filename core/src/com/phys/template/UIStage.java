@@ -170,9 +170,6 @@ public class UIStage {
 
     public void openProjectAction() {
         platformSpecificManager.openProject();
-
-
-
     }
 
     public MetaInfoGroupWidget getMetaWidget() {
@@ -180,12 +177,10 @@ public class UIStage {
     }
 
     public void printProjectAction() {
-        PhysTemplate.Instance().ProjectController().getCurrentProject().importMetaDatas();
         platformSpecificManager.saveWord();
     }
 
     public void saveProjectAction() {
-        PhysTemplate.Instance().ProjectController().getCurrentProject().importMetaDatas();
         platformSpecificManager.saveProject();
     }
 

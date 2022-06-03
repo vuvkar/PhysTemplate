@@ -53,6 +53,7 @@ public class PlatformSpecificManagerImpl implements PlatformSpecificManager<Desk
         if (!isInit) {
             stage = PhysTemplate.Instance().UIStage().getStage();
             fileChooser = new FileChooser(FileChooser.Mode.SAVE);
+            fileChooser.setSize(1600, 900);
             isInit = true;
         }
     }
@@ -194,7 +195,10 @@ public class PlatformSpecificManagerImpl implements PlatformSpecificManager<Desk
             }
         });
 
-        fileChooser.setName("a");
+        Metadata metadata = PhysTemplate.Instance().ProjectController().getCurrentProject().getMetadata();
+        String squadName = metadata.getSquadName();
+        squadName = squadName.replace(" ", "_");
+        fileChooser.setDefaultFileName(squadName + "_ամփոփագիր");
 
         stage.addActor(fileChooser.fadeIn());
     }

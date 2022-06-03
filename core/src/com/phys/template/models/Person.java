@@ -77,7 +77,7 @@ public class Person implements Json.Serializable {
         return overallPoints;
     }
 
-    public int getIntExerciseRawValue (int number) {
+    public int getIntExerciseRawValue(int number) {
         return intExercisesRaw.get(number);
     }
 
@@ -253,6 +253,16 @@ public class Person implements Json.Serializable {
         for (JsonValue intExercise : intExercises) {
             intExercisesRaw.put(intExercise.getInt("exerciseNumber"), intExercise.getInt("exerciseRawValue"));
         }
+
+        restrictionIndexes.clear();
+        JsonValue restrictions = jsonData.get("restrictions");
+        if (restrictions.has("size")) {
+            int size = restrictions.getInt("size");
+            int[] items = restrictions.get("items").asIntArray();
+            for (int i = 0; i < size; i++) {
+                restrictionIndexes.add(items[i]);
+            }
+        }
     }
 
     public boolean hasRestriction(int restrictionIndex) {
@@ -276,6 +286,6 @@ public class Person implements Json.Serializable {
     }
 
     public boolean isWoman() {
-        return ageGroupNumber >= 13 && ageGroupNumber <=17;
+        return ageGroupNumber >= 13 && ageGroupNumber <= 17;
     }
 }

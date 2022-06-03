@@ -33,6 +33,21 @@ public class MetaInfoGroupWidget extends Table {
 
         baseNumberField = new KeyboardHandledTextField("", PhysTemplate.Instance().UIStage().getPlatformSpecificManager(), KeyboardType.NUMERIC);
         squadNameField = new KeyboardHandledTextField("", PhysTemplate.Instance().UIStage().getPlatformSpecificManager(), KeyboardType.TEXT);
+        baseNumberField.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Project currentProject = PhysTemplate.Instance().ProjectController().getCurrentProject();
+                currentProject.getMetadata().setBaseNumber(baseNumberField.getText());
+            }
+        });
+
+        squadNameField.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Project currentProject = PhysTemplate.Instance().ProjectController().getCurrentProject();
+                currentProject.getMetadata().setSquadName(squadNameField.getText());
+            }
+        });
         areStudentsCheckbox = new VisCheckBox("Կուրսանտներ");
         areStudentsCheckbox.addListener(new ChangeListener() {
             @Override

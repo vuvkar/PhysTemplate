@@ -29,17 +29,6 @@ public class Project {
         metadata = new Metadata();
     }
 
-    public void importMetaDatas() {
-        MetaInfoGroupWidget metaWidget = PhysTemplate.Instance().UIStage().getMetaWidget();
-        metadata.setSquadName(metaWidget.getSquadName());
-        String baseNumber = metaWidget.getBaseNumber();
-        if (baseNumber.matches("[0-9]+")) {
-            metadata.setBaseNumber(baseNumber);
-        } else {
-            metadata.setBaseNumber("");
-        }
-    }
-
     public void addExercise(int exerciseNumber) {
         if (containsExercise(exerciseNumber)) {
             logger.error("Already has the exercise " + exerciseNumber, new GdxRuntimeException(""));
@@ -161,11 +150,6 @@ public class Project {
     public void buildAfterLoad() {
         for (Person person : people) {
             person.ageGroup = PhysTemplate.Instance().DataController().getAgeGroupFor(person.ageGroupNumber);
-
-            IntArray restrictions = new IntArray();
-            for (Restriction restriction : person.restrictions) {
-                restrictions.add(restriction.getIndex());
-            }
 
             IntArray restrictionIndexes = person.restrictionIndexes;
             for (int i = 0; i< restrictionIndexes.size; i++) {
