@@ -331,6 +331,9 @@ public class DataController {
         int overallPoints = 0;
 
         for (Integer attachedExercise : person.attachedExercises) {
+            if (!person.availableExercises.contains(attachedExercise)) {
+                continue;
+            }
             if (!person.hasFilledRawValue(attachedExercise)) {
                 continue;
             }

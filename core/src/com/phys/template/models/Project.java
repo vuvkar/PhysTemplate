@@ -178,7 +178,13 @@ public class Project {
     }
 
     public void calculateFinalGrade() {
+        boolean minusOne = false;
         float peopleCount = (float)getCheckedCount();
+        int restrictedPeopleCount = getRestrictedPeopleCount();
+        float restrictedPercent = restrictedPeopleCount / peopleCount * 100f;
+        if (restrictedPercent >= 25) {
+            minusOne = true;
+        }
 
         int countForExc = getCountForGrade(Grade.EXCELLENT);
         float excPercent = countForExc / peopleCount * 100f;
@@ -193,34 +199,34 @@ public class Project {
 
         if (areStudents) {
             if (overallOkPercent >= 95 && excPercent >= 50) {
-                finalGrade = Grade.EXCELLENT;
+                finalGrade = minusOne ? Grade.GOOD : Grade.EXCELLENT;
                 return;
             }
 
             if (overallOkPercent >= 90 && excPercent + goodPercent >= 50) {
-                finalGrade = Grade.GOOD;
+                finalGrade = minusOne ? Grade.OK : Grade.GOOD;
                 return;
             }
 
             if (overallOkPercent >= 85) {
-                finalGrade = Grade.OK;
+                finalGrade = minusOne ? Grade.BAD : Grade.OK;
                 return;
             }
 
             finalGrade = Grade.BAD;
         } else {
             if (overallOkPercent >= 90 && excPercent >= 50) {
-                finalGrade = Grade.EXCELLENT;
+                finalGrade = minusOne ? Grade.GOOD : Grade.EXCELLENT;
                 return;
             }
 
             if (overallOkPercent >= 80 && excPercent + goodPercent >= 50) {
-                finalGrade = Grade.GOOD;
+                finalGrade = minusOne ? Grade.OK : Grade.GOOD;
                 return;
             }
 
             if (overallOkPercent >= 70) {
-                finalGrade = Grade.OK;
+                finalGrade = minusOne? Grade.BAD : Grade.OK;
                 return;
             }
 
@@ -263,8 +269,6 @@ public class Project {
         for (Person person : people) {
             updateAvailableExercises(person);
         }
-
-        calculateFinalGrade();
     }
 
     public void setAviation(boolean isAviation) {
@@ -275,8 +279,10 @@ public class Project {
     }
 
     public void updateAvailableExercises(Person person) {
-        person.availableExercises.clear();
         PhysTemplate.Instance().DataController().fetchPersonAvailableExercises(person, this);
+        PhysTemplate.Instance().DataController().calculatePersonPoints(person);
+        PhysTemplate.Instance().DataController().calculatePersonGrade(person);
+        calculateFinalGrade();
     }
 
     public void removeRestrictionFrom(Person person, int restrictionIndex) {

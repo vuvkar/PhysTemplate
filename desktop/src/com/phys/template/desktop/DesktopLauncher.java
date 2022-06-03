@@ -1,5 +1,6 @@
 package com.phys.template.desktop;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.phys.template.PhysTemplate;
@@ -18,6 +19,8 @@ public class DesktopLauncher {
 		config.x = (screenSize.width - config.width) / 2;
 		config.y = (screenSize.height - config.height) / 2;
 		config.resizable = false;
+		config.addIcon("icon-16.png", Files.FileType.Internal);
+		config.addIcon("icon-32.png", Files.FileType.Internal);
 		new LwjglApplication(new PhysTemplate(new PlatformSpecificManagerImpl()), config);
 	}
 }

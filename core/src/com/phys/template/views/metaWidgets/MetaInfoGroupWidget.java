@@ -52,8 +52,6 @@ public class MetaInfoGroupWidget extends Table {
         areStudentsCheckbox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // TODO: 5/3/2022 Final grade calculation
-                // TODO: 5/3/2022 available exercises update
                 boolean areStudents = areStudentsCheckbox.isChecked();
                 Project currentProject = PhysTemplate.Instance().ProjectController().getCurrentProject();
                 currentProject.setStudents(areStudents);
@@ -64,10 +62,10 @@ public class MetaInfoGroupWidget extends Table {
         isAviationCheckbox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // TODO: 5/3/2022 available exercises update
                 boolean isAviation = isAviationCheckbox.isChecked();
                 Project currentProject = PhysTemplate.Instance().ProjectController().getCurrentProject();
                 currentProject.setAviation(isAviation);
+                PhysTemplate.Instance().UIStage().updateContent();
             }
         });
 
