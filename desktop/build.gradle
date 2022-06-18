@@ -76,7 +76,7 @@ runtime {
     distDir = file(buildDir)
 
     jpackage {
-        jpackageHome = 'C:\\Users\\vuvka\\.jdks\\temurin-18.0.1'
+        jpackageHome = 'C:\\Users\\vuvka\\.jdks\\temurin-16.0.2'
         mainJar = dist.archiveFileName.get()
         if (osName.contains('windows')) {
             imageOptions = ["--icon", file("../icons/icon.ico")]

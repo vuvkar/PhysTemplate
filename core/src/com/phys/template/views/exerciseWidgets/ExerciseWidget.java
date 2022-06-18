@@ -30,7 +30,7 @@ public class ExerciseWidget extends Table {
                 PhysTemplate.Instance().ProjectController().removeExercise(ExerciseWidget.this.exerciseNumber);
             }
         });
-        add(deleteButton);
+        add(deleteButton).height(60);
         pack();
     }
 

@@ -157,11 +157,13 @@ public class DataController {
         switch (ageGroupIndex) {
             // մալադոներ
             case 1:
-                availableExercises.add(1, 4, 7, 8);
-                availableExercises.add(9, 12);
-                availableExercises.add(17, 18, 19, 21);
-                availableExercises.add(25, 26);
-                availableExercises.add(27, 28);
+                if (!project.isAviation) {
+                    availableExercises.add(1, 4, 7, 8);
+                    availableExercises.add(9, 12);
+                    availableExercises.add(17, 18, 19, 21);
+                    availableExercises.add(25, 26);
+                    availableExercises.add(27, 28);
+                }
                 break;
             // պարտադիր ժամկետային
             case 2:

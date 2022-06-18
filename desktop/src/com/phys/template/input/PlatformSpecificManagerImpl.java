@@ -88,7 +88,7 @@ public class PlatformSpecificManagerImpl implements PlatformSpecificManager<Desk
     @Override
     public void saveWord() {
         checkInit();
-        final String ext = "docx";
+        final String ext = ".docx";
         fileChooser.setMode(FileChooser.Mode.SAVE);
         String desktopPath = System.getProperty("user.home") + "/Desktop";
         fileChooser.setDirectory(desktopPath);
